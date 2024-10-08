@@ -15,20 +15,20 @@ class FirestoreService {
 
   User? get user => _authService.user;
 
-  Future<MyUser?> getUserData() async {
-    try {
-      return await fetchUserData();
-    } on CustomFirestoreException catch (error) {
-      if (error.code == 'user-firestore-not-exist') {
-        MyUser newUser = MyUser.newUser();
-        addUserData(newUser);
-        return newUser;
-      } else {
-        print(error.toString());
-        return null;
-      }
-    }
-  }
+  // Future<MyUser?> getUserData() async {
+  //   try {
+  //     return await fetchUserData();
+  //   } on CustomFirestoreException catch (error) {
+  //     if (error.code == 'user-firestore-not-exist') {
+  //       MyUser newUser = MyUser.newUser();
+  //       addUserData(newUser);
+  //       return newUser;
+  //     } else {
+  //       print(error.toString());
+  //       return null;
+  //     }
+  //   }
+  // }
 
   Future<MyUser?> fetchUserData() async {
     if (user == null && kDebugMode) {
@@ -55,31 +55,31 @@ class FirestoreService {
     }
   }
 
-  Future<void> addUserData(MyUser myUser) async {
-    if (user == null && kDebugMode) {
-      print("No user is currently signed in.");
-      return;
-    }
+  // Future<void> addUserData(MyUser myUser) async {
+  //   if (user == null && kDebugMode) {
+  //     print("No user is currently signed in.");
+  //     return;
+  //   }
+  //
+  //   Map<String, dynamic> userData = myUser.toMap();
+  //   await _usersCollection
+  //       .doc(user?.uid)
+  //       .set(userData)
+  //       .then((value) => print("User Added"))
+  //       .catchError((error) => print("Error pushing user data: $error"));
+  // }
 
-    Map<String, dynamic> userData = myUser.toMap();
-    await _usersCollection
-        .doc(user?.uid)
-        .set(userData)
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Error pushing user data: $error"));
-  }
-
-  Future<void> updateUserData(MyUser myUser) async {
-    User? user = _authService.user;
-
-    try {
-      await _usersCollection.doc(user?.uid).update(myUser.toMap());
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error updating user data: $e");
-      }
-    }
-  }
+  // Future<void> updateUserData(MyUser myUser) async {
+  //   User? user = _authService.user;
+  //
+  //   try {
+  //     await _usersCollection.doc(user?.uid).update(myUser.toMap());
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print("Error updating user data: $e");
+  //     }
+  //   }
+  // }
 
   Future<void> deleteUserData() async {
     User? user = _authService.user;
