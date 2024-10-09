@@ -8,7 +8,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleAuthProvider _googleProvider = GoogleAuthProvider();
 
-  Stream<User?> get userStream => _auth.authStateChanges();
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   User? get user => _auth.currentUser;
 
@@ -61,8 +61,8 @@ class AuthService {
     }
   }
 
-  Future<void> signUpWithEmailAndPassword(String username, String email,
-      String password, String confirmPassword) async {
+  Future<void> signUpWithEmailAndPassword(String email,
+      String password) async {
     try {
       UserCredential userCredential =
       await _auth.createUserWithEmailAndPassword(
@@ -71,10 +71,9 @@ class AuthService {
       );
 
       await userCredential.user!.sendEmailVerification();
-      await userCredential.user!.updateDisplayName(username);
-      await userCredential.user!.updatePhotoURL(defaultAvatarUrl);
+      // await userCredential.user!.updatePhotoURL(defaultAvatarUrl);
       // await userCredential.user!.reload();
-      signOut();
+      // signOut();
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
