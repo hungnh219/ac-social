@@ -1,7 +1,6 @@
 // screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:social_app/data/providers/auth_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -14,7 +13,8 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () => Provider.of<AuthProvider>(context, listen: false).signOut(),
+            onPressed: () {
+            },
           ),
         ],
       ),
