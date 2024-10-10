@@ -1,26 +1,26 @@
-// Name the class MyUser to avoid duplicating the name of User class
+// Name the class UserModel to avoid duplicating the name of User class
 // in Firebase Authentication
-class MyUser {
+class UserModel {
   final FullName fullName;
   List<String> followers;
   List<String> following;
   final SocialLinks socialLinks;
 
-  MyUser({
+  UserModel({
     required this.fullName,
     required this.followers,
     required this.following,
     required this.socialLinks,
   });
 
-  MyUser.newUser()
+  UserModel.newUser()
       : fullName = FullName.empty(),
         followers = [],
         following = [],
         socialLinks = SocialLinks();
 
-  factory MyUser.fromMap(Map<String, dynamic> map) {
-    return MyUser(
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
       fullName: FullName.fromMap(map['fullName']),
       followers: List<String>.from(map['followers'] ?? []),
       following: List<String>.from(map['following'] ?? []),
@@ -37,13 +37,13 @@ class MyUser {
     };
   }
 
-  MyUser copyWith({
+  UserModel copyWith({
     FullName? fullName,
     List<String>? followers,
     List<String>? following,
     SocialLinks? socialLinks,
   }) {
-    return MyUser(
+    return UserModel(
       fullName: fullName ?? this.fullName,
       followers: followers ?? this.followers,
       following: following ?? this.following,

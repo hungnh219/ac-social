@@ -79,7 +79,7 @@ class LabColors {
 
   static const Color black = Color(0xFF242424);
 
-  static const Color cyan = Color(0xFF6DD5FA);
+  static const Color heisenbergBlue = Color(0xFF6DD5FA);
 
   static const Color blue = Color(0xff2f80ed);
 

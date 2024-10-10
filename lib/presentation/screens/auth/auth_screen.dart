@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import '../log_in/log_in_screen.dart';
-import '../sign_up/sign_up_screen.dart';
+import 'package:social_app/presentation/screens/auth/sign_up_screen.dart';
+import 'package:social_app/presentation/screens/home/home_screen.dart';
+import 'log_in_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
 
   @override
-  _AuthScreenState createState() => _AuthScreenState();
+  State<AuthScreen> createState() => AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
-  bool _isLogin = true;
+class AuthScreenState extends State<AuthScreen> {
+  bool _isLogin = false;
 
   void toggleAuthMode() {
     setState(() => _isLogin = !_isLogin);
@@ -20,9 +21,9 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(_isLogin ? 'Login' : 'Sign Up')),
-      body: _isLogin
-          ? LoginScreen(onToggle: toggleAuthMode)
-          : SignupScreen(onToggle: toggleAuthMode),
+      body: !_isLogin
+          ? SignUpScreen()
+          : const HomeScreen(),
     );
   }
 }
