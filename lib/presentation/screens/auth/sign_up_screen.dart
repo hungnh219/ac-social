@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/data/models/auth/create_user_req.dart';
 
+
 import '../../../domain/repository/auth/auth.dart';
 import '../../../service_locator.dart';
-import 'log_in_screen.dart';
+import 'sign_in_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   final _emailController = TextEditingController();
@@ -61,7 +62,7 @@ class SignUpScreen extends StatelessWidget {
               onPressed: (){ Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => LogInScreen()
+                      builder: (BuildContext context) => SignInScreen()
                   )
               );},
               child: const Text('Already have an account? Login'),
