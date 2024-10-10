@@ -1,17 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:social_app/data/repository/auth/auth_repository_impl.dart';
 
+import '../../../../domain/repository/auth/auth.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final FirebaseAuth _firebaseAuth;
+  AuthRepository authRepository = AuthRepositoryImpl();
 
-  AuthCubit(this._firebaseAuth) : super(AuthInitial()) {
-    _checkUserStatus(); // Initial check when cubit is created
+  AuthCubit() : super(AuthInitial()) {
+    _checkUserStatus();
   }
 
-  void _checkUserStatus() {
-    User? user = _firebaseAuth.currentUser;
+  void _checkUserStatus() async{
+    User? user = await authRepository.getCurrentUser();
     if (user != null) {
       emit(Authenticated(user));
     } else {
@@ -20,7 +22,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> signOut() async {
-    await _firebaseAuth.signOut();
+    await authRepository.signOut();
     emit(Unauthenticated());
   }
 }
