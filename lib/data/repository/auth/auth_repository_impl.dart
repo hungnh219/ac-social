@@ -18,10 +18,6 @@ class AuthRepositoryImpl extends AuthRepository {
     return await serviceLocator<AuthFirebaseService>().signUp(signUpUserReq);
   }
 
-  @override
-  Future<UserModel?> getUserModel() async {
-    return await serviceLocator<AuthFirebaseService>().getUserModel();
-  }
 
   @override
   Future<dynamic> getCurrentUser() async{

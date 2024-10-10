@@ -9,8 +9,6 @@ abstract class AuthRepository{
 
   Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq);
 
-  Future<UserModel?> getUserModel();
-
   Future<dynamic> getCurrentUser();
 
   Future<void> signOut();
