@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:social_app/data/providers/auth_provider.dart';
+import 'package:social_app/data/models/auth/sign_in_user_req.dart';
+import 'package:social_app/presentation/screens/auth/sign_up_screen.dart';
+import 'package:social_app/service_locator.dart';
 
-class LoginScreen extends StatelessWidget {
-  final VoidCallback onToggle;
+import '../../../domain/repository/auth/auth.dart';
 
-  LoginScreen({super.key, required this.onToggle});
+class LogInScreen extends StatelessWidget {
+
+  LogInScreen({super.key});
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   void _login(BuildContext context) async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
     try {
-      await auth.signIn(_emailController.text, _passwordController.text);
+      await serviceLocator<AuthRepository>().signInWithEmailAndPassword(
+          SignInUserReq(email: _emailController.text, password: _passwordController.text));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed')),
+        const SnackBar(content: Text('Login failed')),
       );
     }
   }
@@ -42,7 +44,14 @@ class LoginScreen extends StatelessWidget {
             child: const Text('Login'),
           ),
           TextButton(
-            onPressed: onToggle,
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => SignUpScreen()
+                  )
+              );
+            },
             child: const Text("Don't have an account? Sign up"),
           ),
         ],
