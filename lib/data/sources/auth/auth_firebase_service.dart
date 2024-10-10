@@ -16,7 +16,9 @@ abstract class AuthFirebaseService{
 
   Future<void> signInWithGoogle();
 
-  Future<UserModel?> getUser();
+  Future<UserModel?> getUserModel();
+
+  User? getCurrentUser();
 
   Future<void> signOut();
 }
@@ -71,12 +73,11 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
   }
 
   @override
-  Future<UserModel?> getUser() async{
+  Future<UserModel?> getUserModel() async{
     try {
-      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-      User? user = firebaseAuth.currentUser;
+      User? user = _auth.currentUser;
       CollectionReference usersCollection = firebaseFirestore.collection('users');
 
       DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
@@ -126,6 +127,11 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
   @override
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  @override
+  User? getCurrentUser() {
+      return _auth.currentUser;
   }
 
 }
