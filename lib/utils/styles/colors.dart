@@ -24,6 +24,7 @@ class AppColors {
   static const Color trolleyGrey = Color(0xFF828282); // 70% Greyscale
 
   static const Color urbanVibes = Color(0xFF8898AA);
+  static const Color white = Color(0xFFFFFFFF); // Highest luminance (brightest)
 
   static const Color chanceOfRain = Color(0xFFA0A5AA);
 
@@ -87,4 +88,21 @@ class AppColors {
 
   static const Color officeNeonLight = Color(0xFFFE2472);
 
+  static const Color erieBlack = Color(0xFF1A1A1A); // 10% Grey
+
+  static const Color skyDancer = Color(0xFF3F94FB); // 0.6 opacity
+
+  static const Color iric = Color(0xFF5252C7);
+
+  static const Color ancestralWater = Color(0xFFD0D0D0);
+
+  static const Color noghreiSilver = Color(0xFFBDBDBD);
+
+  static const Color lavenderBlueShadow = Color(0xFF888BF4);
+
+  static const Color kettleman = Color(0xFF606060);
+
+  static const Color lavenderMist = Color(0xFFE3E4FC);
+
+  static const Color lead = Color(0xFF212121);
 }
