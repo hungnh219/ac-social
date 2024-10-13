@@ -17,5 +17,4 @@ class AppAssets {
   static const String splash3 = '${basePath}splash_3$format';
   static const String splash4 = '${basePath}splash_4$format';
   static const String splashBackground = '${basePath}splash_background$format';
-  static const String splashMask = '${basePath}splash_mask$format';
 }
