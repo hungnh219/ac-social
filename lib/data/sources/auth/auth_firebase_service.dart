@@ -7,9 +7,10 @@ import 'package:social_app/data/models/auth/create_user_req.dart';
 import '../../../domain/entities/user.dart';
 import '../../models/auth/sign_in_user_req.dart';
 
-const defaultAvatarUrl = "https://firebasestorage.googleapis.com/v0/b/ac-social-internship.appspot.com/o/default_avatar.png?alt=media&token=822ddf23-8cf3-434e-87e3-81fd35491e84";
+const defaultAvatarUrl =
+    "https://firebasestorage.googleapis.com/v0/b/ac-social-internship.appspot.com/o/default_avatar.png?alt=media&token=822ddf23-8cf3-434e-87e3-81fd35491e84";
 
-abstract class AuthFirebaseService{
+abstract class AuthFirebaseService {
   Future<void> signUp(SignUpUserReq signUpUserReq);
 
   Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq);
@@ -23,24 +24,38 @@ abstract class AuthFirebaseService{
   Future<void> signOut();
 }
 
-class AuthFirebaseServiceImpl extends AuthFirebaseService{
+class AuthFirebaseServiceImpl extends AuthFirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleAuthProvider _googleProvider = GoogleAuthProvider();
 
   @override
-  Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq) async{
+  Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq) async {
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: signInUserReq.email.trim(), password: signInUserReq.password);
+      final userCredential = await _auth.signInWithEmailAndPassword(
+        email: signInUserReq.email.trim(),
+        password: signInUserReq.password.trim(),
+      );
 
-      User user = _auth.currentUser!;
+      User user = userCredential.user!;
       print(user.displayName);
       if (!user.emailVerified) {
-        signOut();
+        await signOut();
         throw FirebaseAuthException(
           code: 'email-not-verified',
           message: 'Your account is not verified. Please check your inbox',
         );
+      }
+    } on FirebaseAuthException catch (e) {
+      print("mã ${e.code}");
+      switch (e.code) {
+        case 'email-not-verified':
+          throw ('Your account is not verified. Please check your inbox');
+        case 'user-not-found':
+        case 'wrong-password':
+        case 'invalid-credential':
+          throw ("Incorrect email or password");
+        default:
+          throw ("Authentication error: ${e.message}");
       }
     } catch (error) {
       if (kDebugMode) {
@@ -52,10 +67,9 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
   }
 
   @override
-  Future<void> signUp(SignUpUserReq signUpUserReq) async{
+  Future<void> signUp(SignUpUserReq signUpUserReq) async {
     try {
-      UserCredential userCredential =
-      await _auth.createUserWithEmailAndPassword(
+      final userCredential = await _auth.createUserWithEmailAndPassword(
         email: signUpUserReq.email,
         password: signUpUserReq.password,
       );
@@ -63,6 +77,12 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
       await userCredential.user!.sendEmailVerification();
       await userCredential.user!.updatePhotoURL(defaultAvatarUrl);
       // signOut();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        throw ("The account already exists for that email.");
+      } else {
+        throw ("Error");
+      }
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
@@ -73,12 +93,13 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
   }
 
   @override
-  Future<UserModel?> getUserModel() async{
+  Future<UserModel?> getUserModel() async {
     try {
       FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
       User? user = _auth.currentUser;
-      CollectionReference usersCollection = firebaseFirestore.collection('users');
+      CollectionReference usersCollection =
+          firebaseFirestore.collection('users');
 
       DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
 
@@ -105,7 +126,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
       } else {
         final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
         final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
+            await googleUser!.authentication;
 
         // Create a GoogleAuthProvider credential
         final AuthCredential credential = GoogleAuthProvider.credential(
@@ -130,7 +151,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
 
   @override
   User? getCurrentUser() {
-      return _auth.currentUser;
+    return _auth.currentUser;
   }
-
 }
