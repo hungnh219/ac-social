@@ -6,10 +6,10 @@ import 'package:social_app/utils/styles/colors.dart';
 
 import '../../../domain/repository/auth/auth.dart';
 import '../../../service_locator.dart';
-import '../../widgets/auth_body.dart';
-import '../../widgets/auth_elevated_button.dart';
-import '../../widgets/auth_header_image.dart';
-import '../../widgets/auth_text_form_field.dart';
+import '../../widgets/auth/auth_body.dart';
+import '../../widgets/auth/auth_elevated_button.dart';
+import '../../widgets/auth/auth_header_image.dart';
+import '../../widgets/auth/auth_text_form_field.dart';
 
 class SignUpScreen extends StatefulWidget with Validator {
   SignUpScreen({super.key});
@@ -54,9 +54,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Material(
       child: Stack(
         children: [
-          const AuthHeaderImage(height: 0.4),
-          CustomBody(
-            marginTop: MediaQuery.of(context).size.height * 0.3,
+          const AuthHeaderImage(
+            height: 0.44,
+            childAspectRatio: 1.33,
+          ),
+          AuthBody(
+            marginTop: MediaQuery.of(context).size.height * 0.34,
             height: double.infinity,
             padding: Padding(
               padding: const EdgeInsets.only(top: 30, left: 25, right: 25),
@@ -70,8 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: [
                         ValueListenableBuilder(
                           valueListenable: _emailController,
-                          builder: (context, value, child) =>
-                              CustomTextFormField(
+                          builder: (context, value, child) => AuthTextFormField(
                             textEditingController: _emailController,
                             hintText: "Email",
                             textInputAction: TextInputAction.next,
@@ -84,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ValueListenableBuilder(
                           valueListenable: _obscureText,
                           builder: (context, value, child) {
-                            return CustomTextFormField(
+                            return AuthTextFormField(
                               textEditingController: _passwordController,
                               hintText: "Password",
                               obscureText: value,
@@ -108,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ValueListenableBuilder(
                           valueListenable: _obscureConfirmText,
                           builder: (context, value, child) {
-                            return CustomTextFormField(
+                            return AuthTextFormField(
                               textEditingController: _confirmPasswordController,
                               hintText: "Password",
                               obscureText: value,
@@ -133,9 +135,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(
                     height: 35,
                   ),
-                  CustomElevatedButton(
+                  AuthElevatedButton(
                     width: double.infinity,
-                    height: 52,
+                    height: 45,
                     inputText: "SIGN IN",
                     onPressed: () {
                       _signup(context);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
-class CustomElevatedButton extends StatelessWidget {
-  const CustomElevatedButton(
+class AuthElevatedButton extends StatelessWidget {
+  const AuthElevatedButton(
       {super.key,
       required this.width,
       required this.height,
