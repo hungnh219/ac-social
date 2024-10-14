@@ -22,6 +22,7 @@ class SplashBackground extends StatelessWidget {
               fit: BoxFit.cover),
         ),
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Opacity(
               opacity: 0.4,
