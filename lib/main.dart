@@ -1,27 +1,37 @@
 // main.dart
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:social_app/data/repository/firebase_auth_service.dart';
-import 'package:social_app/data/providers/auth_provider.dart';
-import 'package:social_app/presentation/screens/auth/auth_screen.dart';
-import 'package:social_app/presentation/screens/log_in/log_in_screen.dart';
+import 'package:social_app/firebase_options.dart';
+import 'package:social_app/presentation/screens/auth/auth.dart';
+import 'package:social_app/presentation/screens/auth/cubit/auth_cubit.dart';
+import 'package:social_app/presentation/screens/auth/cubit/theme_cubit.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
+import 'package:social_app/service_locator.dart';
+import 'package:bloc/bloc.dart';
+import 'package:social_app/utils/styles/themes.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getApplicationDocumentsDirectory(),
+  );
+
+  await initializeDependencies();
+
   runApp(
-    MultiProvider(
-      providers: [
-        Provider<AuthService>(create: (_) => AuthService()),
-        ChangeNotifierProxyProvider<AuthService, AuthProvider>(
-          create: (context) => AuthProvider(context.read<AuthService>()),
-          update: (_, authService, authProvider) => AuthProvider(authService),
-        ),
-      ],
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 }
 
@@ -30,11 +40,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Firebase Auth App',
-      home: Consumer<AuthProvider>(
-        builder: (ctx, auth, _) => auth.isSignedIn ? const HomeScreen() : const AuthScreen(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => AuthCubit())
+      ],
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+          builder: (context, mode) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        // darkTheme:
+        // themeMode: mode,
+        // home: const SplashPage()
+          home: HomeScreen()
+      )),
     );
   }
 }
