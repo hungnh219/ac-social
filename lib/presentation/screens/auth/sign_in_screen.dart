@@ -1,16 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:social_app/data/models/auth/sign_in_user_req.dart';
 import 'package:social_app/mixin/validators/validators.dart';
-import 'package:social_app/presentation/widgets/auth_body.dart';
-import 'package:social_app/presentation/widgets/auth_elevated_button.dart';
-import 'package:social_app/presentation/widgets/auth_header_image.dart';
-import 'package:social_app/presentation/widgets/auth_text_form_field.dart';
+import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/service_locator.dart';
 import 'package:social_app/utils/styles/colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../domain/repository/auth/auth.dart';
+import '../../widgets/auth/auth_body.dart';
+import '../../widgets/auth/auth_elevated_button.dart';
+import '../../widgets/auth/auth_header_image.dart';
+import '../../widgets/auth/auth_text_form_field.dart';
 
 class SignInScreen extends StatefulWidget with Validator {
   const SignInScreen({super.key});
@@ -28,7 +30,6 @@ class _SignInScreenState extends State<SignInScreen> {
   late ValueNotifier<bool> _isLoading;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
@@ -38,7 +39,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -51,9 +51,12 @@ class _SignInScreenState extends State<SignInScreen> {
     return Material(
       child: Stack(
         children: [
-          const AuthHeaderImage(height: 0.4),
-          CustomBody(
-            marginTop: MediaQuery.of(context).size.height * 0.3,
+          const AuthHeaderImage(
+            height: 0.44,
+            childAspectRatio: 1.33,
+          ),
+          AuthBody(
+            marginTop: MediaQuery.of(context).size.height * 0.34,
             height: double.infinity,
             padding: Padding(
               padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
@@ -64,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        CustomTextFormField(
+                        AuthTextFormField(
                           textEditingController: _emailController,
                           hintText: "Email",
                           textInputAction: TextInputAction.next,
@@ -76,7 +79,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ValueListenableBuilder(
                           valueListenable: _obscureText,
                           builder: (context, value, child) {
-                            return CustomTextFormField(
+                            return AuthTextFormField(
                               textEditingController: _passwordController,
                               hintText: "Password",
                               obscureText: value,
@@ -112,9 +115,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           fontSize: 14),
                     ),
                   ),
-                  CustomElevatedButton(
+                  AuthElevatedButton(
                     width: double.infinity,
-                    height: 52,
+                    height: 45,
                     inputText: "LOG IN",
                     onPressed: () {
                       _login(context);
@@ -134,7 +137,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      _loginWithGoogle(context);
+                    },
                     icon: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: const BoxDecoration(
@@ -193,12 +199,24 @@ class _SignInScreenState extends State<SignInScreen> {
             SignInUserReq(
                 email: _emailController.text.trim(),
                 password: _passwordController.text.trim()));
+        _showAlertDialog(context, "Success", "Login success");
       }
-      _showAlertDialog(context, "Success", "Login success");
     } catch (e) {
       _showAlertDialog(context, "Error", e.toString());
     } finally {
       _isLoading.value = false;
+    }
+  }
+
+  void _loginWithGoogle(BuildContext context) async {
+    try {
+      await serviceLocator<AuthRepository>().signInWithGoogle();
+      User user = await serviceLocator<AuthRepository>().getCurrentUser();
+      if (user.email != null) {
+        _showAlertDialog(context, "Success", "Login success");
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 

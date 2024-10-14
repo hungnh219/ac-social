@@ -1,17 +1,16 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
-class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField(
+class AuthTextFormField extends StatelessWidget {
+  const AuthTextFormField(
       {super.key,
       required this.textEditingController,
       required this.hintText,
       this.suffixIcon,
       this.obscureText = false,
       this.validator,
-      this.textInputAction});
+      this.textInputAction,
+      this.textAlign});
 
   final TextEditingController textEditingController;
   final String hintText;
@@ -19,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final FormFieldValidator? validator;
   final TextInputAction? textInputAction;
+  final TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +37,14 @@ class CustomTextFormField extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
         ),
-        fillColor: const Color.fromARGB(255, 249, 247, 247),
+        fillColor: AppColors.chefsHat,
         filled: true,
         suffixIcon: suffixIcon,
       ),
       obscureText: obscureText,
       validator: validator,
       textInputAction: textInputAction,
+      textAlign: textAlign ?? TextAlign.start,
     );
   }
 }

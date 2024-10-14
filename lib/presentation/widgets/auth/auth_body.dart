@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CustomBody extends StatelessWidget {
-  const CustomBody(
+class AuthBody extends StatelessWidget {
+  const AuthBody(
       {super.key,
       required this.padding,
       required this.marginTop,

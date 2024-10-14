@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/presentation/screens/auth/sign_in_screen.dart';
 import 'package:social_app/presentation/screens/boarding/boarding.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
