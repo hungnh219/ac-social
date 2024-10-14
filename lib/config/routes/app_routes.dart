@@ -24,7 +24,7 @@ class MyRouter {
           GoRoute(
             path: 'signin',
             builder: (BuildContext context, GoRouterState state) {
-              return const SignInScreen();
+              return SignInScreen();
             },
           ),
           GoRoute(
