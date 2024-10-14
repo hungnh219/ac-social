@@ -37,7 +37,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       );
 
       User user = userCredential.user!;
-      print(user.displayName);
+      print("User đăng nhập: ${user.email}");
       if (!user.emailVerified) {
         await signOut();
         throw FirebaseAuthException(
@@ -121,6 +121,9 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   @override
   Future<void> signInWithGoogle() async {
     try {
+      print("Đã đăng nhập với user ${getCurrentUser()?.email}");
+      await signOut();
+      print("Đã đăng xuất với user ${getCurrentUser()?.email}");
       if (kIsWeb) {
         _auth.signInWithPopup(_googleProvider);
       } else {

@@ -101,4 +101,8 @@ class AppColors {
   static const Color lead = Color(0xFF212121);
 
   static const Color foundationWhite = Color(0xFFF1F1FE);
+
+  static const Color chefsHat = Color(0xFFF3F5F7);
+
+  static const Color foundationWhite = Color(0xFFF1F1FE);
 }
