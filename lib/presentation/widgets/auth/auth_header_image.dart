@@ -3,9 +3,15 @@ import 'package:social_app/utils/constants/image_path.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class AuthHeaderImage extends StatelessWidget {
-  const AuthHeaderImage({super.key, required this.height});
+  const AuthHeaderImage(
+      {super.key,
+      required this.height,
+      this.positioned,
+      required this.childAspectRatio});
 
   final double height;
+  final Positioned? positioned;
+  final double childAspectRatio;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +25,7 @@ class AuthHeaderImage extends StatelessWidget {
           Positioned(
             child: GridView.count(
               crossAxisCount: 2,
-              childAspectRatio: 1.5,
+              childAspectRatio: childAspectRatio,
               padding: EdgeInsets.zero,
               children: [
                 for (var image in [
@@ -45,22 +51,7 @@ class AuthHeaderImage extends StatelessWidget {
                       fit: BoxFit.cover)),
             ),
           ),
-          Positioned.fill(
-            top: -45,
-            child: Center(
-              child: Text(
-                "WELCOME",
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 40,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 2 // Độ dày của viền chữ
-                    ..color = AppColors.white, // Màu viền
-                ),
-              ),
-            ),
-          ),
+          if (positioned != null) positioned!,
         ],
       ),
     );
