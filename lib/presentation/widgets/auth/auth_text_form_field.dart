@@ -4,13 +4,13 @@ import 'package:social_app/utils/styles/colors.dart';
 class AuthTextFormField extends StatelessWidget {
   const AuthTextFormField(
       {super.key,
-      required this.textEditingController,
-      required this.hintText,
-      this.suffixIcon,
-      this.obscureText = false,
-      this.validator,
-      this.textInputAction,
-      this.textAlign});
+        required this.textEditingController,
+        required this.hintText,
+        this.suffixIcon,
+        this.obscureText = false,
+        this.validator,
+        this.textInputAction,
+        this.textAlign});
 
   final TextEditingController textEditingController;
   final String hintText;
