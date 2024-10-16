@@ -16,52 +16,36 @@ class EditProfile extends StatelessWidget {
               child: Container(
                 width: 375,
                 height: 150,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 375,
-                      height: 150,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 375,
-                            top: 189.93,
-                            child: Transform(
-                              transform: Matrix4.identity()..translate(0.0, 0.0)..rotateZ(-3.14),
-                              child: Container(
-                                width: 432,
-                                height: 230.94,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage("https://via.placeholder.com/432x231"),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 0,
-                            top: 0,
-                            child: Opacity(
-                              opacity: 0.50,
-                              child: Container(
-                                width: 375,
-                                height: 150,
-                                decoration: ShapeDecoration(
-                                  color: Color(0xFF212121),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                child: Container(
+                  width: 375,
+                  height: 150,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 375,
+                        top: 189.93,
+                        child: Transform(
+                          transform: Matrix4.identity()..translate(0.0, 0.0)..rotateZ(-3.14),
+                          child: Image.asset('assets/images/edit_profile_appbar.png'),
+                        ),
                       ),
-                    ),
-                  ],
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: Opacity(
+                          opacity: 0.50,
+                          child: Container(
+                            width: 375,
+                            height: 150,
+                            decoration: ShapeDecoration(
+                              color: Color(0xFF212121),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
