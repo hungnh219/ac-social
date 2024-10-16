@@ -50,6 +50,7 @@ dependencies:
   flutter_custom_clippers: ^2.1.0
   flutter_svg: ^1.0.3
   flutter_native_splash: ^2.4.1
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
