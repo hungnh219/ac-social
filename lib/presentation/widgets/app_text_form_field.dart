@@ -4,13 +4,13 @@ import 'package:social_app/utils/styles/colors.dart';
 class AuthTextFormField extends StatelessWidget {
   const AuthTextFormField(
       {super.key,
-      required this.textEditingController,
-      required this.hintText,
-      this.suffixIcon,
-      this.obscureText = false,
-      this.validator,
-      this.textInputAction,
-      this.textAlign});
+        required this.textEditingController,
+        required this.hintText,
+        this.suffixIcon,
+        this.obscureText = false,
+        this.validator,
+        this.textInputAction,
+        this.textAlign});
 
   final TextEditingController textEditingController;
   final String hintText;
@@ -27,9 +27,9 @@ class AuthTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle:
-            const TextStyle(color: AppColors.noghreiSilver, fontSize: 16),
+        const TextStyle(color: AppColors.noghreiSilver, fontSize: 16),
         contentPadding:
-            const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+        const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide.none),
