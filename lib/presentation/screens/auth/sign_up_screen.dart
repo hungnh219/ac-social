@@ -11,14 +11,14 @@ import '../../widgets/auth/auth_elevated_button.dart';
 import '../../widgets/auth/auth_header_image.dart';
 import '../../widgets/auth/auth_text_form_field.dart';
 
-class SignUpScreen extends StatefulWidget with Validator {
+class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends State<SignUpScreen> with Validator {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
@@ -54,9 +54,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Material(
       child: Stack(
         children: [
-          const AuthHeaderImage(
+          AuthHeaderImage(
             height: 0.44,
             childAspectRatio: 1.33,
+            positioned: Positioned.fill(
+              top: -45,
+              child: Center(
+                child: Text(
+                  "WELCOME",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 40,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 2 // Độ dày của viền chữ
+                      ..color = AppColors.white, // Màu viền
+                  ),
+                ),
+              ),
+            ),
           ),
           AuthBody(
             marginTop: MediaQuery.of(context).size.height * 0.34,
@@ -77,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             textEditingController: _emailController,
                             hintText: "Email",
                             textInputAction: TextInputAction.next,
-                            validator: (value) => widget.validateEmail(value),
+                            validator: (value) => validateEmail(value),
                           ),
                         ),
                         const SizedBox(
@@ -91,8 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               hintText: "Password",
                               obscureText: value,
                               textInputAction: TextInputAction.next,
-                              validator: (value) =>
-                                  widget.validatePassword(value),
+                              validator: (value) => validatePassword(value),
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   _obscureText.value = !value;
@@ -115,9 +130,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               hintText: "Password",
                               obscureText: value,
                               textInputAction: TextInputAction.done,
-                              validator: (value) =>
-                                  widget.validateConfirmPassword(
-                                      _passwordController.text, value),
+                              validator: (value) => validateConfirmPassword(
+                                  _passwordController.text, value),
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   _obscureConfirmText.value = !value;

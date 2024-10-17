@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:social_app/data/models/auth/sign_in_user_req.dart';
 import 'package:social_app/mixin/validators/validators.dart';
-import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/service_locator.dart';
 import 'package:social_app/utils/styles/colors.dart';
 import 'package:go_router/go_router.dart';
@@ -14,14 +13,14 @@ import '../../widgets/auth/auth_elevated_button.dart';
 import '../../widgets/auth/auth_header_image.dart';
 import '../../widgets/auth/auth_text_form_field.dart';
 
-class SignInScreen extends StatefulWidget with Validator {
+class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignInScreenState extends State<SignInScreen> with Validator {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
@@ -51,9 +50,25 @@ class _SignInScreenState extends State<SignInScreen> {
     return Material(
       child: Stack(
         children: [
-          const AuthHeaderImage(
+          AuthHeaderImage(
             height: 0.44,
             childAspectRatio: 1.33,
+            positioned: Positioned.fill(
+              top: -45,
+              child: Center(
+                child: Text(
+                  "WELCOME",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 40,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 2 // Độ dày của viền chữ
+                      ..color = AppColors.white, // Màu viền
+                  ),
+                ),
+              ),
+            ),
           ),
           AuthBody(
             marginTop: MediaQuery.of(context).size.height * 0.34,
@@ -71,7 +86,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           textEditingController: _emailController,
                           hintText: "Email",
                           textInputAction: TextInputAction.next,
-                          validator: (value) => widget.validateEmail(value),
+                          validator: (value) => validateEmail(value),
                         ),
                         const SizedBox(
                           height: 15,
@@ -85,7 +100,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               obscureText: value,
                               textInputAction: TextInputAction.done,
                               validator: (value) {
-                                if (widget.validateEmpty(value)) {
+                                if (validateEmpty(value)) {
                                   return "Please enter a your password";
                                 }
                                 return null;
@@ -195,11 +210,24 @@ class _SignInScreenState extends State<SignInScreen> {
     _isLoading.value = true;
     try {
       if (_formKey.currentState!.validate()) {
-        await serviceLocator<AuthRepository>().signInWithEmailAndPassword(
+        try {
+          await serviceLocator<AuthRepository>().signInWithEmailAndPassword(
             SignInUserReq(
-                email: _emailController.text.trim(),
-                password: _passwordController.text.trim()));
-        _showAlertDialog(context, "Success", "Login success");
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            ),
+          );
+          _showAlertDialog(context, 'Success', 'Login success');
+        } catch (e) {
+          if (e == 'new-user') {
+            _showAlertDialog(context, 'Navigator',
+                'Login success, navigator to choose category screen');
+          } else {
+            rethrow;
+          }
+        } finally {
+          _isLoading.value = false;
+        }
       }
     } catch (e) {
       _showAlertDialog(context, "Error", e.toString());
@@ -211,12 +239,15 @@ class _SignInScreenState extends State<SignInScreen> {
   void _loginWithGoogle(BuildContext context) async {
     try {
       await serviceLocator<AuthRepository>().signInWithGoogle();
-      User user = await serviceLocator<AuthRepository>().getCurrentUser();
-      if (user.email != null) {
-        _showAlertDialog(context, "Success", "Login success");
-      }
+      // User user = await serviceLocator<AuthRepository>().getCurrentUser();
+      _showAlertDialog(context, "Success", "Login success");
     } catch (e) {
-      throw Exception(e);
+      if (e == 'new-user') {
+        _showAlertDialog(context, 'Navigator',
+            'Login success, navigator to choose category screen');
+      } else {
+        throw Exception(e);
+      }
     }
   }
 
