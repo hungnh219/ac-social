@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomDrawerPage extends StatefulWidget {
   @override
-  _CustomDrawerPageState createState() => _CustomDrawerPageState();
+  State<CustomDrawerPage> createState() => _CustomDrawerPageState();
 }
 
 class _CustomDrawerPageState extends State<CustomDrawerPage> with SingleTickerProviderStateMixin {
