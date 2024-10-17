@@ -1,75 +1,231 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:social_app/data/models/auth/create_user_req.dart';
-
+import 'package:social_app/mixin/validators/validators.dart';
+import 'package:social_app/utils/styles/colors.dart';
 
 import '../../../domain/repository/auth/auth.dart';
 import '../../../service_locator.dart';
-import 'sign_in_screen.dart';
+import '../../widgets/auth/auth_body.dart';
+import '../../widgets/auth/auth_elevated_button.dart';
+import '../../widgets/auth/auth_header_image.dart';
+import '../../widgets/auth/auth_text_form_field.dart';
 
-class SignUpScreen extends StatelessWidget {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
-  SignUpScreen({super.key});
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
 
-  void _signup(BuildContext context) async {
+class _SignUpScreenState extends State<SignUpScreen> with Validator {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
 
-    if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
-      return;
-    }
+  late ValueNotifier<bool> _obscureText;
+  late ValueNotifier<bool> _obscureConfirmText;
+  late ValueNotifier<bool> _isLoading;
 
-    try {
-      await serviceLocator<AuthRepository>().signUp(SignUpUserReq(email: _emailController.text, password:  _passwordController.text));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign-up failed')),
-      );
-    }
+  @override
+  void initState() {
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+    _obscureText = ValueNotifier<bool>(true);
+    _obscureConfirmText = ValueNotifier<bool>(true);
+    _isLoading = ValueNotifier<bool>(false);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _obscureText.dispose();
+    _isLoading.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+      child: Stack(
+        children: [
+          AuthHeaderImage(
+            height: 0.44,
+            childAspectRatio: 1.33,
+            positioned: Positioned.fill(
+              top: -45,
+              child: Center(
+                child: Text(
+                  "WELCOME",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 40,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 2 // Độ dày của viền chữ
+                      ..color = AppColors.white, // Màu viền
+                  ),
+                ),
+              ),
             ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            TextField(
-              controller: _confirmPasswordController,
-              decoration: const InputDecoration(labelText: 'Confirm Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _signup(context),
-              child: const Text('Sign Up'),
-            ),
-            TextButton(
-              onPressed: (){ Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => SignInScreen()
+          ),
+          AuthBody(
+            marginTop: MediaQuery.of(context).size.height * 0.34,
+            height: double.infinity,
+            padding: Padding(
+              padding: const EdgeInsets.only(top: 30, left: 25, right: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.always,
+                    child: Column(
+                      children: [
+                        ValueListenableBuilder(
+                          valueListenable: _emailController,
+                          builder: (context, value, child) => AuthTextFormField(
+                            textEditingController: _emailController,
+                            hintText: "Email",
+                            textInputAction: TextInputAction.next,
+                            validator: (value) => validateEmail(value),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        ValueListenableBuilder(
+                          valueListenable: _obscureText,
+                          builder: (context, value, child) {
+                            return AuthTextFormField(
+                              textEditingController: _passwordController,
+                              hintText: "Password",
+                              obscureText: value,
+                              textInputAction: TextInputAction.next,
+                              validator: (value) => validatePassword(value),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  _obscureText.value = !value;
+                                },
+                                icon: Icon(value
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        ValueListenableBuilder(
+                          valueListenable: _obscureConfirmText,
+                          builder: (context, value, child) {
+                            return AuthTextFormField(
+                              textEditingController: _confirmPasswordController,
+                              hintText: "Password",
+                              obscureText: value,
+                              textInputAction: TextInputAction.done,
+                              validator: (value) => validateConfirmPassword(
+                                  _passwordController.text, value),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  _obscureConfirmText.value = !value;
+                                },
+                                icon: Icon(value
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  AuthElevatedButton(
+                    width: double.infinity,
+                    height: 45,
+                    inputText: "SIGN IN",
+                    onPressed: () {
+                      _signup(context);
+                    },
+                    isLoading: _isLoading,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Already have account?",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      TextButton(
+                        onPressed: () => context.go("/signin"),
+                        child: const Text(
+                          "SIGN IN",
+                          style: TextStyle(
+                              color: AppColors.iric,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      )
+                    ],
                   )
-              );},
-              child: const Text('Already have an account? Login'),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+  }
+
+  void _signup(BuildContext context) async {
+    _isLoading.value = true;
+    try {
+      if (_formKey.currentState!.validate()) {
+        await serviceLocator<AuthRepository>().signUp(SignUpUserReq(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim()));
+        _showAlertDialog(context, "Success",
+            "An email has just been sent to you, click the link provided to complete registration");
+      }
+    } catch (e) {
+      _showAlertDialog(context, "Error", e.toString());
+    } finally {
+      _isLoading.value = false;
+    }
+  }
+
+  void _showAlertDialog(BuildContext context, String? title, String? message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "$title",
+            textAlign: TextAlign.center,
+          ),
+          content: Text("$message"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            )
+          ],
+        );
+      },
     );
   }
 }

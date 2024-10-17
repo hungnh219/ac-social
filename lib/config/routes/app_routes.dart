@@ -30,7 +30,7 @@ class MyRouter {
           GoRoute(
             path: 'signup',
             builder: (BuildContext context, GoRouterState state) {
-              return SignUpScreen();
+              return const SignUpScreen();
             },
           ),
         ],
