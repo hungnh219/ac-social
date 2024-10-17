@@ -1,8 +1,11 @@
 // screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/widgets/home_header_custom.dart';
 import 'package:social_app/presentation/screens/home/widgets/post_custom.dart';
+import 'package:social_app/presentation/widgets/bottom_app_bar_custom.dart';
+import 'package:social_app/presentation/widgets/scaffold_custom.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -65,64 +68,84 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        // backgroundColor: AppColors.bauhaus,
-        backgroundColor: Colors.grey.withOpacity(0.25),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.add,
-          ),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30.0)),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: BottomAppBar(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          height: 76,
-          color: AppColors.white,
-          shape: const CircularNotchedRectangle(),
-          notchMargin: 5,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                icon: const Icon(
-                  Icons.home,
-                  color: Colors.black,
-                  size: 20,
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.category_sharp,
-                  color: Colors.black,
-                  size: 20,
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.notifications,
-                  color: Colors.black,
-                  size: 20,
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.person,
-                  color: Colors.black,
-                  size: 20,
-                ),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
+      child:
+      // Scaffold(
+      //   extendBody: true,
+      //   // backgroundColor: AppColors.bauhaus,
+      //   backgroundColor: Colors.grey.withOpacity(0.25),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {},
+        //   child: const Icon(Icons.add,
+        //   ),
+        //   shape: const RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.all(Radius.circular(30.0)),
+        //   ),
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // bottomNavigationBar: BottomAppBar(
+        //   padding: const EdgeInsets.symmetric(horizontal: 20),
+        //   height: 76,
+        //   color: AppColors.white,
+        //   shape: const CircularNotchedRectangle(),
+        //   notchMargin: 5,
+        //   child: Row(
+        //     mainAxisSize: MainAxisSize.max,
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: <Widget>[
+        //       IconButton(
+        //         icon: const Icon(
+        //           Icons.home,
+        //           color: Colors.black,
+        //           size: 20,
+        //         ),
+        //         onPressed: () {},
+        //       ),
+        //       IconButton(
+        //         icon: const Icon(
+        //           Icons.category_sharp,
+        //           color: Colors.black,
+        //           size: 20,
+        //         ),
+        //         onPressed: () {},
+        //       ),
+        //       IconButton(
+        //         icon: const Icon(
+        //           Icons.notifications,
+        //           color: Colors.black,
+        //           size: 20,
+        //         ),
+        //         onPressed: () {},
+        //       ),
+        //       IconButton(
+        //         icon: const Icon(
+        //           Icons.person,
+        //           color: Colors.black,
+        //           size: 20,
+        //         ),
+        //         onPressed: () {},
+        //       ),
+        //     ],
+        //   ),
+        // ),
+
+          // bottom nav custom
+        //   bottomNavigationBar: BottomNavBarCustom(
+        //   currentIndex: 0, // Set the active index
+        //   onTap: (index) {
+        //     // Handle navigation
+        //     if (index == 0) {
+        //       Navigator.pushNamed(context, '/home');
+        //     } else if (index == 1) {
+        //       // Navigator.pushNamed(context, '/discover');
+        //       Navigator.push(context, MaterialPageRoute(builder: (context) => DiscoverScreen()));
+        //     } else if (index == 2) {
+        //       Navigator.pushNamed(context, '/notifications');
+        //     } else if (index == 3) {
+        //       Navigator.pushNamed(context, '/profile');
+        //     }
+        //   },
+        // ),
+        ScaffoldCustom(
         body: Column(children: [
           const HomeHeaderCustom(),
           Expanded(
@@ -134,6 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],),
+        bottomNavBarEnabled: true,
       )
     );
   }

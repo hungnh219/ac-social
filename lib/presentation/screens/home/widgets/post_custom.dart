@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/presentation/screens/post_detail/post_detail_screen.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class PostCustom extends StatelessWidget {
@@ -19,7 +20,42 @@ class PostCustom extends StatelessWidget {
         child: Column(
           children: [
             PostInfo(post: post,),
-            Image.network('https://via.placeholder.com/150'),
+            // Image.network('https://via.placeholder.com/150'),
+            InkWell(
+              onTap: () {
+                // Navigator.pushNamed(context, '/post-detail');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PostDetailScreen()
+                ));
+              },
+              child: Image.network(
+                'assets/images/appscyclone.png',
+                width: double.infinity,
+                height: 220,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.thumb_up_alt_outlined),
+                    onPressed: () {},
+                  ),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.comment_outlined),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.share_outlined),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       )
