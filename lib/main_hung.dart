@@ -1,3 +1,4 @@
+// main.dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,9 @@ import 'package:social_app/firebase_options.dart';
 import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/presentation/screens/auth/cubit/auth_cubit.dart';
 import 'package:social_app/presentation/screens/auth/cubit/theme_cubit.dart';
+import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
+import 'package:social_app/presentation/screens/post_detail/post_detail_screen.dart';
 import 'package:social_app/service_locator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:social_app/utils/styles/themes.dart';
@@ -51,7 +54,7 @@ class MyApp extends StatelessWidget {
         // darkTheme:
         // themeMode: mode,
         // home: const SplashPage()
-          home: AuthScreen()
+          home: HomeScreen()
       )),
     );
   }
