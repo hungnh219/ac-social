@@ -24,12 +24,12 @@ abstract class AuthFirebaseService {
   Future<void> signOut();
 }
 
-class AuthFirebaseServiceImpl extends AuthFirebaseService {
+class AuthFirebaseServiceImpl extends AuthFirebaseService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleAuthProvider _googleProvider = GoogleAuthProvider();
 
   @override
-  Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq) async {
+  Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq) async{
     try {
       final userCredential = await _auth.signInWithEmailAndPassword(
         email: signInUserReq.email.trim(),
@@ -76,7 +76,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  Future<void> signUp(SignUpUserReq signUpUserReq) async {
+  Future<void> signUp(SignUpUserReq signUpUserReq) async{
     try {
       final userCredential = await _auth.createUserWithEmailAndPassword(
         email: signUpUserReq.email,
@@ -131,7 +131,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
   @override
   Future<void> signInWithGoogle() async {
-    await signOut();
+    // await signOut();
     try {
       if (kIsWeb) {
         _auth.signInWithPopup(_googleProvider);
