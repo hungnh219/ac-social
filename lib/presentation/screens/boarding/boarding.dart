@@ -28,7 +28,7 @@ class BoardingScreen extends StatelessWidget {
             margin: const EdgeInsets.only(top: 25),
             child: ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(
                     AppColors.ancestralWater.withOpacity(0.3)),
               ),
               onPressed: () => context.go("/signin"),
