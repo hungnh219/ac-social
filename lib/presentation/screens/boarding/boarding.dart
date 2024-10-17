@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_app/presentation/widgets/splash/splash_background.dart';
 import 'package:social_app/presentation/widgets/splash/splash_image_group.dart';
-import 'package:social_app/utils/constants/image_path.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class BoardingScreen extends StatelessWidget {
