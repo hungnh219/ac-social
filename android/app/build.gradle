@@ -44,6 +44,25 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions "version"
+    productFlavors {
+        mainHung {
+            applicationId "com.project.hungapp"
+        }
+        mainTu {
+            applicationId "com.project.tuapp"
+        }
+    }
+
+    sourceSets {
+        mainHung {
+            manifest.srcFile 'src/main_hung/AndroidManifest.xml'
+        }
+        mainTu {
+            manifest.srcFile 'src/main_tu/AndroidManifest.xml'
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
