@@ -1,53 +1,89 @@
 // Name the class UserModel to avoid duplicating the name of User class
 // in Firebase Authentication
 class UserModel {
-  final FullName fullName;
-  List<String> followers;
-  List<String> following;
+  final String name;
+  final String lastName;
+  final String category;
+  final String paypal;
+  final String trendingPostId;
   final SocialLinks socialLinks;
+  final List<String> collections;
+  final List<String> followers;
+  final List<String> followingUsers;
 
   UserModel({
-    required this.fullName,
+    required this.name,
+    required this.lastName,
+    required this.category,
+    required this.paypal,
+    required this.trendingPostId,
+    required this.collections,
+    required this.followingUsers,
     required this.followers,
-    required this.following,
     required this.socialLinks,
   });
 
-  UserModel.newUser()
-      : fullName = FullName.empty(),
-        followers = [],
-        following = [],
-        socialLinks = SocialLinks();
+  UserModel.newUser(String categoryID)
+      : name = '',
+        lastName = '',
+        category = categoryID,
+        paypal = '',
+        trendingPostId = '',
+        socialLinks = SocialLinks(),
+        collections = [],
+        followingUsers = [],
+        followers = [];
+
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      fullName: FullName.fromMap(map['fullName']),
+      name: map['name'] ?? '',
+      lastName: map['lastName'] ?? '',
+      category: map['category'] ?? 'Uncategorized',
+      paypal: map['paypal'] ?? '',
+      trendingPostId: map['trendingPostId'] ?? '',
+      collections: List<String>.from(map['collections'] ?? []),
       followers: List<String>.from(map['followers'] ?? []),
-      following: List<String>.from(map['following'] ?? []),
-      socialLinks: SocialLinks.fromMap(map['socialLinks']),
+      followingUsers: List<String>.from(map['followingUsers'] ?? []),
+      socialLinks: SocialLinks.fromMap(map['socialLinks'] ?? {}),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'fullName': fullName.toMap(),
+      'name': name,
+      'lastName': lastName,
+      'category': category,
+      'paypal': paypal,
+      'trendingPostId': trendingPostId,
+      'collections': collections,
       'followers': followers,
-      'following': following,
+      'followingUsers': followingUsers,
       'socialLinks': socialLinks.toMap(),
     };
   }
 
   UserModel copyWith({
-    FullName? fullName,
-    List<String>? followers,
-    List<String>? following,
+    String? name,
+    String? lastName,
+    String? category,
+    String? paypal,
+    String? trendingPostId,
     SocialLinks? socialLinks,
+    List<String>? collections,
+    List<String>? followers,
+    List<String>? followingUsers,
   }) {
     return UserModel(
-      fullName: fullName ?? this.fullName,
-      followers: followers ?? this.followers,
-      following: following ?? this.following,
+      name: name ?? this.name,
+      lastName: lastName ?? this.lastName,
+      category: category ?? this.category,
+      paypal: paypal ?? this.paypal,
+      trendingPostId: trendingPostId ?? this.trendingPostId,
       socialLinks: socialLinks ?? this.socialLinks,
+      collections: collections ?? this.collections,
+      followers: followers ?? this.followers,
+      followingUsers: followingUsers ?? this.followingUsers,
     );
   }
 
@@ -56,32 +92,7 @@ class UserModel {
   }
 
   int? getNumberOfFollowing() {
-    return following.length;
-  }
-}
-
-class FullName {
-  final String firstName;
-  final String lastName;
-
-  FullName({required this.firstName, required this.lastName});
-
-  factory FullName.fromMap(Map<String, dynamic> map) {
-    return FullName(
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-    );
-  }
-
-  FullName.empty()
-      : firstName = '',
-        lastName = '';
-
-  Map<String, dynamic> toMap() {
-    return {
-      'firstName': firstName,
-      'lastName': lastName,
-    };
+    return followingUsers.length;
   }
 }
 
