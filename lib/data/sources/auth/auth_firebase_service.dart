@@ -88,7 +88,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
         if (kDebugMode) {
           print("User document does not exist.");
         }
-        return UserModel.newUser();
       }
     } catch (e) {
       if (kDebugMode) {
