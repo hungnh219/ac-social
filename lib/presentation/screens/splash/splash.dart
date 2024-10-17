@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_app/presentation/widgets/splash/splash_background.dart';
-import 'package:social_app/presentation/widgets/splash/splash_image.dart';
 import 'package:social_app/presentation/widgets/splash/splash_image_group.dart';
-import 'package:social_app/utils/constants/image_path.dart';
-import 'package:social_app/utils/styles/colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
