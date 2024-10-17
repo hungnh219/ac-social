@@ -2,7 +2,7 @@
     <application
         android:label="social_app"
         android:name="${applicationName}"
-        android:icon="@drawable/original">
+        android:icon="@drawable/modern">
         <activity
             android:name=".MainActivity"
             android:exported="true"
