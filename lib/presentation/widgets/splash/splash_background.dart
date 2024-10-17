@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/presentation/widgets/splash/splash_image_group.dart';
 
 import '../../../utils/constants/image_path.dart';
 import '../../../utils/styles/colors.dart';
