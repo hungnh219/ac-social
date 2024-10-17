@@ -65,11 +65,15 @@ class AppColors {
 
   static const Color mutedLavender = Color(0xFF3B5998);
 
+  static const Color irish = Color(0xFF5151C6);
+
   static const Color seaCapture = Color(0xFF5BC0DE);
 
   static const Color heisenbergBlue = Color(0xFF6DD5FA);
 
   static const Color parakeetBlue = Color(0xFF7EB5FB);
+
+  static const Color lavenderBlueShadow = Color(0xFF888BF4);
 
   static const Color pinkSpyro = Color(0xFF9C26B0);
 
