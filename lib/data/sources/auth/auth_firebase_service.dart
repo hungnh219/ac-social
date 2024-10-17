@@ -37,7 +37,9 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       );
 
       User user = userCredential.user!;
-      print("User đăng nhập: ${user.email}");
+      if (kDebugMode) {
+        print("User đăng nhập: ${user.email}");
+      }
       if (!user.emailVerified) {
         await signOut();
         throw FirebaseAuthException(
@@ -45,8 +47,15 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           message: 'Your account is not verified. Please check your inbox',
         );
       }
+      final userModel = await getUserModel();
+
+      if (userModel == null) {
+        throw "new-user";
+      }
     } on FirebaseAuthException catch (e) {
-      print("mã ${e.code}");
+      if (kDebugMode) {
+        print("mã ${e.code}");
+      }
       switch (e.code) {
         case 'email-not-verified':
           throw ('Your account is not verified. Please check your inbox');
@@ -99,17 +108,18 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
       User? user = _auth.currentUser;
       CollectionReference usersCollection =
-          firebaseFirestore.collection('users');
+          firebaseFirestore.collection('User');
 
       DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
 
       if (userDoc.exists) {
+        // Nếu user đã tồn tại, trả về UserModel từ Firestore
         return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
       } else {
         if (kDebugMode) {
           print("User document does not exist.");
         }
-        return UserModel.newUser();
+        return null;
       }
     } catch (e) {
       if (kDebugMode) {
@@ -121,10 +131,8 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
   @override
   Future<void> signInWithGoogle() async {
+    await signOut();
     try {
-      print("Đã đăng nhập với user ${getCurrentUser()?.email}");
-      await signOut();
-      print("Đã đăng xuất với user ${getCurrentUser()?.email}");
       if (kIsWeb) {
         _auth.signInWithPopup(_googleProvider);
       } else {
@@ -133,18 +141,27 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
             await googleUser!.authentication;
 
         // Create a GoogleAuthProvider credential
-        final AuthCredential credential = GoogleAuthProvider.credential(
+        final AuthCredential googleCredential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
 
         // Sign in to Firebase with Google credentials
-        await _auth.signInWithCredential(credential);
+        UserCredential googleUserCredential =
+            await _auth.signInWithCredential(googleCredential);
+
+        // User? currentUser = _auth.currentUser;
+        final userModel = await getUserModel();
+
+        if (userModel == null) {
+          throw "new-user";
+        }
       }
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
       }
+      rethrow;
     }
   }
 

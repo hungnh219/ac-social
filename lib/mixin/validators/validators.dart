@@ -20,6 +20,7 @@ mixin Validator {
   }
 
   String? validateEmail(String value) {
+    value = value.trim();
     if (validateEmpty(value)) {
       return "Please enter a your email";
     } else if (!EmailValidator.validate(value)) {
@@ -37,7 +38,7 @@ mixin Validator {
     if (validateEmpty(value)) {
       return "Please enter a your password";
     } else if (value.length < 6) {
-      return "Password must have more than 5 symbols";
+      return "Password must have more than 6 symbols";
     } else if (!hasUppercase) {
       return "Password has at least one capital letter";
     } else if (!hasDigits) {
