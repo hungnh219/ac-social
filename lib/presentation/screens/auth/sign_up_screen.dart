@@ -12,7 +12,7 @@ import '../../widgets/auth/auth_header_image.dart';
 import '../../widgets/auth/auth_text_form_field.dart';
 
 class SignUpScreen extends StatefulWidget {
-  SignUpScreen({super.key});
+  const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
