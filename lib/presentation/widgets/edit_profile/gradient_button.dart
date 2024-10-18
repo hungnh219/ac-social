@@ -18,10 +18,7 @@ class CustomFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      decoration: BoxDecoration(
-        gradient: AppTheme.mainGradient,
-        borderRadius: BorderRadius.circular(30),
-      ),
+      decoration: AppTheme.gradientFabBoxDecoration,
       child: FloatingActionButton.extended(
         onPressed: onPressed,
         backgroundColor: Colors.transparent,
