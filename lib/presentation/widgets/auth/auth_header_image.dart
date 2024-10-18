@@ -29,10 +29,10 @@ class AuthHeaderImage extends StatelessWidget {
               padding: EdgeInsets.zero,
               children: [
                 for (var image in [
-                  AppAssets.signInThumb1,
-                  AppAssets.signInThumb2,
-                  AppAssets.signInThumb3,
-                  AppAssets.signInThumb4
+                  AppImages.signInThumb1,
+                  AppImages.signInThumb2,
+                  AppImages.signInThumb3,
+                  AppImages.signInThumb4
                 ])
                   Container(
                     decoration: BoxDecoration(
@@ -47,7 +47,7 @@ class AuthHeaderImage extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("${AppAssets.loginMask}"),
+                      image: AssetImage("${AppImages.loginMask}"),
                       fit: BoxFit.cover)),
             ),
           ),

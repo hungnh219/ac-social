@@ -38,7 +38,7 @@ class EditProfile extends StatelessWidget {
                       child: SizedBox(
                         height: 200,
                         child: BottomRoundedAppBar(
-                          bannerPath: AppAssets.editProfileAppbarBackground,
+                          bannerPath: AppImages.editProfileAppbarBackground,
                         ),
                       ),
                     ),
