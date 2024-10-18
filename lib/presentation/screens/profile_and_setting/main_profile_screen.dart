@@ -16,7 +16,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return const ZoomDrawer(
-      drawerShadowsBackgroundColor: AppColors.irish,
+      drawerShadowsBackgroundColor: AppColors.iris,
       menuScreen: SettingPart(),
       mainScreen: ProfilePart(),
       angle: 0,
