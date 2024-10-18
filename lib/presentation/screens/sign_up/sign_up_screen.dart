@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_app/data/models/auth/create_user_req.dart';
+import 'package:social_app/mixin/validators/validators.dart';
 import 'package:social_app/presentation/screens/sign_up/cubit/sign_up_cubit.dart';
 import 'package:social_app/presentation/screens/sign_up/cubit/sign_up_state.dart';
 import 'package:social_app/utils/styles/colors.dart';
@@ -18,7 +19,7 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends State<SignUpScreen> with Validator {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
@@ -89,9 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             textEditingController: _emailController,
                             hintText: "Email",
                             textInputAction: TextInputAction.next,
-                            validator: (value) => context
-                                .read<SignUpCubit>()
-                                .validateEmailCubit(value),
+                            validator: (value) => validateEmail(value),
                           ),
                           const SizedBox(
                             height: 15,
@@ -104,9 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 hintText: "Password",
                                 obscureText: value,
                                 textInputAction: TextInputAction.next,
-                                validator: (value) => context
-                                    .read<SignUpCubit>()
-                                    .validatePasswordCubit(value),
+                                validator: (value) => validatePassword(value),
                                 suffixIcon: IconButton(
                                   onPressed: () {
                                     _obscureText.value = !value;
@@ -130,10 +127,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 hintText: "Password",
                                 obscureText: value,
                                 textInputAction: TextInputAction.done,
-                                validator: (value) => context
-                                    .read<SignUpCubit>()
-                                    .validateConfirmPasswordCubit(
-                                        _passwordController.text, value),
+                                validator: (value) => validateConfirmPassword(
+                                    _passwordController.text, value),
                                 suffixIcon: IconButton(
                                   onPressed: () {
                                     _obscureConfirmText.value = !value;
