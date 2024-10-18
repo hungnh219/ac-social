@@ -7,11 +7,12 @@ import '../../models/user_firestore/add_user_data.dart';
 import '../../models/user_firestore/update_user_req.dart';
 
 abstract class FirestoreService {
-  Future<UserModel?>? getUserData();
+  Future<UserModel?>? getUserData(String userID);
 
   Future<UserModel?>? getCurrentUserData();
+  
   // No need add to repository
-  Future<UserModel?> fetchUserData();
+  Future<UserModel?> fetchUserData(String userID);
 
   Future<void> addCurrentUserData(AddUserReq addUserReq);
 
@@ -26,9 +27,10 @@ class FirestoreServiceImpl extends  FirestoreService{
 
   CollectionReference get _usersCollection => _firestoreDB.collection('users');
 
-  Future<UserModel?> getUserData() async {
+  @override
+  Future<UserModel?> getUserData(String userID) async {
     try {
-      return await fetchUserData();
+      return await fetchUserData(userID);
     } on CustomFirestoreException catch (error) {
         if (kDebugMode) {
           print(error.toString());
@@ -37,11 +39,12 @@ class FirestoreServiceImpl extends  FirestoreService{
     }
   }
 
+  @override
   Future<UserModel?> getCurrentUserData() async {
     try {
-      return await fetchUserData();
+      return await fetchUserData(currentUser!.uid);
     } on CustomFirestoreException catch (error) {
-      if (error.code == 'user-firestore-not-exist') {
+      if (error.code == 'new-user') {
         rethrow;
       }
         if (kDebugMode) {
@@ -52,13 +55,14 @@ class FirestoreServiceImpl extends  FirestoreService{
   }
 
   // No need add to repository
-  Future<UserModel?> fetchUserData() async {
+  @override
+  Future<UserModel?> fetchUserData(String userID) async {
     try {
-      DocumentSnapshot userDoc = await _usersCollection.doc(currentUser?.uid).get();
+      DocumentSnapshot userDoc = await _usersCollection.doc(userID).get();
 
       if (!userDoc.exists) {
         throw CustomFirestoreException(
-          code: 'user-firestore-not-exist',
+          code: 'new-user',
           message: 'User data does not exist in Firestore',
         );
       }
@@ -69,6 +73,7 @@ class FirestoreServiceImpl extends  FirestoreService{
     }
   }
 
+  @override
   Future<void> addCurrentUserData(AddUserReq addUserReq) async {
     if (currentUser == null) {
       if (kDebugMode) {
@@ -85,6 +90,7 @@ class FirestoreServiceImpl extends  FirestoreService{
         .catchError((error) => print("Error pushing user data: $error"));
   }
 
+  @override
   Future<void> updateCurrentUserData(UpdateUserReq updateUserReq) async {
     if (currentUser == null) {
       if (kDebugMode) {
