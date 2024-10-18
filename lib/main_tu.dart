@@ -5,10 +5,12 @@ import 'package:social_app/presentation/screens/profile_and_setting/main_profile
 import 'package:social_app/utils/styles/themes.dart';
 
 void main(){
-  runApp(MyTestApp());
+  runApp(const MyTestApp());
 }
 
 class MyTestApp extends StatelessWidget{
+  const MyTestApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

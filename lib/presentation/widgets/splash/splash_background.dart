@@ -17,7 +17,7 @@ class SplashBackground extends StatelessWidget {
         height: MediaQuery.of(context).size.height * 1,
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("${AppAssets.splashBackground}"),
+              image: AssetImage("${AppImages.splashBackground}"),
               fit: BoxFit.cover),
         ),
         child: Stack(

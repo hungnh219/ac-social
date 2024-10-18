@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
+import '../../../utils/constants/icon_path.dart';
 import '../../../utils/constants/image_path.dart';
 import '../../../utils/styles/themes.dart';
 import '../../widgets/edit_profile/bottom_rounded_appbar.dart';
+import '../../widgets/profile_and_setting/svg_icon_button.dart';
 
 const String avatarURL =
     'https://firebasestorage.googleapis.com/v0/b/ac-social-internship.appspot.com/o/default_avatar.png?alt=media&token=822ddf23-8cf3-434e-87e3-81fd35491e84';
@@ -19,8 +21,8 @@ class ProfilePart extends StatefulWidget {
 class _ProfilePartState extends State<ProfilePart> {
   @override
   Widget build(BuildContext context) {
-    double deviceHeight = MediaQuery.of(context).size.height;
-    double deviceWidth = MediaQuery.of(context).size.width;
+    // double deviceHeight = MediaQuery.of(context).size.height;
+    // double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -34,7 +36,7 @@ class _ProfilePartState extends State<ProfilePart> {
                     child: SizedBox(
                       height: 200,
                       child: BottomRoundedAppBar(
-                        bannerPath: AppAssets.editProfileAppbarBackground,
+                        bannerPath: AppImages.editProfileAppbarBackground,
                       ),
                     ),
                   ),
@@ -86,15 +88,11 @@ class _ProfilePartState extends State<ProfilePart> {
                               // 0.3 Avatar height
                               width: 36,
                               height: 36,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                                gradient: AppTheme.mainGradient,
-                              ),
-                              child: IconButton(
-                                icon: const Icon(Icons.camera_alt_outlined),
-                                iconSize: 18,
+                              decoration: AppTheme.gradientIconBoxDecoration,
+                              child: SvgIconButton(
+                                assetPath: AppIcons.camera,
                                 onPressed: () {
-                                  // Define the action for the button here
+                                  //TODO : Change avatar function
                                 },
                               ),
                             ),
@@ -111,8 +109,7 @@ class _ProfilePartState extends State<ProfilePart> {
             const Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              ],
+              children: [],
             ),
           ],
         ),

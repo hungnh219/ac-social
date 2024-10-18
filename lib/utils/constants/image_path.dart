@@ -1,23 +1,24 @@
-class AppAssets {
-  static const String basePath = 'assets/images/';
-  static const String format = '.png';
+class AppImages {
+  static const String imagePath = 'assets/images/';
+  static const String imageFormat = '.png';
 
-  static const String category1 = '${basePath}category_1$format';
-  static const String category2 = '${basePath}category_2$format';
-  static const String category3 = '${basePath}category_3$format';
-  static const String category4 = '${basePath}category_4$format';
-  static const String categoryMask = '${basePath}category_mask$format';
-  static const String loginMask = '${basePath}login_mask$format';
-  static const String signInThumb1 = '${basePath}sign_in_thumb_1$format';
-  static const String signInThumb2 = '${basePath}sign_in_thumb_2$format';
-  static const String signInThumb3 = '${basePath}sign_in_thumb_3$format';
-  static const String signInThumb4 = '${basePath}sign_in_thumb_4$format';
-  static const String splash1 = '${basePath}splash_1$format';
-  static const String splash2 = '${basePath}splash_2$format';
-  static const String splash3 = '${basePath}splash_3$format';
-  static const String splash4 = '${basePath}splash_4$format';
-  static const String splashBackground = '${basePath}splash_background$format';
-  static const String splashMask = '${basePath}splash_mask$format';
+  static const String category1 = '${imagePath}category_1$imageFormat';
+  static const String category2 = '${imagePath}category_2$imageFormat';
+  static const String category3 = '${imagePath}category_3$imageFormat';
+  static const String category4 = '${imagePath}category_4$imageFormat';
+  static const String categoryMask = '${imagePath}category_mask$imageFormat';
+  static const String loginMask = '${imagePath}login_mask$imageFormat';
+  static const String signInThumb1 = '${imagePath}sign_in_thumb_1$imageFormat';
+  static const String signInThumb2 = '${imagePath}sign_in_thumb_2$imageFormat';
+  static const String signInThumb3 = '${imagePath}sign_in_thumb_3$imageFormat';
+  static const String signInThumb4 = '${imagePath}sign_in_thumb_4$imageFormat';
+  static const String splash1 = '${imagePath}splash_1$imageFormat';
+  static const String splash2 = '${imagePath}splash_2$imageFormat';
+  static const String splash3 = '${imagePath}splash_3$imageFormat';
+  static const String splash4 = '${imagePath}splash_4$imageFormat';
+  static const String splashBackground = '${imagePath}splash_background$imageFormat';
+  static const String splashMask = '${imagePath}splash_mask$imageFormat';
+  static const String editProfileAppbarBackground = '${imagePath}edit_profile_appbar$imageFormat';
 
-  static const String editProfileAppbarBackground = '${basePath}edit_profile_appbar$format';
+
 }

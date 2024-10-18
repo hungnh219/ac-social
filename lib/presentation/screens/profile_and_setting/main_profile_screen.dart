@@ -3,6 +3,8 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/profile_part.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/setting_part.dart';
 
+import '../../../utils/styles/colors.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -13,8 +15,25 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return ZoomDrawer(menuScreen: SettingPart(), mainScreen: const ProfilePart(),
-    angle: 0,
-    duration: const Duration(milliseconds: 600),);
+    return const ZoomDrawer(
+      drawerShadowsBackgroundColor: AppColors.irish,
+      menuScreen: SettingPart(),
+      mainScreen: ProfilePart(),
+      angle: 0,
+      duration: Duration(milliseconds: 600),
+    );
   }
 }
+
+// class _ProfileScreenState extends State<ProfileScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const ZoomDrawer(
+//       drawerShadowsBackgroundColor: AppColors.irish,
+//       menuScreen: SettingPart(),
+//       mainScreen: ProfilePart(),
+//       angle: 0,
+//       duration: Duration(milliseconds: 600),
+//     );
+//   }
+// }

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/presentation/widgets/profile_and_setting/svg_icon_button.dart';
+import 'package:social_app/utils/styles/themes.dart';
 
-class CustomListTile extends StatelessWidget {
+import '../../../utils/constants/icon_path.dart';
+
+class DrawerItem extends StatelessWidget {
   final String title;
-  final Icon? trailingIcon;
+  final VoidCallback onPressed;
 
-  const CustomListTile({
+  const DrawerItem({
     super.key,
-    required this.title,
-    this.trailingIcon,
+    required this.title, required this.onPressed,
   });
 
   @override
@@ -24,35 +27,12 @@ class CustomListTile extends StatelessWidget {
           ),
         ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'Circular Std',
-                fontWeight: FontWeight.w400,
-                letterSpacing: -0.1,
-              ),
-            ),
-          ),
-          if (trailingIcon != null)
-            Container(
-              padding: const EdgeInsets.all(5),
-              decoration: ShapeDecoration(
-                color: Colors.white.withOpacity(0.2),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              child: trailingIcon,
-            ),
-        ],
+      child: ListTile(
+        title: Text(
+          title,
+          style: AppTheme.drawerItemStyle,
+        ),
+        leading: SvgIconButton(assetPath: AppIcons.chevronRightButton, onPressed: onPressed),
       ),
     );
   }
