@@ -33,7 +33,7 @@ class SplashImageGroup extends StatelessWidget {
             height: 160,
             top: 25,
             image: DecorationImage(
-              image: AssetImage(AppAssets.splash1),
+              image: AssetImage(AppImages.splash1),
             ),
           ),
           SplashImage(
@@ -42,7 +42,7 @@ class SplashImageGroup extends StatelessWidget {
             top: 125,
             left: 5,
             image: DecorationImage(
-              image: AssetImage(AppAssets.splash2),
+              image: AssetImage(AppImages.splash2),
             ),
           ),
           SplashImage(
@@ -51,7 +51,7 @@ class SplashImageGroup extends StatelessWidget {
             top: 125,
             right: 5,
             image: DecorationImage(
-              image: AssetImage(AppAssets.splash4),
+              image: AssetImage(AppImages.splash4),
             ),
           ),
           SplashImage(
@@ -68,7 +68,7 @@ class SplashImageGroup extends StatelessWidget {
             height: 160,
             top: 200,
             image: DecorationImage(
-              image: AssetImage(AppAssets.splash3),
+              image: AssetImage(AppImages.splash3),
             ),
           ),
         ],
