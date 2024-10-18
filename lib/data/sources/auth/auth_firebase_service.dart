@@ -70,8 +70,8 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   Future<void> signUp(SignUpUserReq signUpUserReq) async {
     try {
       final userCredential = await _auth.createUserWithEmailAndPassword(
-        email: signUpUserReq.email,
-        password: signUpUserReq.password,
+        email: signUpUserReq.email.trim(),
+        password: signUpUserReq.password.trim(),
       );
 
       await userCredential.user!.sendEmailVerification();
