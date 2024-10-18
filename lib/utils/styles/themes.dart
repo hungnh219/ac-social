@@ -6,7 +6,7 @@ import 'colors.dart';
 class AppTheme {
   //ToDo: Color
   static Color get error => AppColors.sangoRed; // Error color
-  static Color get primary => AppColors.irish; // Primary color
+  static Color get primary => AppColors.iris; // Primary color
   static Color get lightBackground =>
       AppColors.roseDragee; // Background color for light theme
   static Color get hintTextColor => AppColors.noghreiSilver; // Hint text color
@@ -17,7 +17,7 @@ class AppTheme {
 
   //ToDo: Gradient
   static Gradient get mainGradient => const LinearGradient(
-        colors: [AppColors.irish, AppColors.lavenderBlueShadow],
+        colors: [AppColors.iris, AppColors.lavenderBlueShadow],
       );
 
   //ToDo: BoxDecoration
@@ -62,6 +62,35 @@ class AppTheme {
     fontSize: 16,
     fontWeight: FontWeight.w400,
     letterSpacing: -0.1,
+  );
+  static TextStyle get authHeaderStyle => GoogleFonts.plusJakartaSans(
+        fontWeight: FontWeight.w400,
+        fontSize: 40,
+        foreground: Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2 // Độ dày của viền chữ
+          ..color = AppColors.white, // Màu viền
+      );
+
+  static TextStyle get authNormalStyle => GoogleFonts.plusJakartaSans(
+        color: AppColors.kettleman,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 2,
+        fontSize: 14,
+      );
+
+  static TextStyle get authForgotStyle => GoogleFonts.plusJakartaSans(
+      color: AppColors.iric,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 2,
+      fontSize: 14);
+
+  static TextStyle get authSignUpStyle => GoogleFonts.plusJakartaSans(
+      color: AppColors.iric, fontSize: 16, fontWeight: FontWeight.w500);
+
+  static TextStyle get authWhiteText => const TextStyle(
+    color: Colors.white,
+    fontSize: 14,
   );
 
   //ToDo: Theme
