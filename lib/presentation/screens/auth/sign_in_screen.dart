@@ -10,6 +10,7 @@ import 'package:social_app/utils/styles/themes.dart';
 import '../../../data/sources/firestore/firestore_service.dart';
 import '../../../domain/repository/auth/auth.dart';
 import '../../../domain/repository/user/user.dart';
+import '../../../utils/constants/icon_path.dart';
 import '../../widgets/auth/auth_body.dart';
 import '../../widgets/auth/auth_elevated_button.dart';
 import '../../widgets/auth/auth_header_image.dart';
@@ -152,7 +153,7 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                           return AppTheme.mainGradient.createShader(bounds);
                         },
                         child: SvgPicture.asset(
-                          "assets/icons/google_logo.svg",
+                          AppIcons.googleLogo,
                           width: 20.0,
                           height: 20.0,
                           color: const Color.fromARGB(255, 89, 28, 219),
@@ -233,7 +234,7 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
       _showAlertDialog(context, "Success", "Login success");
     } catch (e) {
       if (e is CustomFirestoreException) {
-        if (e.message == 'new-user') {
+        if (e.code == 'new-user') {
           if (!mounted) return;
           _showAlertDialog(context, 'Navigator',
               'Login success, navigator to choose category screen');
