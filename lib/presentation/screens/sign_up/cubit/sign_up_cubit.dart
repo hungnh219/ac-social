@@ -12,19 +12,6 @@ class SignUpCubit extends Cubit<SignUpState> with Validator {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  String? validateEmailCubit(String value) {
-    return validateEmail(value);
-  }
-
-  String? validatePasswordCubit(String value) {
-    return validatePassword(value);
-  }
-
-  String? validateConfirmPasswordCubit(
-      String password, String confirmPassword) {
-    return validateConfirmPassword(password, confirmPassword);
-  }
-
   void signup(BuildContext context, SignUpUserReq signUpUserReq) async {
     try {
       if (formKey.currentState!.validate()) {
