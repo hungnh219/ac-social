@@ -2,6 +2,7 @@ import 'dart:ui';
 
 class AppColors {
 
+  static const Color lightIris = Color(0x005151C6);
 
   static const Color erieBlack = Color(0xFF1A1A1A);
 
@@ -74,7 +75,7 @@ class AppColors {
 
   static const Color mutedLavender = Color(0xFF3B5998);
 
-  static const Color irish = Color(0xFF5151C6);
+  static const Color iris = Color(0xFF5151C6);
 
   static const Color iric = Color(0xFF5252C7);
 
