@@ -3,8 +3,9 @@ import 'package:social_app/presentation/screens/post_detail/comment_list/comment
 import 'package:social_app/presentation/screens/post_detail/post_detail/post_detail.dart';
 
 class PostDetailScreen extends StatelessWidget {
-  const PostDetailScreen({super.key});
+  PostDetailScreen({super.key, required this.post});
 
+  dynamic post;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,7 +30,7 @@ class PostDetailScreen extends StatelessWidget {
               ),
             ],),
         
-            PostDetail(),
+            PostDetail(post: post),
         
             Expanded(child: CommentList()),
           ]

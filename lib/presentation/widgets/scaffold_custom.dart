@@ -61,19 +61,13 @@ class ScaffoldCustom extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.notifications, size: 20, color: Colors.black),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PostDetailScreen()),
-                    );
+
                   },
                 ),
                 IconButton(
                   icon: const Icon(Icons.person, size: 20, color: Colors.black),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PostDetailScreen()),
-                    );
+
                   },
                 ),
               ],

@@ -26,11 +26,11 @@ class PostCustom extends StatelessWidget {
                 // Navigator.pushNamed(context, '/post-detail');
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PostDetailScreen()
+                  MaterialPageRoute(builder: (context) => PostDetailScreen(post: post)
                 ));
               },
               child: Image.network(
-                'assets/images/appscyclone.png',
+                post['image'],
                 width: double.infinity,
                 height: 220,
                 fit: BoxFit.cover,
@@ -78,9 +78,10 @@ class PostInfo extends StatelessWidget {
             backgroundImage: NetworkImage('https://via.placeholder.com/150'),
           ),
           const SizedBox(width: 8),
-          Text(post['username']),
+          // Text(post['username']),
+          Text(post['user_id']),
           Spacer(),
-          Text(post['timestamp']),
+          Text(post['timestamp'].toString()),
         ],),
       ),
     );
