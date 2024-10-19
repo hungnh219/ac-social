@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class PostDetail extends StatelessWidget {
-  const PostDetail({super.key});
+  PostDetail({super.key, required this.post});
 
+  dynamic post;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        PostUserInfo(),
-        PostImage(),
+        PostUserInfo(post: post),
+        PostImage(post: post),
         PostStatsBar(),
         PostContent(),
       ],
@@ -17,7 +18,9 @@ class PostDetail extends StatelessWidget {
 }
 
 class PostUserInfo extends StatelessWidget {
-  const PostUserInfo({super.key});
+  PostUserInfo({super.key, required this.post});
+
+  dynamic post;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +32,9 @@ class PostUserInfo extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16.0),
             child: CircleAvatar(),
           ),
-          Text('username'),
+          Text(post['user_id']),
           Spacer(),
-          Text('timestamp'),
+          Text(post['timestamp'].toString()),
         ],
       ),
     );
@@ -39,17 +42,20 @@ class PostUserInfo extends StatelessWidget {
 }
 
 class PostImage extends StatelessWidget {
-  const PostImage({super.key});
+  PostImage({super.key, required this.post});
+
+  dynamic post;
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset('assets/images/appscyclone.png');
+    return Image.network(post['image']);
   }
 }
 
 class PostStatsBar extends StatelessWidget {
   const PostStatsBar({super.key});
 
+  // dynamic post;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
