@@ -15,7 +15,7 @@ class AuthElevatedButton extends StatelessWidget {
   final double height;
   final String inputText;
   final VoidCallback? onPressed;
-  final ValueNotifier<bool> isLoading;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -29,24 +29,19 @@ class AuthElevatedButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
-        child: ValueListenableBuilder<bool>(
-          valueListenable: isLoading,
-          builder: (context, value, child) {
-            return value
-                ? const SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      color: AppColors.white,
-                      strokeWidth: 2,
-                    ),
-                  )
-                : Text(
-                    inputText,
-                    style: AppTheme.authWhiteText,
-                  );
-          },
-        ),
+        child: isLoading
+            ? const SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  color: AppColors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                inputText,
+                style: AppTheme.authWhiteText,
+              ),
       ),
     );
   }

@@ -4,7 +4,9 @@ import 'package:social_app/mixin/validators/validators.dart';
 import 'package:social_app/presentation/screens/sign_in/cubit/sign_in_state.dart';
 
 import '../../../../data/models/auth/sign_in_user_req.dart';
+import '../../../../data/sources/firestore/firestore_service.dart';
 import '../../../../domain/repository/auth/auth.dart';
+import '../../../../domain/repository/user/user.dart';
 import '../../../../service_locator.dart';
 
 class SignInCubit extends Cubit<SignInState> with Validator {
@@ -19,19 +21,33 @@ class SignInCubit extends Cubit<SignInState> with Validator {
         try {
           await serviceLocator<AuthRepository>()
               .signInWithEmailAndPassword(signInUserReq);
+
+          final userModel =
+              await serviceLocator<UserRepository>().getCurrentUserData();
+
           emit(SignInSuccess());
           _showAlertDialog(context, 'Success', 'Login success');
         } catch (e) {
-          emit(SignInFailure());
-          if (e == 'new-user') {
-            _showAlertDialog(context, 'Navigator',
-                'Login success, navigator to choose category screen');
+          if (e is CustomFirestoreException) {
+            if (e.code == 'new-user') {
+              emit(SignInSuccess());
+              _showAlertDialog(context, 'Navigator',
+                  'Login success, navigator to choose category screen');
+            }
           } else {
+            emit(SignInFailure());
             rethrow;
           }
         }
       }
     } catch (e) {
+      if (e is CustomFirestoreException) {
+        if (e.code == 'new-user') {
+          emit(SignInSuccess());
+          _showAlertDialog(context, 'Navigator',
+              'Login success, navigator to choose category screen');
+        }
+      }
       emit(SignInFailure());
       _showAlertDialog(context, "Error", e.toString());
     }
@@ -40,14 +56,21 @@ class SignInCubit extends Cubit<SignInState> with Validator {
   void loginWithGoogle(BuildContext context) async {
     try {
       await serviceLocator<AuthRepository>().signInWithGoogle();
+
+      final userModel =
+          await serviceLocator<UserRepository>().getCurrentUserData();
+
       emit(SignInSuccess());
       _showAlertDialog(context, "Success", "Login success");
     } catch (e) {
-      emit(SignInFailure());
-      if (e == 'new-user') {
-        _showAlertDialog(context, 'Navigator',
-            'Login success, navigator to choose category screen');
+      if (e is CustomFirestoreException) {
+        if (e.code == 'new-user') {
+          emit(SignInSuccess());
+          _showAlertDialog(context, 'Navigator',
+              'Login success, navigator to choose category screen');
+        }
       } else {
+        emit(SignInFailure());
         throw Exception(e);
       }
     }
