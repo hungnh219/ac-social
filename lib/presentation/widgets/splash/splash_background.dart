@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/presentation/widgets/splash/splash_image_group.dart';
 
 import '../../../utils/constants/image_path.dart';
 import '../../../utils/styles/colors.dart';
@@ -18,10 +17,10 @@ class SplashBackground extends StatelessWidget {
         height: MediaQuery.of(context).size.height * 1,
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("${AppAssets.splashBackground}"),
-              fit: BoxFit.cover),
+              image: AssetImage(AppImages.splashBackground), fit: BoxFit.cover),
         ),
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Opacity(
               opacity: 0.4,

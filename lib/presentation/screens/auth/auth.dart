@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/presentation/screens/sign_in/sign_in_screen.dart';
+import 'package:social_app/presentation/screens/auth/sign_in_screen.dart';
 
 import '../home/home_screen.dart';
 import 'cubit/auth_cubit.dart';
@@ -16,7 +16,7 @@ class AuthScreen extends StatelessWidget {
         if (state is Authenticated) {
           return const HomeScreen();
         } else if (state is Unauthenticated) {
-          return const SignInScreen();
+          return SignInScreen();
         }
         return const Center(child: CircularProgressIndicator());
       },

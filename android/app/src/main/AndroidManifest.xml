@@ -2,7 +2,7 @@
     <application
         android:label="social_app"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/original">
         <activity
             android:name=".MainActivity"
             android:exported="true"
