@@ -10,6 +10,8 @@ import 'package:social_app/config/routes/app_routes.dart';
 import 'package:social_app/firebase_options.dart';
 import 'package:social_app/presentation/screens/auth/cubit/auth_cubit.dart';
 import 'package:social_app/presentation/screens/auth/cubit/theme_cubit.dart';
+import 'package:social_app/presentation/screens/sign_in/cubit/sign_in_cubit.dart';
+import 'package:social_app/presentation/screens/sign_up/cubit/sign_up_cubit.dart';
 import 'package:social_app/service_locator.dart';
 import 'package:social_app/utils/styles/themes.dart';
 
@@ -44,7 +46,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
-        BlocProvider(create: (_) => AuthCubit())
+        BlocProvider(create: (_) => AuthCubit()),
+        BlocProvider(create: (_) => SignInCubit()),
+        BlocProvider(create: (_) => SignUpCubit())
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
           builder: (context, mode) => MaterialApp.router(

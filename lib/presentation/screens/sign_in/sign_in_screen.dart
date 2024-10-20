@@ -7,7 +7,9 @@ import 'package:social_app/presentation/screens/sign_in/cubit/sign_in_cubit.dart
 import 'package:social_app/presentation/screens/sign_in/cubit/sign_in_state.dart';
 import 'package:social_app/utils/styles/colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_app/utils/styles/themes.dart';
 
+import '../../../utils/constants/icon_path.dart';
 import '../../widgets/auth/auth_body.dart';
 import '../../widgets/auth/auth_elevated_button.dart';
 import '../../widgets/auth/auth_header_image.dart';
@@ -54,14 +56,7 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
               child: Center(
                 child: Text(
                   "WELCOME",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 40,
-                    foreground: Paint()
-                      ..style = PaintingStyle.stroke
-                      ..strokeWidth = 2 // Độ dày của viền chữ
-                      ..color = AppColors.white, // Màu viền
-                  ),
+                  style: AppTheme.authHeaderStyle,
                 ),
               ),
             ),
@@ -108,8 +103,8 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                                       _obscureText.value = !value;
                                     },
                                     icon: Icon(value
-                                        ? Icons.visibility_outlined
-                                        : Icons.visibility_off_outlined),
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined),
                                   ),
                                 );
                               },
@@ -119,13 +114,9 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                       ),
                       TextButton(
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           "FORGOT PASSWORD",
-                          style: TextStyle(
-                              color: AppColors.iric,
-                              fontWeight: FontWeight.w400,
-                              letterSpacing: 2,
-                              fontSize: 14),
+                          style: AppTheme.authForgotStyle,
                         ),
                       ),
                       AuthElevatedButton(
@@ -135,22 +126,18 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                         onPressed: () => context
                             .read<SignInCubit>()
                             .loginWithEmailAndPassword(
-                                context,
-                                SignInUserReq(
-                                    email: _emailController.text,
-                                    password: _passwordController.text)),
+                              context,
+                              SignInUserReq(
+                                  email: _emailController.text,
+                                  password: _passwordController.text),
+                            ),
                         isLoading: (state is SignInLoading ? true : false),
                       ),
                       TextButton(
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           "OR LOG IN BY",
-                          style: TextStyle(
-                            color: AppColors.kettleman,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: 2,
-                            fontSize: 14,
-                          ),
+                          style: AppTheme.authNormalStyle,
                         ),
                       ),
                       IconButton(
@@ -166,13 +153,10 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                           ),
                           child: ShaderMask(
                             shaderCallback: (Rect bounds) {
-                              return const LinearGradient(colors: [
-                                AppColors.iric,
-                                AppColors.lavenderBlueShadow,
-                              ]).createShader(bounds);
+                              return AppTheme.mainGradient.createShader(bounds);
                             },
                             child: SvgPicture.asset(
-                              "assets/icons/google_logo.svg",
+                              AppIcons.googleLogo,
                               width: 20.0,
                               height: 20.0,
                               color: const Color.fromARGB(255, 89, 28, 219),
@@ -183,18 +167,16 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
+                          Text(
                             "Don't have account?",
-                            style: TextStyle(fontSize: 16),
+                            style: AppTheme.authSignUpStyle
+                                .copyWith(color: AppColors.kettleman),
                           ),
                           TextButton(
                             onPressed: () => context.go("/signup"),
-                            child: const Text(
+                            child: Text(
                               "SIGN UP",
-                              style: TextStyle(
-                                  color: AppColors.iric,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400),
+                              style: AppTheme.authSignUpStyle,
                             ),
                           )
                         ],

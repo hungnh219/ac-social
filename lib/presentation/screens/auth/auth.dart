@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/presentation/screens/auth/sign_in_screen.dart';
 
 import '../home/home_screen.dart';
+import '../sign_in/sign_in_screen.dart';
 import 'cubit/auth_cubit.dart';
 import 'cubit/auth_state.dart';
 
