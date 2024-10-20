@@ -11,15 +11,14 @@ class LoginScreen extends StatelessWidget {
   final _passwordController = TextEditingController();
 
   void _login(BuildContext context) async {
-    // final auth = Provider.of<AuthProvider>(context, listen: false);
-    // try {
-    //   await auth.signIn(_emailController.text, _passwordController.text);
-    // } catch (e) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text('Login failed')),
-    //   );
-    // }
-
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    try {
+      await auth.signIn(_emailController.text, _passwordController.text);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed')),
+      );
+    }
   }
 
   @override
