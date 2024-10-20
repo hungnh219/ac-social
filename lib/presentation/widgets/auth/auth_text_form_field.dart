@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
+import '../../../utils/styles/themes.dart';
+
 class AuthTextFormField extends StatelessWidget {
   const AuthTextFormField(
       {super.key,
@@ -26,8 +28,7 @@ class AuthTextFormField extends StatelessWidget {
       controller: textEditingController,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle:
-            const TextStyle(color: AppColors.noghreiSilver, fontSize: 16),
+        hintStyle: AppTheme.appHintStyle,
         contentPadding:
             const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
         enabledBorder: OutlineInputBorder(
@@ -41,6 +42,7 @@ class AuthTextFormField extends StatelessWidget {
         filled: true,
         suffixIcon: suffixIcon,
       ),
+      autovalidateMode: AutovalidateMode.onUnfocus,
       obscureText: obscureText,
       validator: validator,
       textInputAction: textInputAction,

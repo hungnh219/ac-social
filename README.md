@@ -1,16 +1,16 @@
-# social_app
+# Release Branch
 
-Social App
+## Overview
 
-## Getting Started
+This branch is for the release version of the application.
 
-This project is a starting point for a Flutter application.
+## Purpose
 
-A few resources to get you started if this is your first Flutter project:
+- **No Further Development:** There will be no more changes or development on this branch.
+- **APK Building:** This branch is only for building the APK.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Notes
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Please do not merge any other branches into this one.
+- This branch is meant to be a stable version for deployment.
+
