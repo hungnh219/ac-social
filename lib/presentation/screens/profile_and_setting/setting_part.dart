@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../widgets/profile_and_setting/drawer_item.dart';
+import 'package:social_app/presentation/screens/profile_and_setting/widgets/drawer_item.dart';
 
 class SettingPart extends StatefulWidget {
   const SettingPart({super.key});

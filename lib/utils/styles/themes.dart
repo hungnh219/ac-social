@@ -16,40 +16,72 @@ class AppTheme {
   static Color get black => AppColors.erieBlack; // Black
 
   //ToDo: Gradient
-  static Gradient get mainGradient => const LinearGradient(
+  static Gradient get mainGradient =>
+      const LinearGradient(
         colors: [AppColors.irish, AppColors.lavenderBlueShadow],
       );
 
-  //ToDo: BoxDecoration
-  static BoxDecoration get gradientIconBoxDecoration => BoxDecoration(
-      borderRadius: const BorderRadius.all(Radius.circular(12)),
-      gradient: mainGradient);
+  static dynamic get mainGradientShader =>
+      AppTheme.mainGradient.createShader(const Rect.fromLTWH(0, 0, 100, 50));
 
-  static BoxDecoration get gradientFabBoxDecoration => BoxDecoration(
+  //ToDo: BoxDecoration
+  static BoxDecoration get gradientIconBoxDecoration =>
+      BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          gradient: mainGradient);
+
+  static BoxDecoration get gradientFabBoxDecoration =>
+      BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         gradient: mainGradient,
       );
 
   //ToDo: Style
-  static TextStyle get appLabelStyle => GoogleFonts.plusJakartaSans(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: labelTextColor,
-      letterSpacing: 0.60);
+  static TextStyle get appLabelStyle =>
+      GoogleFonts.plusJakartaSans(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: labelTextColor,
+          letterSpacing: 0.60);
 
-  static TextStyle get appHintStyle => GoogleFonts.plusJakartaSans(
-      fontSize: 16,
-      fontWeight: FontWeight.w700,
-      color: hintTextColor,
-      letterSpacing: 0.60);
+  static TextStyle get appHintStyle =>
+      GoogleFonts.plusJakartaSans(
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+          color: hintTextColor,
+          letterSpacing: 0.60);
 
-  static TextStyle get headerStyle => GoogleFonts.plusJakartaSans(
+  static TextStyle get profileLocationStyle =>
+      GoogleFonts.plusJakartaSans(
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 0.30,
+        color: AppColors.delicateViolet,
+      );
+
+  static TextStyle get profileTagStyle =>
+      GoogleFonts.plusJakartaSans(
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+        color: white,
+      );
+
+  static TextStyle get headerStyle =>
+      GoogleFonts.plusJakartaSans(
         fontSize: 20,
         fontWeight: FontWeight.w700,
         color: white,
       );
 
-  static TextStyle get buttonGradientStyle => GoogleFonts.plusJakartaSans(
+  static TextStyle get blackHeaderStyle =>
+      GoogleFonts.plusJakartaSans(
+        fontSize: 17,
+        fontWeight: FontWeight.w700,
+        color: black,
+      );
+
+  static TextStyle get buttonGradientStyle =>
+      GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w700,
         color: white,
         fontSize: 16,
@@ -57,12 +89,34 @@ class AppTheme {
         letterSpacing: 0.60,
       );
 
-  static TextStyle get drawerItemStyle => GoogleFonts.plusJakartaSans(
-    color: white,
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    letterSpacing: -0.1,
-  );
+  static TextStyle get profileCasualStyle =>
+      GoogleFonts.plusJakartaSans(
+          color: hintTextColor,
+          fontSize: 16,
+          fontWeight: FontWeight.bold
+      );
+
+  static TextStyle get profileTabStyle =>
+      GoogleFonts.plusJakartaSans(
+          color: hintTextColor,
+          fontSize: 12,
+          fontWeight: FontWeight.bold
+      );
+
+  static TextStyle get profileNumberStyle =>
+      GoogleFonts.plusJakartaSans(
+        color: black,
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+      );
+
+  static TextStyle get drawerItemStyle =>
+      GoogleFonts.plusJakartaSans(
+        color: white,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -0.1,
+      );
 
   //ToDo: Theme
   static final ThemeData lightTheme = ThemeData(

@@ -15,12 +15,13 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return const ZoomDrawer(
-      drawerShadowsBackgroundColor: AppColors.irish,
-      menuScreen: SettingPart(),
-      mainScreen: ProfilePart(),
-      angle: 0,
-      duration: Duration(milliseconds: 600),
+    return const Scaffold(
+      body: Stack(
+        children: <Widget>[
+          SettingPart(),
+          ProfilePart(),
+        ],
+      ),
     );
   }
 }

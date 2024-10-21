@@ -1,15 +1,35 @@
+
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:social_app/presentation/screens/profile_and_setting/widgets/collection_tab.dart';
+import 'package:social_app/presentation/screens/profile_and_setting/widgets/information_box.dart';
+import 'package:social_app/presentation/screens/profile_and_setting/widgets/shot_tab.dart';
+import 'package:social_app/utils/styles/colors.dart';
 
 import '../../../utils/constants/icon_path.dart';
 import '../../../utils/constants/image_path.dart';
 import '../../../utils/styles/themes.dart';
 import '../../widgets/edit_profile/bottom_rounded_appbar.dart';
-import '../../widgets/profile_and_setting/svg_icon_button.dart';
 
 const String avatarURL =
     'https://firebasestorage.googleapis.com/v0/b/ac-social-internship.appspot.com/o/default_avatar.png?alt=media&token=822ddf23-8cf3-434e-87e3-81fd35491e84';
+
+const urls = [
+  'https://loremflickr.com/200/200?random=1',
+  'https://images.pexels.com/photos/2486168/pexels-photo-2486168.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  'https://loremflickr.com/200/200?random=5',
+  'https://loremflickr.com/200/200?random=9',
+  'https://loremflickr.com/200/200?random=1',
+  'https://images.pexels.com/photos/2486168/pexels-photo-2486168.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  'https://loremflickr.com/200/200?random=5',
+  'https://loremflickr.com/200/200?random=9',
+  'https://loremflickr.com/200/200?random=1',
+  'https://images.pexels.com/photos/2486168/pexels-photo-2486168.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  'https://loremflickr.com/200/200?random=5',
+  'https://loremflickr.com/200/200?random=9',
+];
 
 class ProfilePart extends StatefulWidget {
   const ProfilePart({super.key});
@@ -18,102 +38,258 @@ class ProfilePart extends StatefulWidget {
   State<ProfilePart> createState() => _ProfilePartState();
 }
 
-class _ProfilePartState extends State<ProfilePart> {
+class _ProfilePartState extends State<ProfilePart>
+    with SingleTickerProviderStateMixin {
+  int numberOfShots = 10;
+  int numberOfCollections = 10;
+
+  double avatarRadius = 50;
+
+  late double appBarBackgroundHeight = avatarRadius * 2 / 0.6;
+  late double appBarContainerHeight = avatarRadius * (1 + 2 / 0.6);
+
+  double xOffset = 0;
+  double yOffset = 0;
+  double scaleFactor = 1;
+
+  bool isDrawerOpen = false;
+
+  late TabController _tabController;
+  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  void _onTabSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _tabController.animateTo(index); // Change to the selected tab
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // double deviceHeight = MediaQuery.of(context).size.height;
-    // double deviceWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 250,
-              child: Stack(
-                children: [
-                  const Align(
-                    alignment: Alignment.topCenter,
-                    child: SizedBox(
-                      height: 200,
-                      child: BottomRoundedAppBar(
-                        bannerPath: AppImages.editProfileAppbarBackground,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 40),
-                    child: IntrinsicHeight(
+    double deviceHeight = MediaQuery.of(context).size.height;
+    double deviceWidth = MediaQuery.of(context).size.width;
+    return AnimatedContainer(
+      curve: Curves.easeIn,
+      transform: Matrix4.translationValues(xOffset, yOffset, 0)
+        ..scale(scaleFactor)
+        ..rotateY(isDrawerOpen ? -0.5 : 0),
+      duration: const Duration(milliseconds: 250),
+      decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(isDrawerOpen ? 40 : 0.0)),
+      child: DefaultTabController(
+        length: 2,
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    //ToDo : AppBar Background
+                    SizedBox(
+                      height: appBarContainerHeight,
                       child: Stack(
                         children: [
                           Align(
-                            alignment: Alignment.centerRight,
-                            child: IconButton(
-                              onPressed: () {
-                                ZoomDrawer.of(context)!.toggle();
-                              },
-                              icon: const Icon(Icons.settings),
+                            alignment: Alignment.topCenter,
+                            child: SizedBox(
+                              height: appBarBackgroundHeight,
+                              child: const BottomRoundedAppBar(
+                                bannerPath:
+                                    AppImages.editProfileAppbarBackground,
+                              ),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '@brunopham',
-                              textAlign: TextAlign.center,
-                              style: AppTheme.headerStyle,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: 160,
-                      height: 120,
-                      child: Stack(
-                        children: [
-                          Align(
-                            child: CircleAvatar(
-                              // 0.6 Appbar Background
-                              radius: 60,
-                              child: CachedNetworkImage(
-                                imageUrl: avatarURL,
+                          Container(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: IntrinsicHeight(
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          xOffset = 230;
+                                          yOffset = 150;
+                                          scaleFactor = 0.6;
+                                          isDrawerOpen = true;
+                                        });
+                                      },
+                                      icon: SvgPicture.asset(
+                                        AppIcons.setting,
+                                        color: AppColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '@brunopham',
+                                      textAlign: TextAlign.center,
+                                      style: AppTheme.profileTagStyle,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                           Align(
-                            alignment: Alignment.bottomRight,
+                            alignment: Alignment.bottomCenter,
                             child: Container(
-                              // 0.3 Avatar height
-                              width: 36,
-                              height: 36,
-                              decoration: AppTheme.gradientIconBoxDecoration,
-                              child: SvgIconButton(
-                                assetPath: AppIcons.camera,
-                                onPressed: () {
-                                  //TODO : Change avatar function
-                                },
+                              width: avatarRadius * 2,
+                              height: avatarRadius * 2,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppColors.white,
+                                  width: 6.0,
+                                ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    child: CircleAvatar(
+                                      // 0.6 Appbar Background
+                                      radius: avatarRadius,
+                                      child: CachedNetworkImage(
+                                        imageUrl: avatarURL,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
 
-            //TODO : Text fields
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [],
+                    //ToDo : Profile Information
+                    const InformationBox(),
+
+                    //TODO : Nested Tab
+                    SizedBox(
+                      width: deviceWidth * 0.9,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => _onTabSelected(0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: _selectedIndex == 0
+                                      ? AppColors.foundationWhite
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                child: Text(
+                                  '$numberOfShots Shots',
+                                  textAlign:
+                                      TextAlign.center, // Center the text
+                                  style: AppTheme.profileTabStyle.copyWith(
+                                      color: _selectedIndex == 0
+                                          ? AppColors.irish
+                                          : AppColors.noghreiSilver),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => _onTabSelected(1),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: _selectedIndex == 1
+                                      ? AppColors.foundationWhite
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                // Added padding for better appearance
+                                child: Text(
+                                  '$numberOfCollections Collections',
+                                  textAlign:
+                                      TextAlign.center, // Center the text
+                                  style: AppTheme.profileTabStyle.copyWith(
+                                      color: _selectedIndex == 1
+                                          ? AppColors.irish
+                                          : AppColors.noghreiSilver),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Container(
+                    //   padding: EdgeInsets.only(
+                    //       left: deviceWidth * 0.07,
+                    //       right: deviceWidth * 0.07,
+                    //       top: 8,
+                    //       bottom: deviceWidth * 0.15
+                    //   ),
+                    //   height: 500, // Adjust height as needed
+                    //   child: TabBarView(
+                    //     children: [
+                    //       // Shots Tab Content
+                    //       ShotTabs(imageUrls: urls),
+                    //
+                    //       // Collections Tab Content
+                    //       const Center(child: Text('Collections Tab Content')),
+                    //     ],
+                    //   ),
+                    // ),
+                  ],
+                ),
+              )
+            ];
+          },
+          body: Padding(
+    padding: EdgeInsets.only(
+          left: deviceWidth * 0.07,
+          right: deviceWidth * 0.07,
+          top: 8,
+          bottom: deviceWidth * 0.15
+      ),
+            child: TabBarView(
+              children: [
+                // Shots Tab Content
+                const ShotTab(imageUrls: urls),
+
+                // Collections Tab Content
+                CollectionTab()
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+

@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:social_app/presentation/screens/edit_profile/widgets/svg_icon_button.dart';
 import 'package:social_app/presentation/widgets/edit_profile/app_text_form_field.dart';
 import 'package:social_app/presentation/widgets/edit_profile/bottom_rounded_appbar.dart';
 import 'package:social_app/utils/constants/image_path.dart';
 
+import '../../../utils/constants/icon_path.dart';
 import '../../../utils/styles/themes.dart';
 import '../../widgets/edit_profile/gradient_button.dart';
 
@@ -89,15 +91,17 @@ class EditProfile extends StatelessWidget {
                                 width: 36,
                                 height: 36,
                                 decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(12)),
                                   gradient: AppTheme.mainGradient,
                                 ),
-                                child: IconButton(
-                                  icon: const Icon(Icons.camera_alt_outlined),
+                                child: SvgIconButton(
+                                  // icon: const Icon(Icons.camera_alt_outlined),
                                   iconSize: 18,
                                   onPressed: () {
                                     // Define the action for the button here
                                   },
+                                  assetPath: AppIcons.camera,
                                 ),
                               ),
                             ),

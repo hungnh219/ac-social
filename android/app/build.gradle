@@ -45,23 +45,23 @@ android {
     }
 
     flavorDimensions "version"
-    productFlavors {
-        mainHung {
-            applicationId "com.project.hungapp"
-        }
-        mainTu {
-            applicationId "com.project.tuapp"
-        }
-    }
+    // productFlavors {
+    //     mainHung {
+    //         applicationId "com.project.hungapp"
+    //     }
+    //     mainTu {
+    //         applicationId "com.project.tuapp"
+    //     }
+    // }
 
-    sourceSets {
-        mainHung {
-            manifest.srcFile 'src/main_hung/AndroidManifest.xml'
-        }
-        mainTu {
-            manifest.srcFile 'src/main_tu/AndroidManifest.xml'
-        }
-    }
+    // sourceSets {
+    //     mainHung {
+    //         manifest.srcFile 'src/main_hung/AndroidManifest.xml'
+    //     }
+    //     mainTu {
+    //         manifest.srcFile 'src/main_tu/AndroidManifest.xml'
+    //     }
+    // }
 
     buildTypes {
         release {
@@ -70,6 +70,15 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+
+    applicationVariants.all { variant ->
+    variant.assemble.doLast {
+        copy {
+            from '../../build/app/outputs/apk/debug/app-debug.apk'
+            into '../../build/host/outputs/apk'
+        }
+    }
+}
 }
 
 flutter {

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/presentation/widgets/profile_and_setting/svg_icon_button.dart';
+import 'package:social_app/presentation/screens/edit_profile/widgets/svg_icon_button.dart';
+import 'package:social_app/utils/constants/icon_path.dart';
 import 'package:social_app/utils/styles/themes.dart';
-
-import '../../../utils/constants/icon_path.dart';
 
 class DrawerItem extends StatelessWidget {
   final String title;

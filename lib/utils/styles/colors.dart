@@ -31,6 +31,8 @@ class AppColors {
 
   static const Color argent = Color(0xFF898989);
 
+  static const Color delicateViolet = Color(0xFF8F90A7);
+
   static const Color hydrargyrum = Color(0xFF9A9A9A);
 
   static const Color chanceOfRain = Color(0xFFA0A5AA);
@@ -88,13 +90,17 @@ class AppColors {
 
   static const Color pinkSpyro = Color(0xFF9C26B0);
 
-  static const Color sangoRed = Color(0xFFFA6650);
+  static const Color foundationWhite = Color(0xFFF1F1FE);
+
+  static const Color lynxWhite = Color(0xFFF6F7F9);
 
   static const Color circus = Color(0xFFF96332);
 
-  static const Color corona = Color(0xFFFFB236);
+  static const Color sangoRed = Color(0xFFFA6650);
 
   static const Color pelati = Color(0xFFFF3636);
+
+  static const Color corona = Color(0xFFFFB236);
 
   static const Color officeNeonLight = Color(0xFFFE2472);
 

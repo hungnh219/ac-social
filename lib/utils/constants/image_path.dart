@@ -2,6 +2,9 @@ class AppImages {
   static const String imagePath = 'assets/images/';
   static const String imageFormat = '.png';
 
+  static const String svgPath = 'assets/icons/';
+  static const String svgFormat = '.svg';
+
   static const String category1 = '${imagePath}category_1$imageFormat';
   static const String category2 = '${imagePath}category_2$imageFormat';
   static const String category3 = '${imagePath}category_3$imageFormat';
@@ -20,5 +23,5 @@ class AppImages {
   static const String splashMask = '${imagePath}splash_mask$imageFormat';
   static const String editProfileAppbarBackground = '${imagePath}edit_profile_appbar$imageFormat';
 
-
+  static const String empty = '${svgPath}empty$svgFormat';
 }
