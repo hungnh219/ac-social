@@ -8,6 +8,8 @@ class PostCustom extends StatelessWidget {
   dynamic post;
   @override
   Widget build(BuildContext context) {
+
+    // print(post['user_id'].runtimeType);
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
       child: Container(
@@ -36,6 +38,7 @@ class PostCustom extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
+            // Text(post['user_id'].toString()),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,7 +53,7 @@ class PostCustom extends StatelessWidget {
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: Icon(Icons.share_outlined),
+                    icon: Icon(Icons.favorite_border),
                     onPressed: () {},
                   ),
                 ],
@@ -79,9 +82,12 @@ class PostInfo extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           // Text(post['username']),
-          Text(post['user_id']),
+          // Text(post['content'], style: TextStyle(
+          //   overflow: TextOverflow.fade
+          // ),),
           Spacer(),
-          Text(post['timestamp'].toString()),
+          Text('hehehe'),
+          // Text(post['user_id'].toString()),
         ],),
       ),
     );
