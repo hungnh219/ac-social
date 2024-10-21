@@ -17,6 +17,15 @@ abstract class FirestoreService {
   Future<void> addCurrentUserData(AddUserReq addUserReq);
 
   Future<void> updateCurrentUserData(UpdateUserReq updateUserReq);
+
+  Future<UserModel?>? getNewUserData();
+
+  Future<UserModel?>? getCurrentNewUserData();
+  // No need add to repository
+  Future<UserModel?> fetchNewUserData();
+
+  Future<void> addCurrentNewUserData(AddUserReq addUserReq);
+
 }
 
 class FirestoreServiceImpl extends  FirestoreService{
@@ -107,6 +116,70 @@ class FirestoreServiceImpl extends  FirestoreService{
       }
     }
   }
+
+
+
+  CollectionReference get _newUsersCollection => _firestoreDB.collection('NewUser');
+
+  Future<UserModel?> getNewUserData() async {
+    try {
+      return await fetchNewUserData();
+    } on CustomFirestoreException catch (error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      return null;
+    }
+  }
+
+  Future<UserModel?> getCurrentNewUserData() async {
+    try {
+      return await fetchUserData();
+    } on CustomFirestoreException catch (error) {
+      if (error.code == 'user-firestore-not-exist') {
+        rethrow;
+      }
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      return null;
+    }
+  }
+
+  // No need add to repository
+  Future<UserModel?> fetchNewUserData() async {
+    try {
+      DocumentSnapshot userDoc = await _newUsersCollection.doc("atpFNshDxQOeoPavpluSI2CKrqu2").get();
+
+      if (!userDoc.exists) {
+        throw CustomFirestoreException(
+          code: 'user-firestore-not-exist',
+          message: 'User data does not exist in Firestore',
+        );
+      }
+
+      return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> addCurrentNewUserData(AddUserReq addUserReq) async {
+    if (currentUser == null) {
+      if (kDebugMode) {
+        print("No user is currently signed in.");
+      }
+      return;
+    }
+
+    Map<String, dynamic> userData = addUserReq.newUserData.toMap();
+    await _usersCollection
+        .doc(currentUser?.uid)
+        .set(userData)
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Error pushing user data: $error"));
+  }
+
 }
 
 class CustomFirestoreException implements Exception {

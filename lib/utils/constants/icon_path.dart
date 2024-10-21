@@ -14,8 +14,8 @@ class AppIcons {
   static const String camera = '${iconPath}camera$svgFormat';
   static const String cancelButton = '${iconPath}cancel-button$svgFormat';
   static const String chevronRightButton = '${iconPath}chevron-right-button$svgFormat';
-  static const String facebookFill = '${iconPath}facebook$svgFormat';
-  static const String facebookFil = '${iconPath}facebook-fill$svgFormat';
+  static const String facebook = '${iconPath}facebook$svgFormat';
+  static const String facebookFill = '${iconPath}facebook-fill$svgFormat';
   static const String globe = '${iconPath}globe$svgFormat';
   static const String googleLogo = '${iconPath}google-logo$svgFormat';
   static const String instagram = '${iconPath}instagram$svgFormat';
@@ -24,6 +24,7 @@ class AppIcons {
   static const String heart = '${iconPath}heart$svgFormat';
   static const String plus = '${iconPath}plus$svgFormat';
   static const String x = '${iconPath}x$svgFormat';
+  static const String gradientDot = '${iconPath}gradient-dot$svgFormat';
 
   // Specific Icons in the Bold Folder
   static const String categoryCopy = '${boldPath}category-copy$svgFormat';
