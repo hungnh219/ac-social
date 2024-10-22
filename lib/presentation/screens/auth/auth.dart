@@ -16,7 +16,7 @@ class AuthScreen extends StatelessWidget {
         if (state is Authenticated) {
           return const HomeScreen();
         } else if (state is Unauthenticated) {
-          return SignInScreen();
+          return const SignInScreen();
         }
         return const Center(child: CircularProgressIndicator());
       },
