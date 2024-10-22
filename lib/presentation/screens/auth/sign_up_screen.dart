@@ -4,7 +4,7 @@ import 'package:social_app/data/models/auth/create_user_req.dart';
 import 'package:social_app/mixin/validators/validators.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
-import '../../../domain/repository/auth/auth.dart';
+import '../../../domain/repository/auth/auth_repository.dart';
 import '../../../service_locator.dart';
 import '../../../utils/styles/themes.dart';
 import '../../widgets/auth/auth_body.dart';

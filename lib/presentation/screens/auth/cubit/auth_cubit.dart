@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_app/data/repository/auth/auth_repository_impl.dart';
 
-import '../../../../domain/repository/auth/auth.dart';
+import '../../../../domain/repository/auth/auth_repository.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {

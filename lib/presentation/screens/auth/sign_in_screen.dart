@@ -8,8 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:social_app/utils/styles/themes.dart';
 
 import '../../../data/sources/firestore/firestore_service.dart';
-import '../../../domain/repository/auth/auth.dart';
-import '../../../domain/repository/user/user.dart';
+import '../../../domain/repository/auth/auth_repository.dart';
+import '../../../domain/repository/user/user_repository.dart';
 import '../../../utils/constants/icon_path.dart';
 import '../../widgets/auth/auth_body.dart';
 import '../../widgets/auth/auth_elevated_button.dart';
