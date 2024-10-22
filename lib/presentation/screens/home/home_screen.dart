@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/widgets/home_header_custom.dart';
 import 'package:social_app/presentation/screens/home/widgets/post_custom.dart';
+import 'package:social_app/presentation/screens/log_in/log_in_screen.dart';
+import 'package:social_app/presentation/screens/splash/splash.dart';
 import 'package:social_app/presentation/widgets/bottom_app_bar_custom.dart';
 import 'package:social_app/presentation/widgets/scaffold_custom.dart';
 import 'package:social_app/utils/styles/colors.dart';
@@ -106,8 +108,13 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
         ScaffoldCustom(
         body: Column(children: [
           const HomeHeaderCustom(),
-          ElevatedButton(onPressed: () {
-            fetchData();
+          ElevatedButton(onPressed: () async {
+            await fetchData();
+            
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SplashScreen())
+            );
           }, child: Text('hehe')),
           Expanded(
             child: StreamBuilder(

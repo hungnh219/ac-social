@@ -126,7 +126,7 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
                     },
                     child: const Text(
-                      "FORGOT PASSWORD",
+                      "FORGOT PASSWORD (navigate to home screen)",
                       style: TextStyle(
                           color: AppColors.iric,
                           fontWeight: FontWeight.w400,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/profile_part.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/setting_part.dart';
+import 'package:social_app/presentation/widgets/scaffold_custom.dart';
 
 import '../../../utils/styles/colors.dart';
 
@@ -15,13 +16,14 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return const ScaffoldCustom(
       body: Stack(
         children: <Widget>[
           SettingPart(),
           ProfilePart(),
         ],
       ),
+      bottomNavBarEnabled: true,
     );
   }
 }
