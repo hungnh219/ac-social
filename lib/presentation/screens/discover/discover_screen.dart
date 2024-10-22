@@ -9,7 +9,7 @@ class DiscoverScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: 
-      ScaffoldCustom(
+      Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
@@ -20,7 +20,6 @@ class DiscoverScreen extends StatelessWidget {
               CollectionList()
           ],),
         ), 
-        bottomNavBarEnabled: true,
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
+import 'package:social_app/presentation/screens/notification/notification_screen.dart';
 import 'package:social_app/presentation/screens/post_detail/post_detail_screen.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/main_profile_screen.dart';
 
@@ -68,7 +69,10 @@ class _ScaffoldCustomState extends State<ScaffoldCustom> with AutomaticKeepAlive
                 IconButton(
                   icon: const Icon(Icons.notifications, size: 20, color: Colors.black),
                   onPressed: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NotificationScreen())
+                    );
                   },
                 ),
                 IconButton(
