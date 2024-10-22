@@ -83,17 +83,37 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
   Future<void> fetchData() async {
     try {
-      QuerySnapshot querySnapshot = await postCollection.doc('post_000001').collection('lists').get();
+      // QuerySnapshot querySnapshot = await postCollection.doc('post_000001').collection('lists').get();
+      QuerySnapshot querySnapshot = await postCollection.get();
       for (var doc in querySnapshot.docs) {
         // QuerySnapshot userSnapshot = await FirebaseFirestore.instance.collection('NewPost').doc('post_000001').collection('lists').get();
-        print(doc.data());
+        // print(userSnapshot);
+        // print(userSnapshot.runtimeType);
+        // print(doc['user_id']);
+        DocumentReference userRef = doc['user_id'];
+        // Future<Map<String, dynamic>> userData = userRef.get().then((value) => value.data() as Map<String, dynamic>);
+        // print(doc);
+        // print(userRef);
+        // print(userRef.id);
+        // print(userData);
+        // userData.then((value) {
+        //   userInfo = value;
+        //   print(userInfo);
+        //   print(userInfo['name']);
+        // });
+        dynamic userData = await userRef.get();
+        print(userData);
+        print(userData.runtimeType);
+        for (var data in userData.data()!.entries) {
+          if (data.key == 'name') {
+            print(data.value);
+          }
+          // print(data.key);
+          // print(data.value);
+        }
         // print(userSnapshot.data());
       }
-      // userInfo = userSnapshot.data();
-      for (var doc in querySnapshot.docs) {
-        print(doc.data());
-        // print(userInfo);
-      }
+
     } catch (e) {
       print('Error fetching data: $e');
     }
@@ -104,46 +124,47 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     // print('test ${userInfo}');
     super.build(context);
     return SafeArea(
-      child:
-        ScaffoldCustom(
+      bottom: false,
+      child: Scaffold(
         body: Column(children: [
-          const HomeHeaderCustom(),
-          ElevatedButton(onPressed: () async {
-            await fetchData();
-            
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SplashScreen())
-            );
-          }, child: Text('hehe')),
-          Expanded(
-            child: StreamBuilder(
-              stream: postCollection.snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text('No data found.'));
-                }
-
-                // print(snapshot.data);
-                // for (var doc in snapshot.data!.docs) {
-                //   print(doc.data());
-                // }
-                return ListView(
-                  children: snapshot.data!.docs.map((doc) {
-                    commentPostCollection = postCollection.doc(doc.id).collection('lists');
-                    return PostCustom(post: doc, commentPostCollection: commentPostCollection);
-                  }).toList(),
-                );
-              },
-            )
-          ),
-        ],),
-        bottomNavBarEnabled: true,
-      )
+            const HomeHeaderCustom(),
+            ElevatedButton(onPressed: () {
+              fetchData();
+              
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const SplashScreen())
+              // );
+            }, child: Text('logout', style: TextStyle(
+              color: AppColors.white
+            ),)),
+            Expanded(
+              child: StreamBuilder(
+                stream: postCollection.snapshots(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Center(child: Text('No data found.'));
+                  }
+        
+                  // print(snapshot.data);
+                  // for (var doc in snapshot.data!.docs) {
+                  //   print(doc.data());
+                  // }
+                  return ListView(
+                    children: snapshot.data!.docs.map((doc) {
+                      commentPostCollection = postCollection.doc(doc.id).collection('lists');
+                      return PostCustom(post: doc, commentPostCollection: commentPostCollection);
+                    }).toList(),
+                  );
+                },
+              )
+            ),
+          ],),
+      ),
     );
   }
 

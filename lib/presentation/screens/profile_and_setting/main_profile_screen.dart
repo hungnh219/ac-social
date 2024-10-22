@@ -16,14 +16,13 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return const ScaffoldCustom(
+    return const Scaffold(
       body: Stack(
         children: <Widget>[
           SettingPart(),
           ProfilePart(),
         ],
       ),
-      bottomNavBarEnabled: true,
     );
   }
 }

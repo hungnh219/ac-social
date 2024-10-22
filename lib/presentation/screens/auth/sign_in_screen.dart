@@ -4,6 +4,7 @@ import 'package:social_app/data/models/auth/sign_in_user_req.dart';
 import 'package:social_app/mixin/validators/validators.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/main_profile_screen.dart';
+import 'package:social_app/presentation/widgets/navigator_bar.dart';
 import 'package:social_app/service_locator.dart';
 import 'package:social_app/utils/styles/colors.dart';
 import 'package:go_router/go_router.dart';
@@ -123,7 +124,7 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => NavigatorBarCustom()));
                     },
                     child: const Text(
                       "FORGOT PASSWORD (navigate to home screen)",
