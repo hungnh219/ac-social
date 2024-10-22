@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/utils/styles/colors.dart';
-import 'package:social_app/utils/styles/themes.dart';
 
 class AuthElevatedButton extends StatelessWidget {
   const AuthElevatedButton(
@@ -23,7 +22,12 @@ class AuthElevatedButton extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        gradient: AppTheme.mainGradient,
+        gradient: const LinearGradient(
+          colors: [
+            AppColors.iric,
+            AppColors.lavenderBlueShadow,
+          ],
+        ),
         borderRadius: BorderRadius.circular(30),
       ),
       child: ElevatedButton(
@@ -43,7 +47,10 @@ class AuthElevatedButton extends StatelessWidget {
                   )
                 : Text(
                     inputText,
-                    style: AppTheme.authWhiteText,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
                   );
           },
         ),

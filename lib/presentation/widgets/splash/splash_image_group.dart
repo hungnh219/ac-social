@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/presentation/widgets/splash/splash_image.dart';
 import 'package:social_app/utils/constants/image_path.dart';
-import 'package:social_app/utils/styles/colors.dart';
 
 //Group hình splash
 class SplashImageGroup extends StatelessWidget {
@@ -24,8 +23,8 @@ class SplashImageGroup extends StatelessWidget {
             width: 130,
             height: 130,
             gradient: LinearGradient(colors: [
-              AppColors.lightIris,
-              AppColors.iris,
+              Color(0x005151C6),
+              Color(0xFF5151C6),
             ]),
           ),
           SplashImage(
@@ -33,7 +32,7 @@ class SplashImageGroup extends StatelessWidget {
             height: 160,
             top: 25,
             image: DecorationImage(
-              image: AssetImage(AppImages.splash1),
+              image: AssetImage("${AppImages.splash1}"),
             ),
           ),
           SplashImage(
@@ -42,7 +41,7 @@ class SplashImageGroup extends StatelessWidget {
             top: 125,
             left: 5,
             image: DecorationImage(
-              image: AssetImage(AppImages.splash2),
+              image: AssetImage("${AppImages.splash2}"),
             ),
           ),
           SplashImage(
@@ -51,7 +50,7 @@ class SplashImageGroup extends StatelessWidget {
             top: 125,
             right: 5,
             image: DecorationImage(
-              image: AssetImage(AppImages.splash4),
+              image: AssetImage("${AppImages.splash4}"),
             ),
           ),
           SplashImage(
@@ -59,8 +58,8 @@ class SplashImageGroup extends StatelessWidget {
             width: 130,
             height: 130,
             gradient: LinearGradient(colors: [
-              AppColors.iris,
-              AppColors.lightIris,
+              Color(0xFF5151C6),
+              Color(0x005151C6),
             ]),
           ),
           SplashImage(
@@ -68,7 +67,7 @@ class SplashImageGroup extends StatelessWidget {
             height: 160,
             top: 200,
             image: DecorationImage(
-              image: AssetImage(AppImages.splash3),
+              image: AssetImage("${AppImages.splash3}"),
             ),
           ),
         ],

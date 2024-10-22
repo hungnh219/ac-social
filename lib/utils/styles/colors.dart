@@ -2,7 +2,6 @@ import 'dart:ui';
 
 class AppColors {
 
-  static const Color lightIris = Color(0x005151C6);
 
   static const Color erieBlack = Color(0xFF1A1A1A);
 
@@ -31,6 +30,8 @@ class AppColors {
   static const Color urbanVibes = Color(0xFF8898AA);
 
   static const Color argent = Color(0xFF898989);
+
+  static const Color delicateViolet = Color(0xFF8F90A7);
 
   static const Color hydrargyrum = Color(0xFF9A9A9A);
 
@@ -75,7 +76,7 @@ class AppColors {
 
   static const Color mutedLavender = Color(0xFF3B5998);
 
-  static const Color iris = Color(0xFF5151C6);
+  static const Color irish = Color(0xFF5151C6);
 
   static const Color iric = Color(0xFF5252C7);
 
@@ -89,13 +90,17 @@ class AppColors {
 
   static const Color pinkSpyro = Color(0xFF9C26B0);
 
-  static const Color sangoRed = Color(0xFFFA6650);
+  static const Color foundationWhite = Color(0xFFF1F1FE);
+
+  static const Color lynxWhite = Color(0xFFF6F7F9);
 
   static const Color circus = Color(0xFFF96332);
 
-  static const Color corona = Color(0xFFFFB236);
+  static const Color sangoRed = Color(0xFFFA6650);
 
   static const Color pelati = Color(0xFFFF3636);
+
+  static const Color corona = Color(0xFFFFB236);
 
   static const Color officeNeonLight = Color(0xFFFE2472);
 

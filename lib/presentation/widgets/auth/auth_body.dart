@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/styles/themes.dart';
-
 class AuthBody extends StatelessWidget {
   const AuthBody(
       {super.key,
@@ -18,9 +16,9 @@ class AuthBody extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: marginTop),
       height: height,
-      decoration: BoxDecoration(
-        color: AppTheme.white,
-        borderRadius: const BorderRadius.only(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),

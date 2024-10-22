@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:social_app/data/models/auth/sign_in_user_req.dart';
 import 'package:social_app/mixin/validators/validators.dart';
+import 'package:social_app/presentation/screens/home/home_screen.dart';
+import 'package:social_app/presentation/screens/profile_and_setting/main_profile_screen.dart';
 import 'package:social_app/service_locator.dart';
 import 'package:social_app/utils/styles/colors.dart';
 import 'package:go_router/go_router.dart';
-import 'package:social_app/utils/styles/themes.dart';
 
 import '../../../data/sources/firestore/firestore_service.dart';
 import '../../../domain/repository/auth/auth.dart';
-import '../../../domain/repository/user/user.dart';
-import '../../../utils/constants/icon_path.dart';
 import '../../widgets/auth/auth_body.dart';
 import '../../widgets/auth/auth_elevated_button.dart';
 import '../../widgets/auth/auth_header_image.dart';
@@ -30,7 +29,6 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
 
   late ValueNotifier<bool> _obscureText;
   late ValueNotifier<bool> _isLoading;
-
   @override
   void initState() {
     super.initState();
@@ -62,7 +60,14 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
               child: Center(
                 child: Text(
                   "WELCOME",
-                  style: AppTheme.authHeaderStyle,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 40,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 2 // Độ dày của viền chữ
+                      ..color = AppColors.white, // Màu viền
+                  ),
                 ),
               ),
             ),
@@ -107,8 +112,8 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                                   _obscureText.value = !value;
                                 },
                                 icon: Icon(value
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined),
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
                               ),
                             );
                           },
@@ -117,10 +122,16 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
-                    child: Text(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                    },
+                    child: const Text(
                       "FORGOT PASSWORD",
-                      style: AppTheme.authForgotStyle,
+                      style: TextStyle(
+                          color: AppColors.iric,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 2,
+                          fontSize: 14),
                     ),
                   ),
                   AuthElevatedButton(
@@ -134,8 +145,15 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                   ),
                   TextButton(
                     onPressed: () {},
-                    child:
-                        Text("OR LOG IN BY", style: AppTheme.authNormalStyle),
+                    child: const Text(
+                      "OR LOG IN BY",
+                      style: TextStyle(
+                        color: AppColors.kettleman,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 2,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
                   IconButton(
                     padding: EdgeInsets.zero,
@@ -150,10 +168,13 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                       ),
                       child: ShaderMask(
                         shaderCallback: (Rect bounds) {
-                          return AppTheme.mainGradient.createShader(bounds);
+                          return const LinearGradient(colors: [
+                            AppColors.iric,
+                            AppColors.lavenderBlueShadow,
+                          ]).createShader(bounds);
                         },
                         child: SvgPicture.asset(
-                          AppIcons.googleLogo,
+                          "assets/icons/google_logo.svg",
                           width: 20.0,
                           height: 20.0,
                           color: const Color.fromARGB(255, 89, 28, 219),
@@ -164,16 +185,18 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Don't have account?",
-                        style: AppTheme.authSignUpStyle
-                            .copyWith(color: AppColors.kettleman),
+                        style: TextStyle(fontSize: 16),
                       ),
                       TextButton(
                         onPressed: () => context.go("/signup"),
-                        child: Text(
+                        child: const Text(
                           "SIGN UP",
-                          style: AppTheme.authSignUpStyle,
+                          style: TextStyle(
+                              color: AppColors.iric,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400),
                         ),
                       )
                     ],
@@ -198,15 +221,9 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
               password: _passwordController.text.trim(),
             ),
           );
-
-          final userModel =
-              await serviceLocator<UserRepository>().getCurrentUserData();
-
-          if (!mounted) return;
           _showAlertDialog(context, 'Success', 'Login success');
         } catch (e) {
           if (e == 'new-user') {
-            if (!mounted) return;
             _showAlertDialog(context, 'Navigator',
                 'Login success, navigator to choose category screen');
           } else {
@@ -217,7 +234,6 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
         }
       }
     } catch (e) {
-      if (!mounted) return;
       _showAlertDialog(context, "Error", e.toString());
     } finally {
       _isLoading.value = false;
@@ -227,20 +243,13 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
   void _loginWithGoogle(BuildContext context) async {
     try {
       await serviceLocator<AuthRepository>().signInWithGoogle();
-      final userModel =
-          await serviceLocator<UserRepository>().getCurrentUserData();
-
-      if (!mounted) return;
+      // User user = await serviceLocator<AuthRepository>().getCurrentUser();
       _showAlertDialog(context, "Success", "Login success");
     } catch (e) {
-      if (e is CustomFirestoreException) {
-        if (e.code == 'new-user') {
-          if (!mounted) return;
-          _showAlertDialog(context, 'Navigator',
-              'Login success, navigator to choose category screen');
-        }
-      }
-      else {
+      if (e == 'new-user') {
+        _showAlertDialog(context, 'Navigator',
+            'Login success, navigator to choose category screen');
+      } else {
         throw Exception(e);
       }
     }

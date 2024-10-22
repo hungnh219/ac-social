@@ -6,7 +6,6 @@ import 'package:social_app/utils/styles/colors.dart';
 
 import '../../../domain/repository/auth/auth.dart';
 import '../../../service_locator.dart';
-import '../../../utils/styles/themes.dart';
 import '../../widgets/auth/auth_body.dart';
 import '../../widgets/auth/auth_elevated_button.dart';
 import '../../widgets/auth/auth_header_image.dart';
@@ -63,7 +62,14 @@ class _SignUpScreenState extends State<SignUpScreen> with Validator {
               child: Center(
                 child: Text(
                   "WELCOME",
-                  style: AppTheme.authHeaderStyle,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 40,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 2 // Độ dày của viền chữ
+                      ..color = AppColors.white, // Màu viền
+                  ),
                 ),
               ),
             ),
@@ -78,6 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> with Validator {
                 children: [
                   Form(
                     key: _formKey,
+                    autovalidateMode: AutovalidateMode.always,
                     child: Column(
                       children: [
                         ValueListenableBuilder(
@@ -106,8 +113,8 @@ class _SignUpScreenState extends State<SignUpScreen> with Validator {
                                   _obscureText.value = !value;
                                 },
                                 icon: Icon(value
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined),
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
                               ),
                             );
                           },
@@ -130,8 +137,8 @@ class _SignUpScreenState extends State<SignUpScreen> with Validator {
                                   _obscureConfirmText.value = !value;
                                 },
                                 icon: Icon(value
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined),
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
                               ),
                             );
                           },
@@ -157,16 +164,18 @@ class _SignUpScreenState extends State<SignUpScreen> with Validator {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Already have account?",
-                        style: AppTheme.authSignUpStyle
-                            .copyWith(color: AppColors.kettleman),
+                        style: TextStyle(fontSize: 16),
                       ),
                       TextButton(
                         onPressed: () => context.go("/signin"),
-                        child: Text(
+                        child: const Text(
                           "SIGN IN",
-                          style: AppTheme.authSignUpStyle,
+                          style: TextStyle(
+                              color: AppColors.iric,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400),
                         ),
                       )
                     ],

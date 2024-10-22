@@ -5,7 +5,7 @@ import 'package:social_app/data/models/user_firestore/update_user_req.dart';
 import '../../entities/user.dart';
 
 abstract class UserRepository{
-  Future<UserModel?>? getUserData(String userID);
+  Future<UserModel?>? getUserData();
 
   Future<UserModel?>? getCurrentUserData();
 
