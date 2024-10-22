@@ -6,7 +6,7 @@ import 'colors.dart';
 class AppTheme {
   //ToDo: Color
   static Color get error => AppColors.sangoRed; // Error color
-  static Color get primary => AppColors.irish; // Primary color
+  static Color get primary => AppColors.iris; // Primary color
   static Color get lightBackground =>
       AppColors.roseDragee; // Background color for light theme
   static Color get hintTextColor => AppColors.noghreiSilver; // Hint text color
@@ -16,9 +16,8 @@ class AppTheme {
   static Color get black => AppColors.erieBlack; // Black
 
   //ToDo: Gradient
-  static Gradient get mainGradient =>
-      const LinearGradient(
-        colors: [AppColors.irish, AppColors.lavenderBlueShadow],
+  static Gradient get mainGradient => const LinearGradient(
+        colors: [AppColors.iris, AppColors.lavenderBlueShadow],
       );
 
   static dynamic get mainGradientShader =>
@@ -89,34 +88,41 @@ class AppTheme {
         letterSpacing: 0.60,
       );
 
-  static TextStyle get profileCasualStyle =>
-      GoogleFonts.plusJakartaSans(
-          color: hintTextColor,
-          fontSize: 16,
-          fontWeight: FontWeight.bold
-      );
-
-  static TextStyle get profileTabStyle =>
-      GoogleFonts.plusJakartaSans(
-          color: hintTextColor,
-          fontSize: 12,
-          fontWeight: FontWeight.bold
-      );
-
-  static TextStyle get profileNumberStyle =>
-      GoogleFonts.plusJakartaSans(
-        color: black,
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-      );
-
-  static TextStyle get drawerItemStyle =>
-      GoogleFonts.plusJakartaSans(
-        color: white,
-        fontSize: 16,
+  static TextStyle get drawerItemStyle => GoogleFonts.plusJakartaSans(
+    color: white,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    letterSpacing: -0.1,
+  );
+  static TextStyle get authHeaderStyle => GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w400,
-        letterSpacing: -0.1,
+        fontSize: 40,
+        foreground: Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2 // Độ dày của viền chữ
+          ..color = AppColors.white, // Màu viền
       );
+
+  static TextStyle get authNormalStyle => GoogleFonts.plusJakartaSans(
+        color: AppColors.kettleman,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 2,
+        fontSize: 14,
+      );
+
+  static TextStyle get authForgotStyle => GoogleFonts.plusJakartaSans(
+      color: AppColors.iric,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 2,
+      fontSize: 14);
+
+  static TextStyle get authSignUpStyle => GoogleFonts.plusJakartaSans(
+      color: AppColors.iric, fontSize: 16, fontWeight: FontWeight.w500);
+
+  static TextStyle get authWhiteText => const TextStyle(
+    color: Colors.white,
+    fontSize: 14,
+  );
 
   //ToDo: Theme
   static final ThemeData lightTheme = ThemeData(

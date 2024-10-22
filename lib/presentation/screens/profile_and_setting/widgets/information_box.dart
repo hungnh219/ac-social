@@ -40,11 +40,11 @@ class InformationBox extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '1000',
-                        style: AppTheme.profileNumberStyle,
+                        // style: AppTheme.profileNumberStyle,
                       ),
                       TextSpan(
                         text: '  Followers',
-                        style: AppTheme.profileCasualStyle,
+                        // style: AppTheme.profileCasualStyle,
                       ),
                     ],
                   ),
@@ -55,11 +55,11 @@ class InformationBox extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '500',
-                        style: AppTheme.profileNumberStyle,
+                        // style: AppTheme.profileNumberStyle,
                       ),
                       TextSpan(
                         text: '  Following',
-                        style: AppTheme.profileCasualStyle,
+                        // style: AppTheme.profileCasualStyle,
                       ),
                     ],
                   ),

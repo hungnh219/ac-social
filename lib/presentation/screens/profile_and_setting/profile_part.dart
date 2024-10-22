@@ -210,10 +210,10 @@ class _ProfilePartState extends State<ProfilePart>
                                   '$numberOfShots Shots',
                                   textAlign:
                                       TextAlign.center, // Center the text
-                                  style: AppTheme.profileTabStyle.copyWith(
-                                      color: _selectedIndex == 0
-                                          ? AppColors.irish
-                                          : AppColors.noghreiSilver),
+                                  // style: AppTheme.profileTabStyle.copyWith(
+                                  //     color: _selectedIndex == 0
+                                  //         ? AppColors.irish
+                                  //         : AppColors.noghreiSilver),
                                 ),
                               ),
                             ),
@@ -235,10 +235,10 @@ class _ProfilePartState extends State<ProfilePart>
                                   '$numberOfCollections Collections',
                                   textAlign:
                                       TextAlign.center, // Center the text
-                                  style: AppTheme.profileTabStyle.copyWith(
-                                      color: _selectedIndex == 1
-                                          ? AppColors.irish
-                                          : AppColors.noghreiSilver),
+                                  // style: AppTheme.profileTabStyle.copyWith(
+                                  //     color: _selectedIndex == 1
+                                  //         ? AppColors.irish
+                                  //         : AppColors.noghreiSilver),
                                 ),
                               ),
                             ),

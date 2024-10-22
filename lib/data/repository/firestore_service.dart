@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:social_app/data/models/user.dart';
+// import 'package:social_app/data/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'firebase_auth_service.dart';
@@ -15,7 +15,7 @@ class FirestoreService {
 
   User? get user => _authService.user;
 
-  Future<MyUser?> fetchUserData() async {
+  Future<void> fetchUserData() async {
     if (user == null && kDebugMode) {
       print("No user is currently signed in.");
       return null;
@@ -31,7 +31,7 @@ class FirestoreService {
         );
       }
 
-      return MyUser.fromMap(userDoc.data() as Map<String, dynamic>);
+      // return MyUser.fromMap(userDoc.data() as Map<String, dynamic>);
     } catch (e) {
       if (kDebugMode) {
         print("Error fetching user data: $e");

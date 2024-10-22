@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -44,11 +43,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
           code: 'email-not-verified',
           message: 'Your account is not verified. Please check your inbox',
         );
-      }
-      final userModel = await getUserModel();
-
-      if (userModel == null) {
-        throw "new-user";
       }
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
@@ -99,33 +93,33 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
     }
   }
 
-  @override
-  Future<UserModel?> getUserModel() async {
-    try {
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
-      User? user = _auth.currentUser;
-      CollectionReference usersCollection =
-          firebaseFirestore.collection('User');
-
-      DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
-
-      if (userDoc.exists) {
-        // Nếu user đã tồn tại, trả về UserModel từ Firestore
-        return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
-      } else {
-        if (kDebugMode) {
-          print("User document does not exist.");
-        }
-        return null;
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error fetching user data: $e");
-      }
-      return null;
-    }
-  }
+  // @override
+  // Future<UserModel?> getUserModel() async {
+  //   try {
+  //     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  //
+  //     User? user = _auth.currentUser;
+  //     CollectionReference usersCollection =
+  //         firebaseFirestore.collection('User');
+  //
+  //     DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
+  //
+  //     if (userDoc.exists) {
+  //       // Nếu user đã tồn tại, trả về UserModel từ Firestore
+  //       return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+  //     } else {
+  //       if (kDebugMode) {
+  //         print("User document does not exist.");
+  //       }
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print("Error fetching user data: $e");
+  //     }
+  //     return null;
+  //   }
+  // }
 
   @override
   Future<void> signInWithGoogle() async {
@@ -149,11 +143,11 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService{
             await _auth.signInWithCredential(googleCredential);
 
         // User? currentUser = _auth.currentUser;
-        final userModel = await getUserModel();
-
-        if (userModel == null) {
-          throw "new-user";
-        }
+        // final userModel = await getUserModel();
+        //
+        // if (userModel == null) {
+        //   throw "new-user";
+        // }
       }
     } catch (error) {
       if (kDebugMode) {
