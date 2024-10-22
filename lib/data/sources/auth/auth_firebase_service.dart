@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_app/data/models/auth/create_user_req.dart';
+import 'package:social_app/domain/entities/user.dart';
 
 import '../../models/auth/sign_in_user_req.dart';
 

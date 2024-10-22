@@ -121,36 +121,7 @@ class FirestoreServiceImpl extends  FirestoreService{
     }
   }
 
-  @override
-  Future<List<String>> getUserFollowers(String uid) async {
-    final followersRef = _firestoreDB
-        .collection('users')
-        .doc(uid)
-        .collection('followers');
 
-    final snapshot = await followersRef.get();
-
-    List<String> followers = snapshot.docs.map((doc) => doc.id).toList();
-
-    return followers;
-  }
-
-  Future<List<String>> getUserFollowings(String uid) async {
-    final followingRef = _firestoreDB
-        .collection('NewUser')
-        .doc(uid)
-        .collection('followings');
-
-    final snapshot = await followingRef.get();
-
-    List<String> followings = snapshot.docs.map((doc) => doc.id).toList();
-
-    print("the list $uid ${followings.toString()}");
-
-    return followings;
-  }
-
-  /////////////////////////////////////////////////////////////////////////
 
   CollectionReference get _newUsersCollection => _firestoreDB.collection('NewUser');
 

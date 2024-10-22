@@ -129,6 +129,19 @@ class AppTheme {
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2 // Độ dày của viền chữ
           ..color = AppColors.white, // Màu viền
+  static TextStyle get drawerItemStyle => GoogleFonts.plusJakartaSans(
+    color: white,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    letterSpacing: -0.1,
+  );
+  static TextStyle get authHeaderStyle => GoogleFonts.plusJakartaSans(
+        fontWeight: FontWeight.w400,
+        fontSize: 40,
+        foreground: Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2 // Độ dày của viền chữ
+          ..color = AppColors.white, // Màu viền
       );
 
   static TextStyle get authNormalStyle => GoogleFonts.plusJakartaSans(

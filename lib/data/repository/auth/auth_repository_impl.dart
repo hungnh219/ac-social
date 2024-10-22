@@ -24,8 +24,13 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<User?> getCurrentUser() async {
-    return serviceLocator<AuthFirebaseService>().getCurrentUser();
+  Future<UserModel?> getUserModel() async {
+    // return await serviceLocator<AuthFirebaseService>().getUserModel();
+  }
+
+  @override
+  Future<dynamic> getCurrentUser() async {
+    return await serviceLocator<AuthFirebaseService>().getCurrentUser();
   }
 
   @override
