@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/presentation/screens/post_detail/post_detail_screen.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class PostCustom extends StatelessWidget {
-  PostCustom({super.key, required this.post});
+  PostCustom({super.key, required this.post, required this.commentPostCollection});
 
   dynamic post;
+  dynamic commentPostCollection;
   @override
   Widget build(BuildContext context) {
 

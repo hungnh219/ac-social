@@ -1,5 +1,6 @@
 // screens/home_screen.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/presentation/screens/discover/discover_screen.dart';
@@ -19,13 +20,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin<HomeScreen> {
   late List<dynamic> posts;
   // late CollectionReference postCollection;
-  late dynamic postCollection;
+  late CollectionReference<Map<String, dynamic>> postCollection;
+  late CollectionReference<Map<String, dynamic>> commentPostCollection;
   late dynamic userInfo;
   @override
   void initState() {
     super.initState();
     postCollection = FirebaseFirestore.instance.collection("NewPost");
-
     // postCollection = FirebaseFirestore.instance.collection("Post").where(field, isEqualTo: value);
     // DocumentSnapshot userDoc = await firestore.collection('users').doc(userId).get();
 
@@ -80,16 +81,16 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
   Future<void> fetchData() async {
     try {
-      QuerySnapshot querySnapshot = await postCollection.get();
+      QuerySnapshot querySnapshot = await postCollection.doc('post_000001').collection('lists').get();
       for (var doc in querySnapshot.docs) {
-        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('NewUser').doc(doc['user_id']).get();
+        // QuerySnapshot userSnapshot = await FirebaseFirestore.instance.collection('NewPost').doc('post_000001').collection('lists').get();
         print(doc.data());
-        print(userSnapshot.data());
+        // print(userSnapshot.data());
       }
       // userInfo = userSnapshot.data();
       for (var doc in querySnapshot.docs) {
         print(doc.data());
-        print(userInfo);
+        // print(userInfo);
       }
     } catch (e) {
       print('Error fetching data: $e');
@@ -126,7 +127,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 // }
                 return ListView(
                   children: snapshot.data!.docs.map((doc) {
-                    return PostCustom(post: doc);
+                    commentPostCollection = postCollection.doc(doc.id).collection('lists');
+                    return PostCustom(post: doc, commentPostCollection: commentPostCollection);
                   }).toList(),
                 );
               },
