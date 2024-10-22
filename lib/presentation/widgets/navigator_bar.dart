@@ -29,7 +29,11 @@ class _NavigatorBarCustomState extends State<NavigatorBarCustom> {
       backgroundColor: Colors.transparent,
       extendBody: true,
       resizeToAvoidBottomInset: false,
-      body: _screens[_screenIndex],
+      // body: _screens[_screenIndex],
+      body: IndexedStack(
+        index: _screenIndex,
+        children: _screens,
+      ),
       floatingActionButton: FloatingActionButton(
         // backgroundColor: Colors.transparent,
           onPressed: () {},

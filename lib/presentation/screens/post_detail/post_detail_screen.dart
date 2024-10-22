@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/domain/entities/post.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/post_detail/comment_list/comment_list.dart';
 import 'package:social_app/presentation/screens/post_detail/post_detail/post_detail.dart';
@@ -6,7 +7,7 @@ import 'package:social_app/presentation/screens/post_detail/post_detail/post_det
 class PostDetailScreen extends StatelessWidget {
   PostDetailScreen({super.key, required this.post});
 
-  dynamic post;
+  PostModel post;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -15,19 +16,10 @@ class PostDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(children: [
-                BackButton(),
-                ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
-                    settings: RouteSettings(name: 'HomeScreen'),
-                  ),
-                  );
-                },
-                child: Text('home'),
-                ),
+              BackButton(
+                color: Colors.black,
+              ),
+                
               Spacer(),
               IconButton(
                 icon: Icon(Icons.favorite_border),
