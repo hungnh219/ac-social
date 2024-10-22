@@ -52,16 +52,19 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SignUpCubit()),
         BlocProvider(create: (_) => CategoryCubit())
       ],
-      child: BlocBuilder<ThemeCubit, ThemeMode>(
+      child: SafeArea(
+        child: BlocBuilder<ThemeCubit, ThemeMode>(
           builder: (context, mode) => MaterialApp.router(
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.lightTheme,
-                // darkTheme:
-                // themeMode: mode,
-                // home: const SplashPage()
-                routerConfig: MyRouter.router,
-                // home: const SplashScreen(),
-              )),
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            // darkTheme:
+            // themeMode: mode,
+            // home: const SplashPage()
+            routerConfig: MyRouter.router,
+            // home: const SplashScreen(),
+          ),
+        ),
+      ),
     );
   }
 }
