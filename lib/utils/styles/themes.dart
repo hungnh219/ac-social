@@ -49,6 +49,12 @@ class AppTheme {
         color: white,
       );
 
+  static TextStyle get categoryLabelStyle => GoogleFonts.plusJakartaSans(
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: black,
+      );
+
   static TextStyle get buttonGradientStyle => GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w700,
         color: white,
@@ -63,6 +69,13 @@ class AppTheme {
         fontWeight: FontWeight.w400,
         letterSpacing: -0.1,
       );
+
+  static TextStyle get categoryBottomTitle => GoogleFonts.plusJakartaSans(
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+      color: AppColors.white,
+      letterSpacing: 2);
+
   static TextStyle get authHeaderStyle => GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w400,
         fontSize: 40,

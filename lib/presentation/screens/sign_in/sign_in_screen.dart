@@ -29,18 +29,18 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
 
   @override
   void initState() {
-    super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _obscureText = ValueNotifier<bool>(true);
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _obscureText.dispose();
+    super.dispose();
   }
 
   @override
@@ -173,7 +173,7 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
                                 .copyWith(color: AppColors.kettleman),
                           ),
                           TextButton(
-                            onPressed: () => context.go("/signup"),
+                            onPressed: () => context.go("/signin/signup"),
                             child: Text(
                               "SIGN UP",
                               style: AppTheme.authSignUpStyle,

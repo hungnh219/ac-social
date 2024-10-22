@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initialization() async {
     FlutterNativeSplash.remove();
 
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 2));
     context.go("/boarding");
   }
 
