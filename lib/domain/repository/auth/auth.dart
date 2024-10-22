@@ -9,6 +9,8 @@ abstract class AuthRepository{
 
   Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq);
 
+  Future<void> signInWithGoogle();
+
   Future<UserModel?> getUserModel();
 
   Future<dynamic> getCurrentUser();

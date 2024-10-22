@@ -7,6 +7,7 @@ import 'domain/repository/auth/auth.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initializeDependencies() async {
-  serviceLocator.registerSingleton<AuthFirebaseService>(AuthFirebaseServiceImpl());
+  serviceLocator
+      .registerSingleton<AuthFirebaseService>(AuthFirebaseServiceImpl());
   serviceLocator.registerSingleton<AuthRepository>(AuthRepositoryImpl());
 }

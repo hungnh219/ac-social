@@ -7,10 +7,10 @@ import '../../models/auth/sign_in_user_req.dart';
 import '../../sources/auth/auth_firebase_service.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
-
   @override
-  Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq) async{
-    return await serviceLocator<AuthFirebaseService>().signInWithEmailAndPassword(signInUserReq);
+  Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq) async {
+    return await serviceLocator<AuthFirebaseService>()
+        .signInWithEmailAndPassword(signInUserReq);
   }
 
   @override
@@ -19,18 +19,22 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
+  Future<void> signInWithGoogle() async {
+    return await serviceLocator<AuthFirebaseService>().signInWithGoogle();
+  }
+
+  @override
   Future<UserModel?> getUserModel() async {
     return await serviceLocator<AuthFirebaseService>().getUserModel();
   }
 
   @override
-  Future<dynamic> getCurrentUser() async{
+  Future<dynamic> getCurrentUser() async {
     return await serviceLocator<AuthFirebaseService>().getCurrentUser();
   }
 
   @override
-  Future<void> signOut() async{
+  Future<void> signOut() async {
     return await serviceLocator<AuthFirebaseService>().signOut();
   }
-
 }
