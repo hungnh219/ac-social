@@ -56,8 +56,27 @@ class _HomeHeaderCustomState extends State<HomeHeaderCustom> {
   }
 }
 
-class SearchBar extends StatelessWidget {
+class SearchBar extends StatefulWidget {
   const SearchBar({super.key});
+
+  @override
+  State<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  late TextEditingController searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +85,15 @@ class SearchBar extends StatelessWidget {
       child: SizedBox(
         height: 36,
         child: TextField(
-            decoration: InputDecoration(
-              // hintText: 'Search',
-              labelText: 'Search',
-              prefixIcon: const Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            )
+          controller: searchController,
+          decoration: InputDecoration(
+            // hintText: 'Search',
+            labelText: 'Search',
+            prefixIcon: const Icon(Icons.search),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          )
         )
       ),
     );

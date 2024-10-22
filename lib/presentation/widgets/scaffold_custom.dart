@@ -3,7 +3,7 @@ import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/post_detail/post_detail_screen.dart';
 
-class ScaffoldCustom extends StatelessWidget {
+class ScaffoldCustom extends StatefulWidget {
   final Widget body;
   final AppBar? appBar;
   final bool bottomNavBarEnabled;
@@ -16,10 +16,16 @@ class ScaffoldCustom extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ScaffoldCustom> createState() => _ScaffoldCustomState();
+}
+
+class _ScaffoldCustomState extends State<ScaffoldCustom> with AutomaticKeepAliveClientMixin<ScaffoldCustom> {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      appBar: appBar,
-      body: body,
+      appBar: widget.appBar,
+      body: widget.body,
       floatingActionButton: FloatingActionButton(
         // backgroundColor: Colors.transparent,
           onPressed: () {},
@@ -30,7 +36,7 @@ class ScaffoldCustom extends StatelessWidget {
           ),
         ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: bottomNavBarEnabled
+      bottomNavigationBar: widget.bottomNavBarEnabled
         ? BottomAppBar(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 76,
@@ -76,4 +82,6 @@ class ScaffoldCustom extends StatelessWidget {
         : null, // No bottom navigation if it's not enabled
     );
   }
+  @override
+  bool get wantKeepAlive => true;
 }

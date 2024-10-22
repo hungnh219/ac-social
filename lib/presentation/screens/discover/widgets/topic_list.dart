@@ -32,7 +32,7 @@ class TopicList extends StatelessWidget {
                 return TopicImageCustom();
               },
               separatorBuilder: (context, index) {
-                return SizedBox(width: 10);
+                return SizedBox(width: 16);
               },
               itemCount: 10),
           ),
@@ -55,11 +55,12 @@ class TopicImageCustom extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              // borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.all(Radius.circular(16)),
               image: DecorationImage(
                 image: AssetImage(
                   'assets/images/appscyclone.png'
-                  ),
+                ),
+                fit: BoxFit.cover,
               )
             ),
           ),

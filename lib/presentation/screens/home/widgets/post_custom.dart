@@ -1,13 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/presentation/screens/post_detail/post_detail_screen.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class PostCustom extends StatelessWidget {
-  PostCustom({super.key, required this.post});
+  PostCustom({super.key, required this.post, required this.commentPostCollection});
 
   dynamic post;
+  dynamic commentPostCollection;
   @override
   Widget build(BuildContext context) {
+
+    // print(post['user_id'].runtimeType);
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
       child: Container(
@@ -36,6 +40,7 @@ class PostCustom extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
+            // Text(post['user_id'].toString()),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,7 +55,7 @@ class PostCustom extends StatelessWidget {
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: Icon(Icons.share_outlined),
+                    icon: Icon(Icons.favorite_border),
                     onPressed: () {},
                   ),
                 ],
@@ -79,9 +84,12 @@ class PostInfo extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           // Text(post['username']),
-          Text(post['user_id']),
+          // Text(post['content'], style: TextStyle(
+          //   overflow: TextOverflow.fade
+          // ),),
           Spacer(),
-          Text(post['timestamp'].toString()),
+          Text('hehehe'),
+          // Text(post['user_id'].toString()),
         ],),
       ),
     );
