@@ -1,6 +1,7 @@
 // Name the class UserModel to avoid duplicating the name of User class
 // in Firebase Authentication
 class UserModel {
+  final String avatar;
   final String name;
   final String lastName;
   final String category;
@@ -12,6 +13,7 @@ class UserModel {
   final List<String> followingUsers;
 
   UserModel({
+    required this.avatar,
     required this.name,
     required this.lastName,
     required this.category,
@@ -23,8 +25,9 @@ class UserModel {
     required this.socialLinks,
   });
 
-  UserModel.newUser(String categoryID)
-      : name = '',
+  UserModel.newUser(String categoryID, String photo)
+      : avatar = photo,
+        name = '',
         lastName = '',
         category = categoryID,
         paypal = '',
@@ -36,6 +39,7 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
+      avatar: map['avatar'] ?? '',
       name: map['name'] ?? '',
       lastName: map['lastName'] ?? '',
       category: map['category'] ?? 'Uncategorized',
@@ -50,6 +54,7 @@ class UserModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'avatar': avatar,
       'name': name,
       'lastName': lastName,
       'category': category,
@@ -63,6 +68,7 @@ class UserModel {
   }
 
   UserModel copyWith({
+    String? avatar,
     String? name,
     String? lastName,
     String? category,
@@ -74,6 +80,7 @@ class UserModel {
     List<String>? followingUsers,
   }) {
     return UserModel(
+      avatar: avatar ?? this.avatar,
       name: name ?? this.name,
       lastName: lastName ?? this.lastName,
       category: category ?? this.category,

@@ -10,32 +10,37 @@ abstract class FirestoreService {
   Future<UserModel?>? getUserData(String userID);
 
   Future<UserModel?>? getCurrentUserData();
-  
+
   // No need add to repository
   Future<UserModel?> fetchUserData(String userID);
 
   Future<void> addCurrentUserData(AddUserReq addUserReq);
 
   Future<void> updateCurrentUserData(UpdateUserReq updateUserReq);
+
+  Future<List<Map<String, String>>> fetchCategoriesData();
 }
 
-class FirestoreServiceImpl extends  FirestoreService{
+class FirestoreServiceImpl extends FirestoreService {
   final FirebaseFirestore _firestoreDB = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   User? get currentUser => _auth.currentUser;
 
-  CollectionReference get _usersCollection => _firestoreDB.collection('users');
+  CollectionReference get _usersCollection =>
+      _firestoreDB.collection('NewUser');
+  CollectionReference get _categoryCollection =>
+      _firestoreDB.collection("Category");
 
   @override
   Future<UserModel?> getUserData(String userID) async {
     try {
       return await fetchUserData(userID);
     } on CustomFirestoreException catch (error) {
-        if (kDebugMode) {
-          print(error.toString());
-        }
-        return null;
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      return null;
     }
   }
 
@@ -47,11 +52,11 @@ class FirestoreServiceImpl extends  FirestoreService{
       if (error.code == 'new-user') {
         rethrow;
       }
-        if (kDebugMode) {
-          print(error.toString());
-        }
-        return null;
+      if (kDebugMode) {
+        print(error.toString());
       }
+      return null;
+    }
   }
 
   // No need add to repository
@@ -100,12 +105,38 @@ class FirestoreServiceImpl extends  FirestoreService{
     }
 
     try {
-      await _usersCollection.doc(currentUser?.uid).update(updateUserReq.updatedUserData.toMap());
+      await _usersCollection
+          .doc(currentUser?.uid)
+          .update(updateUserReq.updatedUserData.toMap());
     } catch (e) {
       if (kDebugMode) {
         print("Error updating user data: $e");
       }
     }
+  }
+
+  @override
+  Future<List<Map<String, String>>> fetchCategoriesData() async {
+    List<Map<String, String>> categories = [];
+    try {
+      QuerySnapshot snapshot = await _categoryCollection.get();
+
+      for (var doc in snapshot.docs) {
+        if (doc.exists) {}
+        categories.add({
+          'id': doc.id, // Lấy ID của tài liệu
+          'name': doc['name'], // Lấy trường 'name'
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error get category list: $e");
+      }
+    }
+    if (kDebugMode) {
+      print(categories);
+    }
+    return categories;
   }
 }
 
