@@ -3,10 +3,6 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
-<<<<<<< HEAD
-    id 'com.google.gms.google-services'
-=======
->>>>>>> release
 }
 
 dependencies {
@@ -25,11 +21,7 @@ dependencies {
 
 android {
     namespace = "com.project.socialapp.social_app"
-<<<<<<< HEAD
-    compileSdk = flutter.compileSdkVersion
-=======
     compileSdk = 34
->>>>>>> release
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
