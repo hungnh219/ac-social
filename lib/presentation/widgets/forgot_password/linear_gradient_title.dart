@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../utils/styles/colors.dart';
+import 'package:social_app/utils/styles/themes.dart';
 
 class LinearGradientTitle extends StatelessWidget {
   const LinearGradientTitle(
@@ -12,12 +11,7 @@ class LinearGradientTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ShaderMask(
       shaderCallback: (Rect rect) {
-        return const LinearGradient(
-          colors: [
-            AppColors.iric,
-            AppColors.lavenderBlueShadow,
-          ],
-        ).createShader(rect);
+        return AppTheme.mainGradient.createShader(rect);
       },
       child: Text(
         text,

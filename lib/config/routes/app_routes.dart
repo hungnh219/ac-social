@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/presentation/screens/boarding/boarding.dart';
 import 'package:social_app/presentation/screens/category/category_screen.dart';
+import 'package:social_app/presentation/screens/forgot_pasword/forgot_password_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
 
@@ -40,6 +41,12 @@ class MyRouter {
                 path: 'signup',
                 builder: (BuildContext context, GoRouterState state) {
                   return const SignUpScreen();
+                },
+              ),
+              GoRoute(
+                path: 'forgotpassword',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const ForgotPasswordScreen();
                 },
               ),
               GoRoute(
