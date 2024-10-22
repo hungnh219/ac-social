@@ -1,12 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:social_app/domain/entities/user.dart';
 import 'package:social_app/utils/constants/icon_path.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 import '../../../../utils/styles/themes.dart';
 
 class InformationBox extends StatelessWidget {
-  const InformationBox({super.key});
+  final UserModel userModel;
+  final List<String> userFollowers;
+  final List<String> userFollowings;
+
+  const InformationBox({super.key, required this.userModel, required this.userFollowers, required this.userFollowings});
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +21,12 @@ class InformationBox extends StatelessWidget {
       alignment: Alignment.center,
       child: Column(
         children: [
-          Text('Bruno Pham', style: AppTheme.blackHeaderStyle),
+          Text('${userModel.name} ${userModel.lastName}', style: AppTheme.blackHeaderStyle),
           const SizedBox(
             height: 5,
           ),
           Text(
-            'Da Nang, Vietnam',
+            userModel.location,
             style: AppTheme.profileLocationStyle,
           ),
           const SizedBox(
@@ -39,7 +45,7 @@ class InformationBox extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: '1000',
+                        text: userFollowers.length.toString(),
                         style: AppTheme.profileNumberStyle,
                       ),
                       TextSpan(
@@ -54,7 +60,7 @@ class InformationBox extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: '500',
+                        text: userFollowings.length.toString(),
                         style: AppTheme.profileNumberStyle,
                       ),
                       TextSpan(
@@ -76,17 +82,29 @@ class InformationBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (kDebugMode) {
+                      print(userModel.socialAccounts['website']);
+                    }
+                  },
                   icon: SvgPicture.asset(AppIcons.globe),
                 ),
                 SvgPicture.asset(AppIcons.gradientDot),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (kDebugMode) {
+                      print(userModel.socialAccounts['instagramId']);
+                    }
+                  },
                   icon: SvgPicture.asset(AppIcons.instagram),
                 ),
                 SvgPicture.asset(AppIcons.gradientDot),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (kDebugMode) {
+                      print(userModel.socialAccounts['facebookId']);
+                    }
+                  },
                   icon: SvgPicture.asset(AppIcons.facebook),
                 ),
               ],

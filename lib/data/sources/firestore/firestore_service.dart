@@ -18,6 +18,10 @@ abstract class FirestoreService {
 
   Future<void> updateCurrentUserData(UpdateUserReq updateUserReq);
 
+  Future<List<String>> getUserFollowers(String uid);
+
+  Future<List<String>> getUserFollowings(String uid);
+
   Future<UserModel?>? getNewUserData();
 
   Future<UserModel?>? getCurrentNewUserData();
@@ -117,7 +121,36 @@ class FirestoreServiceImpl extends  FirestoreService{
     }
   }
 
+  @override
+  Future<List<String>> getUserFollowers(String uid) async {
+    final followersRef = _firestoreDB
+        .collection('users')
+        .doc(uid)
+        .collection('followers');
 
+    final snapshot = await followersRef.get();
+
+    List<String> followers = snapshot.docs.map((doc) => doc.id).toList();
+
+    return followers;
+  }
+
+  Future<List<String>> getUserFollowings(String uid) async {
+    final followingRef = _firestoreDB
+        .collection('NewUser')
+        .doc(uid)
+        .collection('followings');
+
+    final snapshot = await followingRef.get();
+
+    List<String> followings = snapshot.docs.map((doc) => doc.id).toList();
+
+    print("the list $uid ${followings.toString()}");
+
+    return followings;
+  }
+
+  /////////////////////////////////////////////////////////////////////////
 
   CollectionReference get _newUsersCollection => _firestoreDB.collection('NewUser');
 
@@ -134,7 +167,7 @@ class FirestoreServiceImpl extends  FirestoreService{
 
   Future<UserModel?> getCurrentNewUserData() async {
     try {
-      return await fetchUserData();
+      return await fetchNewUserData();
     } on CustomFirestoreException catch (error) {
       if (error.code == 'user-firestore-not-exist') {
         rethrow;
@@ -160,6 +193,7 @@ class FirestoreServiceImpl extends  FirestoreService{
 
       return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -179,6 +213,8 @@ class FirestoreServiceImpl extends  FirestoreService{
         .then((value) => print("User Added"))
         .catchError((error) => print("Error pushing user data: $error"));
   }
+
+  //////////////////////////////////////////////////////////////////////////
 
 }
 

@@ -29,4 +29,29 @@ class UserRepositoryImpl extends UserRepository {
     return serviceLocator<FirestoreService>().updateCurrentUserData(updateUserReq) ;
   }
 
+  @override
+  Future<void> addCurrentNewUserData(AddUserReq addUserReq) {
+    return serviceLocator<FirestoreService>().addCurrentNewUserData(addUserReq);
+  }
+
+  @override
+  Future<UserModel?>? getCurrentNewUserData() {
+    return serviceLocator<FirestoreService>().getCurrentNewUserData() ;
+  }
+
+  @override
+  Future<UserModel?>? getNewUserData() {
+    return serviceLocator<FirestoreService>().getNewUserData() ;
+  }
+
+  @override
+  Future<List<String>> getUserFollowers(String uid) {
+    return serviceLocator<FirestoreService>().getUserFollowers(uid);
+  }
+
+  @override
+  Future<List<String>> getUserFollowings(String uid) {
+    return serviceLocator<FirestoreService>().getUserFollowings(uid);
+  }
+
 }

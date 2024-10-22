@@ -9,7 +9,7 @@ class CollectionTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    throw UnimplementedError();
+    return const SizedBox(width: 5,height: 5,);
   }
   // final List<CollectionModel> imageUrls;
   //
