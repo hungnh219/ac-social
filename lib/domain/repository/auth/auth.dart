@@ -13,7 +13,7 @@ abstract class AuthRepository{
 
   Future<UserModel?> getUserModel();
 
-  Future<dynamic> getCurrentUser();
+  Future<User?> getCurrentUser();
 
   Future<void> signOut();
 }

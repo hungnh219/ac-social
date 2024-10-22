@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:social_app/presentation/screens/edit_profile/widgets/svg_icon_button.dart';
+import 'package:social_app/presentation/widgets/svg_icon_button.dart';
 import 'package:social_app/presentation/widgets/edit_profile/app_text_form_field.dart';
 import 'package:social_app/presentation/widgets/edit_profile/bottom_rounded_appbar.dart';
 import 'package:social_app/utils/constants/image_path.dart';

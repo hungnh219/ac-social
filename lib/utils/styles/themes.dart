@@ -113,7 +113,7 @@ class AppTheme {
   static TextStyle get drawerItemStyle =>
       GoogleFonts.plusJakartaSans(
         color: white,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: FontWeight.w400,
         letterSpacing: -0.1,
       );

@@ -12,4 +12,15 @@ abstract class UserRepository{
   Future<void> addCurrentUserData(AddUserReq addUserReq);
 
   Future<void> updateCurrentUserData(UpdateUserReq updateUserReq);
+
+  Future<List<String>> getUserFollowers(String uid);
+
+  Future<List<String>> getUserFollowings(String uid);
+
+
+  Future<UserModel?>? getNewUserData();
+
+  Future<UserModel?>? getCurrentNewUserData();
+
+  Future<void> addCurrentNewUserData(AddUserReq addUserReq);
 }
