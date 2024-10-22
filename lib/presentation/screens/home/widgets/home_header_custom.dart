@@ -13,31 +13,31 @@ class _HomeHeaderCustomState extends State<HomeHeaderCustom> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 112,
+      // height: 112,
       color: AppColors.white,
       child: Column(
         children: [
           SearchBar(),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: SwitchTabButton(tabText: 'Popular', switchTab: popularTabPress),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: SwitchTabButton(tabText: 'Trending', switchTab: trendingTabPress),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: SwitchTabButton(tabText: 'Following', switchTab: followingTabPress),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+          //   child: Row(
+          //     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Expanded(
+          //         flex: 1,
+          //         child: SwitchTabButton(tabText: 'Popular', switchTab: popularTabPress),
+          //       ),
+          //       Expanded(
+          //         flex: 1,
+          //         child: SwitchTabButton(tabText: 'Trending', switchTab: trendingTabPress),
+          //       ),
+          //       Expanded(
+          //         flex: 1,
+          //         child: SwitchTabButton(tabText: 'Following', switchTab: followingTabPress),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
@@ -81,7 +81,7 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
+      padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
       child: SizedBox(
         height: 36,
         child: TextField(

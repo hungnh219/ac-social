@@ -3,12 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_app/data/sources/firestore/firestore_service.dart';
+import 'package:social_app/domain/repository/post/post_repository.dart';
 import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/widgets/home_header_custom.dart';
 import 'package:social_app/presentation/screens/home/widgets/post_custom.dart';
+import 'package:social_app/presentation/screens/home/widgets/tab_item.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
 import 'package:social_app/presentation/widgets/bottom_app_bar_custom.dart';
 import 'package:social_app/presentation/widgets/scaffold_custom.dart';
+import 'package:social_app/service_locator.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,11 +22,11 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   late List<dynamic> posts;
   // late CollectionReference postCollection;
   late CollectionReference<Map<String, dynamic>> postCollection;
-  late CollectionReference<Map<String, dynamic>> commentPostCollection;
+  // late CollectionReference<Map<String, dynamic>> commentPostCollection;
   late dynamic userInfo;
   
   @override
@@ -37,48 +41,13 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   // QuerySnapshot querySnapshot = await users
   //     .select(['name', 'email']) 
   //     .get();
-    posts = [
-      {
-        'username': 'User 1',
-        'timestamp': '2 hours ago',
-        'title': 'Post 1',
-        'description': 'This is post 1',
-        'image': 'https://via.placeholder.com/150',
-        'avatar': 'https://via.placeholder.com/150'
-      },
-      {
-        'username': 'User 2',
-        'timestamp': '1 hours ago',
-        'title': 'Post 2',
-        'description': 'This is post 2',
-        'image': 'https://via.placeholder.com/150',
-        'avatar': 'https://via.placeholder.com/150'
-      },
-      {
-        'username': 'User 3',
-        'timestamp': '3 hours ago',
-        'title': 'Post 3',
-        'description': 'This is post 3',
-        'image': 'https://via.placeholder.com/150',
-        'avatar': 'https://via.placeholder.com/150'
-      },
-      {
-        'username': 'User 4',
-        'timestamp': '2 hours ago',
-        'title': 'Post 4',
-        'description': 'This is post 4',
-        'image': 'https://via.placeholder.com/150',
-        'avatar': 'https://via.placeholder.com/150',
-      },
-      {
-        'username': 'User 5',
-        'timestamp': '1 hours ago',
-        'title': 'Post 5',
-        'description': 'This is post 5',
-        'image': 'https://via.placeholder.com/150',
-        'avatar': 'https://via.placeholder.com/150',
-      },
-    ];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // updateKeepAlive();
+    // posts = Provider.of<PostRepository>(context).getPostsData();
   }
 
   Future<void> fetchData() async {
@@ -119,34 +88,142 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     }
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   // print('test ${userInfo}');
+  //   // super.build(context);
+  //   return SafeArea(
+  //     bottom: false,
+  //     child: Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text('Home'),
+  //         actions: [
+  //           IconButton(
+  //             icon: const Icon(Icons.search),
+  //             onPressed: () {},
+  //           ),
+  //           IconButton(
+  //             icon: const Icon(Icons.notifications),
+  //             onPressed: () {},
+  //           ),
+  //         ],
+  //       ),
+  //       body: Column(children: [
+  //           const HomeHeaderCustom(),
+  //           ElevatedButton(onPressed: () {
+  //             fetchData();
+              
+  //             // Navigator.push(
+  //             //   context,
+  //             //   MaterialPageRoute(builder: (context) => const SplashScreen())
+  //             // );
+  //           }, child: Text('logout', style: TextStyle(
+  //             color: AppColors.white
+  //           ),)),
+      //       Expanded(
+      //         child: FutureBuilder(
+      //           future: serviceLocator.get<PostRepository>().getPostsData(),
+      //           builder: (context, snapshot) {
+      //             if (snapshot.connectionState == ConnectionState.waiting) {
+      //               return Center(child: CircularProgressIndicator());
+      //             }
+                  
+      //             if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      //               return Center(child: Text('No data found.'));
+      //             }
+        
+      //             // print(snapshot.data);
+      //             // for (var doc in snapshot.data!.docs) {
+      //             //   print(doc.data());
+      //             // }
+      //             return ListView(
+      //               children: snapshot.data!.map((doc) {
+      //                 print(doc);
+      //                 // commentPostCollection = postCollection.doc(doc.id).collection('lists');
+      //                 return PostCustom(post: doc);
+      //               }).toList(),
+      //             );
+      //           },
+      //         )
+      //       ),
+      //     ],),
+      // ),
+  //   );
+  // }
+   @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: HomeHeaderCustom(),
+          centerTitle: true,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(40),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              child: Container(
+                height: 40,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: Colors.green.shade100,
+                ),
+                child: const TabBar(
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: Colors.transparent,
+                  indicator: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.black54,
+                  tabs: [
+                    TabItem(title: 'Popular'),
+                    TabItem(title: 'Trending'),
+                    TabItem(title: 'Following'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            PostListView(),
+            Center(child: Text('Trending Fake')),
+            PostListView(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PostListView extends StatefulWidget {
+  const PostListView({super.key});
+
+  @override
+  State<PostListView> createState() => _PostListViewState();
+}
+
+class _PostListViewState extends State<PostListView> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
-    // print('test ${userInfo}');
     super.build(context);
-    return SafeArea(
-      bottom: false,
-      child: Scaffold(
-        body: Column(children: [
-            const HomeHeaderCustom(),
-            ElevatedButton(onPressed: () {
-              fetchData();
-              
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const SplashScreen())
-              // );
-            }, child: Text('logout', style: TextStyle(
-              color: AppColors.white
-            ),)),
-            Expanded(
-              child: StreamBuilder(
-                stream: postCollection.snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    return Expanded(
+              child: FutureBuilder(
+                future: serviceLocator.get<PostRepository>().getPostsData(),
+                builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   }
                   
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return Center(child: Text('No data found.'));
                   }
         
@@ -155,19 +232,14 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   //   print(doc.data());
                   // }
                   return ListView(
-                    children: snapshot.data!.docs.map((doc) {
-                      commentPostCollection = postCollection.doc(doc.id).collection('lists');
-                      return PostCustom(post: doc, commentPostCollection: commentPostCollection);
+                    children: snapshot.data!.map((doc) {
+                      print(doc);
+                      // commentPostCollection = postCollection.doc(doc.id).collection('lists');
+                      return PostCustom(post: doc);
                     }).toList(),
                   );
                 },
               )
-            ),
-          ],),
-      ),
-    );
+            );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
