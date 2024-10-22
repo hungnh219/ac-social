@@ -1,89 +1,102 @@
 // Name the class UserModel to avoid duplicating the name of User class
 // in Firebase Authentication
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String name;
   final String lastName;
+  final String location;
   final String category;
-  final String paypal;
-  final String trendingPostId;
-  final SocialLinks socialLinks;
-  final List<String> collections;
+  final String avatar;
+  final Map<String, String> socialAccounts;
+  final List<String> popularPosts;
   final List<String> followers;
   final List<String> followingUsers;
 
   UserModel({
     required this.name,
     required this.lastName,
+    required this.location,
     required this.category,
-    required this.paypal,
-    required this.trendingPostId,
-    required this.collections,
-    required this.followingUsers,
+    required this.avatar,
+    required this.socialAccounts,
     required this.followers,
-    required this.socialLinks,
+    required this.followingUsers,
+    required this.popularPosts,
   });
 
-  UserModel.newUser(String categoryID)
+  UserModel.newUser(String categoryID, String userAvatar)
       : name = '',
         lastName = '',
+        location = '',
         category = categoryID,
-        paypal = '',
-        trendingPostId = '',
-        socialLinks = SocialLinks(),
-        collections = [],
+        avatar = userAvatar, // Khởi tạo avatar
+        socialAccounts = {},
+        followers = [],
         followingUsers = [],
-        followers = [];
+        popularPosts = [];
 
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       name: map['name'] ?? '',
-      lastName: map['lastName'] ?? '',
-      category: map['category'] ?? 'Uncategorized',
-      paypal: map['paypal'] ?? '',
-      trendingPostId: map['trendingPostId'] ?? '',
-      collections: List<String>.from(map['collections'] ?? []),
-      followers: List<String>.from(map['followers'] ?? []),
-      followingUsers: List<String>.from(map['followingUsers'] ?? []),
-      socialLinks: SocialLinks.fromMap(map['socialLinks'] ?? {}),
+      lastName: map['lastname'] ?? '',
+      location: map['location'] ?? '',
+      category: map['category'] is DocumentReference // Checking if it's a single DocumentReference
+          ? (map['category'] as DocumentReference).id // Convert the reference to a list containing the ID
+          : '', // Default to an empty list if it's not a reference
+      avatar: map['avatar'] ?? '',
+      socialAccounts: Map<String, String>.from(map['socials'] ?? {}),
+      followers: (map['followers'] as List<dynamic>?)
+          ?.map((ref) => (ref as DocumentReference).id)
+          .toList() ??
+          [],
+      followingUsers: (map['followingUsers'] as List<dynamic>?)
+          ?.map((ref) => (ref as DocumentReference).id)
+          .toList() ??
+          [],
+      popularPosts: (map['popular_posts'] as List<dynamic>?)
+          ?.map((ref) => (ref as DocumentReference).id)
+          .toList() ??
+          [],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'lastName': lastName,
+      'lastname': lastName,
+      'location': location,
       'category': category,
-      'paypal': paypal,
-      'trendingPostId': trendingPostId,
-      'collections': collections,
+      'avatar': avatar,
+      'socialAccounts': socialAccounts,
       'followers': followers,
       'followingUsers': followingUsers,
-      'socialLinks': socialLinks.toMap(),
+      'popular_posts': popularPosts,
     };
   }
 
   UserModel copyWith({
     String? name,
     String? lastName,
+    String? location,
     String? category,
-    String? paypal,
-    String? trendingPostId,
-    SocialLinks? socialLinks,
-    List<String>? collections,
+    String? avatar, // Thêm avatar vào copyWith
+    Map<String, String>? socialAccounts, // Cập nhật tên trường
     List<String>? followers,
     List<String>? followingUsers,
+    List<String>? popularPosts, // Cập nhật tên trường
   }) {
     return UserModel(
       name: name ?? this.name,
       lastName: lastName ?? this.lastName,
+      location: location ?? this.location,
       category: category ?? this.category,
-      paypal: paypal ?? this.paypal,
-      trendingPostId: trendingPostId ?? this.trendingPostId,
-      socialLinks: socialLinks ?? this.socialLinks,
-      collections: collections ?? this.collections,
+      avatar: avatar ?? this.avatar,
+      socialAccounts: socialAccounts ?? this.socialAccounts,
       followers: followers ?? this.followers,
       followingUsers: followingUsers ?? this.followingUsers,
+      popularPosts: popularPosts ?? this.popularPosts,
     );
   }
 
