@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/presentation/screens/boarding/boarding.dart';
 import 'package:social_app/presentation/screens/category/category_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
@@ -21,6 +22,12 @@ class MyRouter {
             path: 'boarding',
             builder: (BuildContext context, GoRouterState state) {
               return const BoardingScreen();
+            },
+          ),
+          GoRoute(
+            path: 'auth',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AuthScreen();
             },
           ),
           GoRoute(
