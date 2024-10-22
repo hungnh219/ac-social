@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:social_app/domain/entities/topic.dart';
 
 import '../../../domain/entities/user.dart';
 import '../../models/user_firestore/add_user_data.dart';
@@ -26,9 +27,12 @@ abstract class FirestoreService {
 
   Future<void> addCurrentNewUserData(AddUserReq addUserReq);
 
+  Future<TopicModel?>? getTopicData(String topicID);
+
+  Future<List<TopicModel>?>? getTopicsData();
 }
 
-class FirestoreServiceImpl extends  FirestoreService{
+class FirestoreServiceImpl extends FirestoreService{
   final FirebaseFirestore _firestoreDB = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -180,6 +184,41 @@ class FirestoreServiceImpl extends  FirestoreService{
         .catchError((error) => print("Error pushing user data: $error"));
   }
 
+  @override
+  Future<TopicModel?> getTopicData(String topicID) async {
+    try {
+      DocumentSnapshot topicDoc = await _firestoreDB.collection('NewTopic').doc(topicID).get();
+
+      if (!topicDoc.exists) {
+        throw CustomFirestoreException(
+          code: 'topic-not-exist',
+          message: 'Topic data does not exist in Firestore',
+        );
+      }
+
+      return TopicModel.fromMap(topicDoc.data() as Map<String, dynamic>);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<TopicModel>?>? getTopicsData() async {
+    try {
+      QuerySnapshot topicsSnapshot = await _firestoreDB.collection('NewTopic').get();
+
+      if (topicsSnapshot.docs.isEmpty) {
+        throw CustomFirestoreException(
+          code: 'no-topics',
+          message: 'No topics exist in Firestore',
+        );
+      }
+
+      return topicsSnapshot.docs.map((doc) => TopicModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 class CustomFirestoreException implements Exception {

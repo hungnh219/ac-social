@@ -14,6 +14,13 @@ class TopicModel {
     );
   }
 
+  factory TopicModel.fromMap(Map<String, dynamic> map) {
+    return TopicModel(
+      name: map['name'],
+      thumbnail: map['thumbnail'],
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'name': name,

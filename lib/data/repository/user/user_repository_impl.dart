@@ -4,7 +4,7 @@ import 'package:social_app/data/models/user_firestore/update_user_req.dart';
 
 import 'package:social_app/domain/entities/user.dart';
 
-import '../../../domain/repository/user/user.dart';
+import '../../../domain/repository/user/user_repository.dart';
 import '../../../service_locator.dart';
 import '../../sources/firestore/firestore_service.dart';
 
