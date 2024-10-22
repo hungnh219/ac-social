@@ -328,7 +328,7 @@ class ProfileTab extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppTheme.profileTabStyle.copyWith(
                   color: selectedIndex == index
-                      ? AppColors.irish
+                      ? AppColors.iris
                       : AppColors.noghreiSilver,
                 ),
               ),

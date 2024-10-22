@@ -1,4 +1,4 @@
-import 'package:custom_navigation_bar/custom_navigation_bar.dart';
+// import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/presentation/screens/discover/discover_screen.dart';

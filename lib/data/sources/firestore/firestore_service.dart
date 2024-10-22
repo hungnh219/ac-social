@@ -214,6 +214,36 @@ class FirestoreServiceImpl extends  FirestoreService{
         .catchError((error) => print("Error pushing user data: $error"));
   }
 
+  @override
+  Future<List<String>> getUserFollowers(String uid) async {
+    List<String> followers = [];
+
+    // Fetch the followers nested collection for the user
+    QuerySnapshot<Map<String, dynamic>> followersSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).collection('followers').get();
+
+    for (var doc in followersSnapshot.docs) {
+      followers.add(doc.id);
+    }
+
+    return followers;
+  }
+
+  @override
+  Future<List<String>> getUserFollowings(String uid) async {
+    List<String> followings = [];
+
+  // Fetch the followers nested collection for the user
+  QuerySnapshot<Map<String, dynamic>> followersSnapshot =
+      await FirebaseFirestore.instance.collection('users').doc(uid).collection('followers').get();
+
+  for (var doc in followersSnapshot.docs) {
+    followings.add(doc.id);
+  }
+
+  return followings;
+  }
+
   //////////////////////////////////////////////////////////////////////////
 
 }
