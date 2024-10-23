@@ -14,6 +14,7 @@ class AppIcons {
   static const String camera = '${iconPath}camera$svgFormat';
   static const String cancelButton = '${iconPath}cancel-button$svgFormat';
   static const String chevronRightButton = '${iconPath}chevron-right-button$svgFormat';
+  static const String whiteChevronRightButton = '${iconPath}white-chevron-right-button$svgFormat';
   static const String facebook = '${iconPath}facebook$svgFormat';
   static const String facebookFill = '${iconPath}facebook-fill$svgFormat';
   static const String globe = '${iconPath}globe$svgFormat';

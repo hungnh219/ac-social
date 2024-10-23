@@ -44,7 +44,7 @@ class SignInCubit extends Cubit<SignInState> {
       await serviceLocator<AuthRepository>().signInWithGoogle();
       await serviceLocator<UserRepository>().getCurrentUserData();
       emit(SignInSuccess());
-      context.go("/signin/home");
+      context.go("/signin/navigator");
     } catch (e) {
       if (e is CustomFirestoreException) {
         if (e.code == 'new-user') {

@@ -2,48 +2,56 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:social_app/domain/entities/collection.dart';
 
 import '../../../../utils/constants/image_path.dart';
+import 'collection_grid_view.dart';
 
 class CollectionTab extends StatelessWidget {
+  final List<CollectionModel> collections;
+
+  const CollectionTab({super.key, required this.collections});
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return const SizedBox(width: 5,height: 5,);
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // Adjust the number of columns as needed
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+      ),
+      itemCount: collections.length,
+      itemBuilder: (context, index) {
+        final collection = collections[index];
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            // Container(
+            //   decoration: BoxDecoration(
+            //     border: Border.all(color: Colors.grey),
+            //     borderRadius: BorderRadius.circular(10.0),
+            //   ),
+            //   child: GridTile(
+            //     footer: Center(
+            //       child: Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: Text(
+            //           collection.name,
+            //           style: const TextStyle(
+            //             fontSize: 16,
+            //             fontWeight: FontWeight.bold,
+            //             color: Colors.white,
+            //             backgroundColor: Colors.black54,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     child: ImagesGrid(images: collection.postIds),
+            //   ),
+            // ),
+          ],
+        );
+      },
+    );
   }
-  // final List<CollectionModel> imageUrls;
-  //
-  // const CollectionTab({super.key, required this.imageUrls});
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   if (imageUrls.isEmpty) {
-  //     return Center(child: SvgPicture.asset(AppImages.empty));
-  //   } else {
-  //     return Padding(
-  //       padding: const EdgeInsets.all(8.0),
-  //       child: StaggeredGridView.countBuilder(
-  //         physics: const NeverScrollableScrollPhysics(),
-  //         crossAxisCount: 2,
-  //         itemCount: imageUrls.length,
-  //         itemBuilder: (context, index) {
-  //           return ClipRRect(
-  //             borderRadius: BorderRadius.circular(10),
-  //             child: CachedNetworkImage(
-  //               imageUrl: imageUrls[index],
-  //               fit: BoxFit.cover,
-  //               placeholder: (context, url) =>
-  //               const Center(child: CircularProgressIndicator()),
-  //               errorWidget: (context, url, error) => const Icon(
-  //                   Icons.error), // Error widget if image fails to load
-  //             ),
-  //           );
-  //         },
-  //         staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
-  //         mainAxisSpacing: 16.0,
-  //         crossAxisSpacing: 16.0, // Horizontal space between items
-  //       ),
-  //     );
-  //   }
-  // }
 }

@@ -15,8 +15,6 @@ import '../../widgets/edit_profile/bottom_rounded_appbar.dart';
 import 'cubit/profile_cubit.dart';
 import 'cubit/profile_state.dart';
 
-// const String avatarURL =
-//     'https://firebasestorage.googleapis.com/v0/b/ac-social-internship.appspot.com/o/default_avatar.png?alt=media&token=822ddf23-8cf3-434e-87e3-81fd35491e84';
 
 const urls = [
   'https://loremflickr.com/200/200?random=1',
@@ -103,7 +101,7 @@ class _ProfilePartState extends State<ProfilePart>
         isDrawerOpen = false;
       } else {
         xOffset = 350;
-        yOffset = 190;
+        yOffset = 150;
         scaleFactor = 0.7;
         isDrawerOpen = true;
       }
@@ -211,9 +209,7 @@ class _ProfilePartState extends State<ProfilePart>
                                           child: CircleAvatar(
                                             // 0.6 Appbar Background
                                             radius: avatarRadius,
-                                            child: CachedNetworkImage(
-                                              imageUrl: userModel.avatar,
-                                            ),
+                                            backgroundImage: CachedNetworkImageProvider(userModel.avatar),
                                           ),
                                         ),
                                       ],
@@ -278,7 +274,7 @@ class _ProfilePartState extends State<ProfilePart>
                         const ShotTab(imageUrls: urls),
 
                         // Collections Tab Content
-                        CollectionTab()
+                        CollectionTab(collections: [],)
                       ],
                     ),
                   ),
