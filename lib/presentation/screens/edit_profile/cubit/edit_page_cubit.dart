@@ -14,7 +14,6 @@ class UserCubit extends Cubit<UserState> {
     fetchCurrentUser();
   }
 
-  // Fetches the current user data and handles any errors
   Future<void> fetchCurrentUser() async {
     emit(UserLoading());
     try {

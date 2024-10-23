@@ -79,6 +79,13 @@ class AppTheme {
         color: black,
       );
 
+  static TextStyle get logOutButtonStyle =>
+      GoogleFonts.plusJakartaSans(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: black,
+      );
+
   static TextStyle get categoryLabelStyle => GoogleFonts.plusJakartaSans(
         fontSize: 20,
         fontWeight: FontWeight.w700,
@@ -119,6 +126,14 @@ class AppTheme {
         color: white,
         fontSize: 12,
         fontWeight: FontWeight.bold,
+        letterSpacing: -0.1,
+      );
+
+  static TextStyle get gridItemStyle =>
+      GoogleFonts.plusJakartaSans(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: AppTheme.white,
         letterSpacing: -0.1,
       );
 

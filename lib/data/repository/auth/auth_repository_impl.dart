@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_app/domain/repository/auth/auth_repository.dart';
 
 import '../../../domain/entities/user.dart';
@@ -24,13 +25,8 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<UserModel?> getUserModel() async {
-    // return await serviceLocator<AuthFirebaseService>().getUserModel();
-  }
-
-  @override
-  Future<dynamic> getCurrentUser() async {
-    return await serviceLocator<AuthFirebaseService>().getCurrentUser();
+  Future<User?> getCurrentUser() async {
+    return serviceLocator<AuthFirebaseService>().getCurrentUser();
   }
 
   @override
