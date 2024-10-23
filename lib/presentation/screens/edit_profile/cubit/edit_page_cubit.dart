@@ -3,7 +3,7 @@ import 'package:social_app/data/repository/user/user_repository_impl.dart';
 
 import '../../../../data/sources/firestore/firestore_service.dart';
 import '../../../../domain/entities/user.dart';
-import '../../../../domain/repository/user/user.dart';
+import '../../../../domain/repository/user/user_repository.dart';
 import 'edit_state.dart';
 
 

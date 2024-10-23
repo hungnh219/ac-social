@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/widgets/home_header_custom.dart';
 import 'package:social_app/presentation/screens/home/widgets/post_custom.dart';
-import 'package:social_app/presentation/screens/log_in/log_in_screen.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
 import 'package:social_app/presentation/widgets/bottom_app_bar_custom.dart';
 import 'package:social_app/presentation/widgets/scaffold_custom.dart';
@@ -25,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   late CollectionReference<Map<String, dynamic>> postCollection;
   late CollectionReference<Map<String, dynamic>> commentPostCollection;
   late dynamic userInfo;
+  
   @override
   void initState() {
     super.initState();

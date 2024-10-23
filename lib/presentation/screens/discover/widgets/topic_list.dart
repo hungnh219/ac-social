@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/domain/entities/topic.dart';
+import 'package:social_app/presentation/screens/topic/topic_screen.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class TopicList extends StatelessWidget {
-  const TopicList({super.key});
+  TopicList({super.key, required this.topics});
 
+  List<TopicModel>? topics;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -20,7 +23,14 @@ class TopicList extends StatelessWidget {
                 ),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TopicScreen(topics: topics)
+                    )
+                  );
+                },
                 child: Text('View more', style: TextStyle(color: AppColors.mutedLavender),),
               )
             ],
@@ -29,12 +39,12 @@ class TopicList extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return TopicImageCustom();
+                return TopicImageCustom(topic: topics![index],);
               },
               separatorBuilder: (context, index) {
                 return SizedBox(width: 16);
               },
-              itemCount: 10),
+              itemCount: topics?.length ?? 0),
           ),
           // TopicImageCustom()
         ],
@@ -44,8 +54,9 @@ class TopicList extends StatelessWidget {
 }
 
 class TopicImageCustom extends StatelessWidget {
-  const TopicImageCustom({super.key});
+  TopicImageCustom({super.key, required this.topic});
 
+  TopicModel topic;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -57,15 +68,16 @@ class TopicImageCustom extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(16)),
               image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/appscyclone.png'
-                ),
+                // image: AssetImage(
+                //   'assets/images/appscyclone.png'
+                // ),
+                image: NetworkImage(topic.thumbnail),
                 fit: BoxFit.cover,
               )
             ),
           ),
           Center(
-            child: Text('appscyclone'),
+            child: Text(topic.name),
           )
         ],
       ),
