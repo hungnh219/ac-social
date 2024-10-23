@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/domain/entities/post.dart';
 
 class CommentList extends StatelessWidget {
-  const CommentList({super.key});
+  CommentList({super.key, required this.post});
+
+  PostModel post;
+  
 
   @override
   Widget build(BuildContext context) {

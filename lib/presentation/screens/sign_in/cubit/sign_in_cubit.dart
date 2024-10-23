@@ -23,6 +23,7 @@ class SignInCubit extends Cubit<SignInState> {
             .signInWithEmailAndPassword(signInUserReq);
         await serviceLocator<UserRepository>().getCurrentUserData();
         emit(SignInSuccess());
+        print('sign in');
         context.go("/signin/navigator");
         // context.go("/signin/home");
       }
