@@ -50,7 +50,6 @@ class AppColors {
 
   static const Color chefsHat = Color(0xFFF3F5F7);
 
-  static const Color white = Color(0xFFFFFFFF); // Highest luminance (brightest)
 
 
 
@@ -88,21 +87,18 @@ class AppColors {
 
   static const Color officeNeonLight = Color(0xFFFE2472);
 
-  static const Color erieBlack = Color(0xFF1A1A1A); // 10% Grey
-
-  static const Color skyDancer = Color(0xFF3F94FB); // 0.6 opacity
 
   static const Color iric = Color(0xFF5252C7);
 
   static const Color ancestralWater = Color(0xFFD0D0D0);
 
-  static const Color noghreiSilver = Color(0xFFBDBDBD);
 
-  static const Color lavenderBlueShadow = Color(0xFF888BF4);
 
   static const Color kettleman = Color(0xFF606060);
 
   static const Color lavenderMist = Color(0xFFE3E4FC);
 
   static const Color lead = Color(0xFF212121);
+
+  static const Color foundationWhite = Color(0xFFF1F1FE);
 }
