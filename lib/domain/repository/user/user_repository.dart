@@ -1,10 +1,9 @@
-
 import 'package:social_app/data/models/user_firestore/add_user_data.dart';
 import 'package:social_app/data/models/user_firestore/update_user_req.dart';
 
 import '../../entities/user.dart';
 
-abstract class UserRepository{
+abstract class UserRepository {
   Future<UserModel?>? getUserData(String userID);
 
   Future<UserModel?>? getCurrentUserData();
@@ -13,14 +12,11 @@ abstract class UserRepository{
 
   Future<void> updateCurrentUserData(UpdateUserReq updateUserReq);
 
+  Future<List<Map<String, String>>> fetchCategoriesData();
+
   Future<List<String>> getUserFollowers(String uid);
 
   Future<List<String>> getUserFollowings(String uid);
 
-
-  Future<UserModel?>? getNewUserData();
-
-  Future<UserModel?>? getCurrentNewUserData();
-
-  Future<void> addCurrentNewUserData(AddUserReq addUserReq);
+  Future<List<String>> getUserCollectionIDs(String uid);
 }

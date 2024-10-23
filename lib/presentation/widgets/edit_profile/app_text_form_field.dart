@@ -12,14 +12,13 @@ class AppTextFormField extends StatelessWidget {
         this.obscureText = false,
         this.validator,
         this.textInputAction,
-        this.textAlign, this.keyboardType});
+        this.textAlign});
 
   final TextEditingController controller;
   final String label;
   final String hintText;
   final double width;
   final IconButton? suffixIcon;
-  final TextInputType? keyboardType;
   final bool obscureText;
   final FormFieldValidator? validator;
   final TextInputAction? textInputAction;
@@ -36,7 +35,6 @@ class AppTextFormField extends StatelessWidget {
           const SizedBox(height: 10,),
           TextFormField(
             controller: controller,
-            keyboardType: keyboardType ?? TextInputType.text,
             decoration: InputDecoration(
               hintText: hintText,
               contentPadding:

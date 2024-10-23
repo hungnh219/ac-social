@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:social_app/domain/repository/auth/auth.dart';
+import 'package:social_app/domain/repository/auth/auth_repository.dart';
 
 import '../../../domain/entities/user.dart';
 import '../../../service_locator.dart';
@@ -18,14 +18,15 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<void> signUp(SignUpUserReq signUpUserReq) async {
     return await serviceLocator<AuthFirebaseService>().signUp(signUpUserReq);
   }
+
   @override
   Future<void> signInWithGoogle() async {
     return await serviceLocator<AuthFirebaseService>().signInWithGoogle();
   }
 
   @override
-  Future<dynamic> getCurrentUser() async {
-    return await serviceLocator<AuthFirebaseService>().getCurrentUser();
+  Future<User?> getCurrentUser() async {
+    return serviceLocator<AuthFirebaseService>().getCurrentUser();
   }
 
   @override

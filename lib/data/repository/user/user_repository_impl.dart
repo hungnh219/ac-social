@@ -16,32 +16,23 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<UserModel?>? getCurrentUserData() {
-    return serviceLocator<FirestoreService>().getCurrentUserData() ;
+    return serviceLocator<FirestoreService>().getCurrentUserData();
   }
 
   @override
   Future<UserModel?>? getUserData(String userID) {
-    return serviceLocator<FirestoreService>().getUserData(userID) ;
+    return serviceLocator<FirestoreService>().getUserData(userID);
   }
 
   @override
   Future<void> updateCurrentUserData(UpdateUserReq updateUserReq) {
-    return serviceLocator<FirestoreService>().updateCurrentUserData(updateUserReq) ;
+    return serviceLocator<FirestoreService>()
+        .updateCurrentUserData(updateUserReq);
   }
 
   @override
-  Future<void> addCurrentNewUserData(AddUserReq addUserReq) {
-    return serviceLocator<FirestoreService>().addCurrentNewUserData(addUserReq);
-  }
-
-  @override
-  Future<UserModel?>? getCurrentNewUserData() {
-    return serviceLocator<FirestoreService>().getCurrentNewUserData() ;
-  }
-
-  @override
-  Future<UserModel?>? getNewUserData() {
-    return serviceLocator<FirestoreService>().getNewUserData() ;
+  Future<List<Map<String, String>>> fetchCategoriesData() {
+    return serviceLocator<FirestoreService>().fetchCategoriesData();
   }
 
   @override
@@ -52,6 +43,11 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<List<String>> getUserFollowings(String uid) {
     return serviceLocator<FirestoreService>().getUserFollowings(uid);
+  }
+
+  @override
+  Future<List<String>> getUserCollectionIDs(String uid){
+    return serviceLocator<FirestoreService>().getUserCollectionIDs(uid);
   }
 
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/presentation/screens/sign_in/sign_in_screen.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../widgets/navigator_bar.dart';
 import '../home/home_screen.dart';
+import '../sign_in/sign_in_screen.dart';
 import 'cubit/auth_cubit.dart';
 import 'cubit/auth_state.dart';
 
@@ -14,7 +16,8 @@ class AuthScreen extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is Authenticated) {
-          return const HomeScreen();
+          return const NavigatorBarCustom();
+          // context.go("/signin/navigator");
         } else if (state is Unauthenticated) {
           return const SignInScreen();
         }

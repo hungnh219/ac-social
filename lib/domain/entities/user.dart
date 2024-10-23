@@ -27,7 +27,6 @@ class UserModel {
         avatar = userAvatar, // Khởi tạo avatar
         socialAccounts = {};
 
-
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       name: map['name'] ?? '',
@@ -63,6 +62,7 @@ class UserModel {
     List<String>? followingUsers,
   }) {
     return UserModel(
+      avatar: avatar ?? this.avatar,
       name: name ?? this.name,
       lastName: lastName ?? this.lastName,
       location: location ?? this.location,

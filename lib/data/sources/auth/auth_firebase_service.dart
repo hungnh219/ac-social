@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_app/data/models/auth/create_user_req.dart';
+import 'package:social_app/domain/entities/user.dart';
 
-import '../../../domain/entities/user.dart';
 import '../../models/auth/sign_in_user_req.dart';
 
 const defaultAvatarUrl =
@@ -16,8 +15,6 @@ abstract class AuthFirebaseService {
   Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq);
 
   Future<void> signInWithGoogle();
-
-  Future<UserModel?> getUserModel();
 
   User? getCurrentUser();
 
@@ -37,7 +34,9 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       );
 
       User user = userCredential.user!;
-      print("User đăng nhập: ${user.email}");
+      if (kDebugMode) {
+        print("User đăng nhập: ${user.email}");
+      }
       if (!user.emailVerified) {
         await signOut();
         throw FirebaseAuthException(
@@ -46,7 +45,9 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         );
       }
     } on FirebaseAuthException catch (e) {
-      print("mã ${e.code}");
+      if (kDebugMode) {
+        print("mã ${e.code}");
+      }
       switch (e.code) {
         case 'email-not-verified':
           throw ('Your account is not verified. Please check your inbox');
@@ -70,8 +71,8 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   Future<void> signUp(SignUpUserReq signUpUserReq) async {
     try {
       final userCredential = await _auth.createUserWithEmailAndPassword(
-        email: signUpUserReq.email.trim(),
-        password: signUpUserReq.password.trim(),
+        email: signUpUserReq.email,
+        password: signUpUserReq.password,
       );
 
       await userCredential.user!.sendEmailVerification(
@@ -94,38 +95,38 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
     }
   }
 
-  @override
-  Future<UserModel?> getUserModel() async {
-    try {
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
-      User? user = _auth.currentUser;
-      CollectionReference usersCollection =
-          firebaseFirestore.collection('users');
-
-      DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
-
-      if (userDoc.exists) {
-        return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
-      } else {
-        if (kDebugMode) {
-          print("User document does not exist.");
-        }
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error fetching user data: $e");
-      }
-      return null;
-    }
-  }
+  // @override
+  // Future<UserModel?> getUserModel() async {
+  //   try {
+  //     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  //
+  //     User? user = _auth.currentUser;
+  //     CollectionReference usersCollection =
+  //         firebaseFirestore.collection('User');
+  //
+  //     DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
+  //
+  //     if (userDoc.exists) {
+  //       // Nếu user đã tồn tại, trả về UserModel từ Firestore
+  //       return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+  //     } else {
+  //       if (kDebugMode) {
+  //         print("User document does not exist.");
+  //       }
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print("Error fetching user data: $e");
+  //     }
+  //     return null;
+  //   }
+  // }
 
   @override
   Future<void> signInWithGoogle() async {
+    // await signOut();
     try {
-      print("Đã đăng nhập với user ${getCurrentUser()?.email}");
-      await signOut();
-      print("Đã đăng xuất với user ${getCurrentUser()?.email}");
       if (kIsWeb) {
         _auth.signInWithPopup(_googleProvider);
       } else {
@@ -134,18 +135,27 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
             await googleUser!.authentication;
 
         // Create a GoogleAuthProvider credential
-        final AuthCredential credential = GoogleAuthProvider.credential(
+        final AuthCredential googleCredential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
 
         // Sign in to Firebase with Google credentials
-        await _auth.signInWithCredential(credential);
+        UserCredential googleUserCredential =
+            await _auth.signInWithCredential(googleCredential);
+
+        // User? currentUser = _auth.currentUser;
+        // final userModel = await getUserModel();
+        //
+        // if (userModel == null) {
+        //   throw "new-user";
+        // }
       }
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
       }
+      rethrow;
     }
   }
 
