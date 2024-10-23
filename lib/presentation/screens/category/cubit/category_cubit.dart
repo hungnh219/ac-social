@@ -33,7 +33,7 @@ class CategoryCubit extends Cubit<CategoryState> {
       AddUserReq newUser = AddUserReq(userModel);
       serviceLocator<UserRepository>().addCurrentUserData(newUser);
       emit(AddUserSuccess());
-      context.go("/signin/home");
+      context.go("/signin/navigator");
     } catch (e) {
       emit(AddUserFailure());
       if (kDebugMode) {
