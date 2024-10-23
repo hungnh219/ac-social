@@ -96,10 +96,8 @@ class EditProfile extends StatelessWidget {
                                   gradient: AppTheme.mainGradient,
                                 ),
                                 child: SvgIconButton(
-                                  // icon: const Icon(Icons.camera_alt_outlined),
                                   iconSize: 18,
                                   onPressed: () {
-                                    // Define the action for the button here
                                   },
                                   assetPath: AppIcons.camera,
                                 ),

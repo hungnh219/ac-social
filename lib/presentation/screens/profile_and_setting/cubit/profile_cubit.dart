@@ -16,18 +16,13 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> fetchUserData() async {
     emit(ProfileLoading());
     try {
-      final _currentUser = await authRepository.getCurrentUser();
-      final userModel = await userRepository.getCurrentNewUserData();
+      final currentUser = await authRepository.getCurrentUser();
+      final userModel = await userRepository.getCurrentUserData();
 
       final userFollowers = await userRepository
-          .getUserFollowers("atpFNshDxQOeoPavpluSI2CKrqu2");
+          .getUserFollowers(currentUser!.uid);
       final userFollowings = await userRepository
-          .getUserFollowings("atpFNshDxQOeoPavpluSI2CKrqu2");
-      // final
-      // final userFollowers = await userRepository
-      //     .getUserFollowers(_currentUser!.uid);
-      // final userFollowings = await userRepository
-      //     .getUserFollowings(_currentUser.uid);
+          .getUserFollowings(currentUser.uid);
       if (userModel != null) {
         emit(ProfileLoaded(userModel, userFollowers, userFollowings));
       } else {

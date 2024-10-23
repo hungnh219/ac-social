@@ -19,9 +19,9 @@ abstract class UserRepository {
   Future<List<String>> getUserFollowings(String uid);
 
 
-  Future<UserModel?>? getNewUserData();
-
-  Future<UserModel?>? getCurrentNewUserData();
-
-  Future<void> addCurrentNewUserData(AddUserReq addUserReq);
+  // Future<UserModel?>? getNewUserData();
+  //
+  // Future<UserModel?>? getCurrentNewUserData();
+  //
+  // Future<void> addCurrentNewUserData(AddUserReq addUserReq);
 }
