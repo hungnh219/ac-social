@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:social_app/domain/entities/post.dart';
 import 'package:social_app/presentation/screens/post_detail/post_detail_screen.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class PostCustom extends StatelessWidget {
-  PostCustom({super.key, required this.post, required this.commentPostCollection});
+  PostCustom({super.key, required this.post});
 
-  dynamic post;
-  dynamic commentPostCollection;
+  PostModel post;
+  // dynamic commentPostCollection;
   @override
   Widget build(BuildContext context) {
 
@@ -34,7 +35,7 @@ class PostCustom extends StatelessWidget {
                 ));
               },
               child: Image.network(
-                post['image'],
+                post.image,
                 width: double.infinity,
                 height: 220,
                 fit: BoxFit.cover,
@@ -46,16 +47,22 @@ class PostCustom extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.thumb_up_alt_outlined),
+                    icon: Icon(Icons.add_circle_outline, color: Colors.red,),
                     onPressed: () {},
                   ),
                   Spacer(),
+
+                  Text(post.commentAmount.toString()),
                   IconButton(
-                    icon: Icon(Icons.comment_outlined),
+                    icon: Icon(Icons.comment_outlined, color: Colors.red,),
                     onPressed: () {},
                   ),
+
+                  SizedBox(width: 8),
+
+                  Text(post.likeAmount.toString()),
                   IconButton(
-                    icon: Icon(Icons.favorite_border),
+                    icon: Icon(Icons.favorite_border, color: Colors.red,),
                     onPressed: () {},
                   ),
                 ],
@@ -70,7 +77,8 @@ class PostCustom extends StatelessWidget {
 
 class PostInfo extends StatelessWidget {
   PostInfo({super.key, required this.post});
-  dynamic post;
+
+  PostModel post;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -78,15 +86,12 @@ class PostInfo extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 16,
-            backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+            backgroundImage: NetworkImage(post.userAvatar),
           ),
           const SizedBox(width: 8),
-          // Text(post['username']),
-          // Text(post['content'], style: TextStyle(
-          //   overflow: TextOverflow.fade
-          // ),),
+          Text(post.username),
           Spacer(),
           Text('hehehe'),
           // Text(post['user_id'].toString()),

@@ -23,9 +23,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const SplashBackground(
-      center: Center(
-        child: SplashImageGroup(),
+    return const SafeArea(
+      child: SplashBackground(
+        center: Center(
+          child: SplashImageGroup(),
+        ),
       ),
     );
   }

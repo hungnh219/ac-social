@@ -10,7 +10,9 @@ class TopicScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(body: Column(
       children: [
-        BackButton(),
+        BackButton(
+          color: Colors.black,  
+        ),
         Expanded(
             child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

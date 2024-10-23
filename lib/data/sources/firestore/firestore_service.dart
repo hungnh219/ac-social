@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:social_app/domain/entities/post.dart';
 import 'package:social_app/domain/entities/topic.dart';
 
 import '../../../domain/entities/user.dart';
@@ -36,6 +37,8 @@ abstract class FirestoreService {
   Future<TopicModel?>? getTopicData(String topicID);
 
   Future<List<TopicModel>?>? getTopicsData();
+
+  Future<List<PostModel>?>? getPostsData();
 }
 
 class FirestoreServiceImpl extends FirestoreService {
@@ -283,6 +286,60 @@ class FirestoreServiceImpl extends FirestoreService {
       print(categories);
     }
     return categories;
+  }
+
+  @override
+  Future<List<PostModel>?>? getPostsData() async {
+    List<PostModel> posts = [];
+    DocumentReference userRef;
+    Future<DocumentSnapshot<Object?>> userData;
+    String username = '';
+    String userAvatar = '';
+    // PostModel post = PostModel();
+      print('posts: $posts');
+
+    try {
+      QuerySnapshot postsSnapshot = await _firestoreDB.collection('NewPost').get();
+      // Future<Map<String, dynamic>> userData = userRef.get().then((value) => value.data() as Map<String, dynamic>);
+      if (postsSnapshot.docs.isEmpty) {
+        throw CustomFirestoreException(
+          code: 'no-posts',
+          message: 'No posts exist in Firestore',
+        );
+      }
+      for (var doc in postsSnapshot.docs) {
+        userRef = doc['user_id'];
+        userData = userRef.get();
+        await userData.then((value) {
+          // userInfo = value;
+          username = value['name'];
+          userAvatar = value['avatar'];
+        });
+
+        PostModel post = PostModel(
+          username: username,
+          userAvatar: userAvatar,
+          content: doc['content'],
+          likeAmount: doc['like_amount'],
+          commentAmount: doc['comment_amount'],
+          viewAmount: doc['view_amount'],
+          image: doc['image'],
+          timestamp: (doc['timestamp'] as Timestamp).toDate(),
+          comments: null,
+          likes: null,
+          views: null,
+        );
+        // print('post: $post');
+        posts.add(post);
+        // topics.add(TopicModel.fromMap(doc.data() as Map<String, dynamic>));
+      }
+
+      // print('posts: $posts');
+      return posts;
+      // return postsSnapshot.docs.map((doc) => PostModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 

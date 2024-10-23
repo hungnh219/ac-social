@@ -42,7 +42,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               FutureBuilder<List<TopicModel>?>(
-                future: serviceLocator<FirestoreService>().getTopicsData(),
+                future: serviceLocator<TopicRepository>().getTopicsData(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
