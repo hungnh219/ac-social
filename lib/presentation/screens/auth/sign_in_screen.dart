@@ -54,144 +54,146 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Stack(
-        children: [
-          AuthHeaderImage(
-            height: 0.44,
-            childAspectRatio: 1.33,
-            positioned: Positioned.fill(
-              top: -45,
-              child: Center(
-                child: Text(
-                  "WELCOME",
-                  style: AppTheme.authHeaderStyle,
+    return SafeArea(
+      child: Material(
+        child: Stack(
+          children: [
+            AuthHeaderImage(
+              height: 0.44,
+              childAspectRatio: 1.33,
+              positioned: Positioned.fill(
+                top: -45,
+                child: Center(
+                  child: Text(
+                    "WELCOME",
+                    style: AppTheme.authHeaderStyle,
+                  ),
                 ),
               ),
             ),
-          ),
-          AuthBody(
-            marginTop: MediaQuery.of(context).size.height * 0.34,
-            height: double.infinity,
-            padding: Padding(
-              padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        AuthTextFormField(
-                          textEditingController: _emailController,
-                          hintText: "Email",
-                          textInputAction: TextInputAction.next,
-                          validator: (value) => validateEmail(value),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        ValueListenableBuilder(
-                          valueListenable: _obscureText,
-                          builder: (context, value, child) {
-                            return AuthTextFormField(
-                              textEditingController: _passwordController,
-                              hintText: "Password",
-                              obscureText: value,
-                              textInputAction: TextInputAction.done,
-                              validator: (value) {
-                                if (validateEmpty(value)) {
-                                  return "Please enter a your password";
-                                }
-                                return null;
-                              },
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  _obscureText.value = !value;
+            AuthBody(
+              marginTop: MediaQuery.of(context).size.height * 0.34,
+              height: double.infinity,
+              padding: Padding(
+                padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          AuthTextFormField(
+                            textEditingController: _emailController,
+                            hintText: "Email",
+                            textInputAction: TextInputAction.next,
+                            validator: (value) => validateEmail(value),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          ValueListenableBuilder(
+                            valueListenable: _obscureText,
+                            builder: (context, value, child) {
+                              return AuthTextFormField(
+                                textEditingController: _passwordController,
+                                hintText: "Password",
+                                obscureText: value,
+                                textInputAction: TextInputAction.done,
+                                validator: (value) {
+                                  if (validateEmpty(value)) {
+                                    return "Please enter a your password";
+                                  }
+                                  return null;
                                 },
-                                icon: Icon(value
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined),
-                              ),
-                            );
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _obscureText.value = !value;
+                                  },
+                                  icon: Icon(value
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined),
+                                ),
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => NavigatorBarCustom()));
+                      },
+                      child: const Text(
+                        "FORGOT PASSWORD (navigate to home screen)",
+                        style: TextStyle(
+                            color: AppColors.iric,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 2,
+                            fontSize: 14),
+                      ),
+                    ),
+                    AuthElevatedButton(
+                      width: double.infinity,
+                      height: 45,
+                      inputText: "LOG IN",
+                      onPressed: () {
+                        _login(context);
+                      },
+                      isLoading: _isLoading,
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child:
+                          Text("OR LOG IN BY", style: AppTheme.authNormalStyle),
+                    ),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        _loginWithGoogle(context);
+                      },
+                      icon: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.lavenderMist,
+                        ),
+                        child: ShaderMask(
+                          shaderCallback: (Rect bounds) {
+                            return AppTheme.mainGradient.createShader(bounds);
                           },
+                          child: SvgPicture.asset(
+                            AppIcons.googleLogo,
+                            width: 20.0,
+                            height: 20.0,
+                            color: const Color.fromARGB(255, 89, 28, 219),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have account?",
+                          style: AppTheme.authSignUpStyle
+                              .copyWith(color: AppColors.kettleman),
+                        ),
+                        TextButton(
+                          onPressed: () => context.go("/signup"),
+                          child: Text(
+                            "SIGN UP",
+                            style: AppTheme.authSignUpStyle,
+                          ),
                         )
                       ],
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => NavigatorBarCustom()));
-                    },
-                    child: const Text(
-                      "FORGOT PASSWORD (navigate to home screen)",
-                      style: TextStyle(
-                          color: AppColors.iric,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 2,
-                          fontSize: 14),
-                    ),
-                  ),
-                  AuthElevatedButton(
-                    width: double.infinity,
-                    height: 45,
-                    inputText: "LOG IN",
-                    onPressed: () {
-                      _login(context);
-                    },
-                    isLoading: _isLoading,
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child:
-                        Text("OR LOG IN BY", style: AppTheme.authNormalStyle),
-                  ),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      _loginWithGoogle(context);
-                    },
-                    icon: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.lavenderMist,
-                      ),
-                      child: ShaderMask(
-                        shaderCallback: (Rect bounds) {
-                          return AppTheme.mainGradient.createShader(bounds);
-                        },
-                        child: SvgPicture.asset(
-                          AppIcons.googleLogo,
-                          width: 20.0,
-                          height: 20.0,
-                          color: const Color.fromARGB(255, 89, 28, 219),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have account?",
-                        style: AppTheme.authSignUpStyle
-                            .copyWith(color: AppColors.kettleman),
-                      ),
-                      TextButton(
-                        onPressed: () => context.go("/signup"),
-                        child: Text(
-                          "SIGN UP",
-                          style: AppTheme.authSignUpStyle,
-                        ),
-                      )
-                    ],
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

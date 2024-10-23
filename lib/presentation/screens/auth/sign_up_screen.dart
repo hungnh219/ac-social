@@ -52,130 +52,132 @@ class _SignUpScreenState extends State<SignUpScreen> with Validator {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Stack(
-        children: [
-          AuthHeaderImage(
-            height: 0.44,
-            childAspectRatio: 1.33,
-            positioned: Positioned.fill(
-              top: -45,
-              child: Center(
-                child: Text(
-                  "WELCOME",
-                  style: AppTheme.authHeaderStyle,
+    return SafeArea(
+      child: Material(
+        child: Stack(
+          children: [
+            AuthHeaderImage(
+              height: 0.44,
+              childAspectRatio: 1.33,
+              positioned: Positioned.fill(
+                top: -45,
+                child: Center(
+                  child: Text(
+                    "WELCOME",
+                    style: AppTheme.authHeaderStyle,
+                  ),
                 ),
               ),
             ),
-          ),
-          AuthBody(
-            marginTop: MediaQuery.of(context).size.height * 0.34,
-            height: double.infinity,
-            padding: Padding(
-              padding: const EdgeInsets.only(top: 30, left: 25, right: 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        ValueListenableBuilder(
-                          valueListenable: _emailController,
-                          builder: (context, value, child) => AuthTextFormField(
-                            textEditingController: _emailController,
-                            hintText: "Email",
-                            textInputAction: TextInputAction.next,
-                            validator: (value) => validateEmail(value),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        ValueListenableBuilder(
-                          valueListenable: _obscureText,
-                          builder: (context, value, child) {
-                            return AuthTextFormField(
-                              textEditingController: _passwordController,
-                              hintText: "Password",
-                              obscureText: value,
+            AuthBody(
+              marginTop: MediaQuery.of(context).size.height * 0.34,
+              height: double.infinity,
+              padding: Padding(
+                padding: const EdgeInsets.only(top: 30, left: 25, right: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          ValueListenableBuilder(
+                            valueListenable: _emailController,
+                            builder: (context, value, child) => AuthTextFormField(
+                              textEditingController: _emailController,
+                              hintText: "Email",
                               textInputAction: TextInputAction.next,
-                              validator: (value) => validatePassword(value),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  _obscureText.value = !value;
-                                },
-                                icon: Icon(value
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        ValueListenableBuilder(
-                          valueListenable: _obscureConfirmText,
-                          builder: (context, value, child) {
-                            return AuthTextFormField(
-                              textEditingController: _confirmPasswordController,
-                              hintText: "Password",
-                              obscureText: value,
-                              textInputAction: TextInputAction.done,
-                              validator: (value) => validateConfirmPassword(
-                                  _passwordController.text, value),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  _obscureConfirmText.value = !value;
-                                },
-                                icon: Icon(value
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  AuthElevatedButton(
-                    width: double.infinity,
-                    height: 45,
-                    inputText: "SIGN IN",
-                    onPressed: () {
-                      _signup(context);
-                    },
-                    isLoading: _isLoading,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Already have account?",
-                        style: AppTheme.authSignUpStyle
-                            .copyWith(color: AppColors.kettleman),
+                              validator: (value) => validateEmail(value),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          ValueListenableBuilder(
+                            valueListenable: _obscureText,
+                            builder: (context, value, child) {
+                              return AuthTextFormField(
+                                textEditingController: _passwordController,
+                                hintText: "Password",
+                                obscureText: value,
+                                textInputAction: TextInputAction.next,
+                                validator: (value) => validatePassword(value),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _obscureText.value = !value;
+                                  },
+                                  icon: Icon(value
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          ValueListenableBuilder(
+                            valueListenable: _obscureConfirmText,
+                            builder: (context, value, child) {
+                              return AuthTextFormField(
+                                textEditingController: _confirmPasswordController,
+                                hintText: "Password",
+                                obscureText: value,
+                                textInputAction: TextInputAction.done,
+                                validator: (value) => validateConfirmPassword(
+                                    _passwordController.text, value),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _obscureConfirmText.value = !value;
+                                  },
+                                  icon: Icon(value
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                      TextButton(
-                        onPressed: () => context.go("/signin"),
-                        child: Text(
-                          "SIGN IN",
-                          style: AppTheme.authSignUpStyle,
+                    ),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    AuthElevatedButton(
+                      width: double.infinity,
+                      height: 45,
+                      inputText: "SIGN IN",
+                      onPressed: () {
+                        _signup(context);
+                      },
+                      isLoading: _isLoading,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Already have account?",
+                          style: AppTheme.authSignUpStyle
+                              .copyWith(color: AppColors.kettleman),
                         ),
-                      )
-                    ],
-                  )
-                ],
+                        TextButton(
+                          onPressed: () => context.go("/signin"),
+                          child: Text(
+                            "SIGN IN",
+                            style: AppTheme.authSignUpStyle,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
