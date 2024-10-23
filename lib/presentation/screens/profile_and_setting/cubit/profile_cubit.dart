@@ -3,8 +3,8 @@ import 'package:social_app/presentation/screens/profile_and_setting/cubit/profil
 
 import '../../../../data/repository/auth/auth_repository_impl.dart';
 import '../../../../data/repository/user/user_repository_impl.dart';
-import '../../../../domain/repository/auth/auth.dart';
-import '../../../../domain/repository/user/user.dart';
+import '../../../../domain/repository/auth/auth_repository.dart';
+import '../../../../domain/repository/user/user_repository.dart';
 import '../../../../service_locator.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
@@ -28,7 +28,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       //     .getUserFollowers(_currentUser!.uid);
       // final userFollowings = await userRepository
       //     .getUserFollowings(_currentUser.uid);
-      print(userFollowings);
       if (userModel != null) {
         emit(ProfileLoaded(userModel, userFollowers, userFollowings));
       } else {

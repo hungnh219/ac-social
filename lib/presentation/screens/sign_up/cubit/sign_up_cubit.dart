@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/presentation/screens/sign_up/cubit/sign_up_state.dart';
 
 import '../../../../data/models/auth/create_user_req.dart';
-import '../../../../domain/repository/auth/auth.dart';
+import '../../../../domain/repository/auth/auth_repository.dart';
 import '../../../../service_locator.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {

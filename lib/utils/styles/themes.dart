@@ -79,8 +79,6 @@ class AppTheme {
         color: black,
       );
 
-  static TextStyle get buttonGradientStyle =>
-      GoogleFonts.plusJakartaSans(
   static TextStyle get categoryLabelStyle => GoogleFonts.plusJakartaSans(
         fontSize: 20,
         fontWeight: FontWeight.w700,
@@ -120,13 +118,6 @@ class AppTheme {
       GoogleFonts.plusJakartaSans(
         color: white,
         fontSize: 14,
-        fontWeight: FontWeight.w400,
-        letterSpacing: -0.1,
-      );
-
-  static TextStyle get drawerItemStyle => GoogleFonts.plusJakartaSans(
-        color: white,
-        fontSize: 16,
         fontWeight: FontWeight.w400,
         letterSpacing: -0.1,
       );
