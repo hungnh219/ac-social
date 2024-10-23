@@ -5,6 +5,7 @@ import 'package:social_app/presentation/screens/boarding/boarding.dart';
 import 'package:social_app/presentation/screens/category/category_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
+import 'package:social_app/presentation/widgets/navigator_bar.dart';
 
 import '../../presentation/screens/sign_in/sign_in_screen.dart';
 import '../../presentation/screens/sign_up/sign_up_screen.dart';
@@ -53,6 +54,12 @@ class MyRouter {
                 path: 'home',
                 builder: (BuildContext context, GoRouterState state) {
                   return const HomeScreen();
+                },
+              ),
+              GoRoute(
+                path: 'navigator',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const NavigatorBarCustom();
                 },
               ),
             ],

@@ -23,7 +23,8 @@ class SignInCubit extends Cubit<SignInState> {
             .signInWithEmailAndPassword(signInUserReq);
         await serviceLocator<UserRepository>().getCurrentUserData();
         emit(SignInSuccess());
-        context.go("/signin/home");
+        context.go("/signin/navigator");
+        // context.go("/signin/home");
       }
     } catch (e) {
       if (e is CustomFirestoreException) {
