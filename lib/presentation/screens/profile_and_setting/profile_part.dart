@@ -7,6 +7,7 @@ import 'package:social_app/presentation/screens/profile_and_setting/widgets/info
 import 'package:social_app/presentation/screens/profile_and_setting/widgets/shot_tab.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
+import '../../../domain/entities/collection.dart';
 import '../../../domain/entities/user.dart';
 import '../../../utils/constants/icon_path.dart';
 import '../../../utils/constants/image_path.dart';
@@ -100,8 +101,8 @@ class _ProfilePartState extends State<ProfilePart>
         scaleFactor = 1;
         isDrawerOpen = false;
       } else {
-        xOffset = 350;
-        yOffset = 150;
+        xOffset = 330;
+        yOffset = 120;
         scaleFactor = 0.7;
         isDrawerOpen = true;
       }
@@ -129,14 +130,15 @@ class _ProfilePartState extends State<ProfilePart>
             borderRadius: BorderRadius.circular(isDrawerOpen ? 40 : 0.0)),
         child: DefaultTabController(
           length: 2,
-          child:
-          BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
+          child: BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
             if (state is ProfileLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is ProfileError) {
               return Center(child: Text(state.message));
             } else if (state is ProfileLoaded) {
+
               final UserModel userModel = state.userModel;
+              final List<CollectionModel> userCollections = state.collections;
               return NestedScrollView(
                 physics: isDrawerOpen ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
                 headerSliverBuilder:
@@ -246,7 +248,7 @@ class _ProfilePartState extends State<ProfilePart>
                                   ProfileTab(
                                     index: 1,
                                     selectedIndexNotifier: _selectedIndexNotifier,
-                                    label: '$numberOfCollections Collections',
+                                    label: '${userCollections.length} Collections',
                                     onTabSelected: _onTabSelected,
                                   ),
                                 ],
@@ -274,7 +276,7 @@ class _ProfilePartState extends State<ProfilePart>
                         const ShotTab(imageUrls: urls),
 
                         // Collections Tab Content
-                        CollectionTab(collections: [],)
+                        CollectionTab(collections: userCollections,)
                       ],
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/domain/entities/collection.dart';
 
 import '../../../../domain/entities/user.dart';
 
@@ -10,8 +11,9 @@ class ProfileLoaded extends ProfileState {
   final UserModel userModel;
   final List<String> userFollowers;
   final List<String> userFollowings;
+  final List<CollectionModel> collections;
 
-  ProfileLoaded(this.userModel, this.userFollowers, this.userFollowings);
+  ProfileLoaded(this.userModel, this.userFollowers, this.userFollowings, this.collections);
 }
 
 class ProfileError extends ProfileState {
