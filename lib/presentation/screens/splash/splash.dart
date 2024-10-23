@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_app/presentation/widgets/splash/splash_background.dart';
 import 'package:social_app/presentation/widgets/splash/splash_image_group.dart';
 
@@ -14,15 +16,9 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     initialization();
-  }
-
-  void initialization() async {
-    FlutterNativeSplash.remove();
-
-    await Future.delayed(const Duration(seconds: 5));
-    context.go("/boarding");
   }
 
   @override
@@ -32,5 +28,27 @@ class _SplashScreenState extends State<SplashScreen> {
         child: SplashImageGroup(),
       ),
     );
+  }
+
+  void initialization() async {
+    FlutterNativeSplash.remove();
+    await Future.delayed(const Duration(seconds: 2));
+
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+
+      if (isFirstLaunch) {
+        // Nếu là lần đầu tiên, đặt cờ thành false
+        await prefs.setBool('isFirstLaunch', false);
+        context.go("/boarding");
+      } else {
+        context.go("/auth");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Lỗi: $e");
+      }
+    }
   }
 }

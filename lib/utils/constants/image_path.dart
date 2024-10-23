@@ -21,6 +21,8 @@ class AppImages {
   static const String splash4 = '${imagePath}splash_4$imageFormat';
   static const String splashBackground = '${imagePath}splash_background$imageFormat';
   static const String splashMask = '${imagePath}splash_mask$imageFormat';
+  static const String editProfileAppbarBackground =
+      '${imagePath}edit_profile_appbar$imageFormat';
   static const String editProfileAppbarBackground = '${imagePath}edit_profile_appbar$imageFormat';
   static const String settingBackground = '${imagePath}setting_background$imageFormat';
 

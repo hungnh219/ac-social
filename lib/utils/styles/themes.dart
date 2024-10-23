@@ -81,6 +81,13 @@ class AppTheme {
 
   static TextStyle get buttonGradientStyle =>
       GoogleFonts.plusJakartaSans(
+  static TextStyle get categoryLabelStyle => GoogleFonts.plusJakartaSans(
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: black,
+      );
+
+  static TextStyle get buttonGradientStyle => GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w700,
         color: white,
         fontSize: 16,
@@ -117,6 +124,19 @@ class AppTheme {
         letterSpacing: -0.1,
       );
 
+  static TextStyle get drawerItemStyle => GoogleFonts.plusJakartaSans(
+        color: white,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -0.1,
+      );
+
+  static TextStyle get categoryBottomTitle => GoogleFonts.plusJakartaSans(
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+      color: AppColors.white,
+      letterSpacing: 2);
+
   static TextStyle get authHeaderStyle => GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w400,
         fontSize: 40,
@@ -142,9 +162,9 @@ class AppTheme {
       color: AppColors.iric, fontSize: 16, fontWeight: FontWeight.w500);
 
   static TextStyle get authWhiteText => const TextStyle(
-    color: Colors.white,
-    fontSize: 14,
-  );
+        color: Colors.white,
+        fontSize: 14,
+      );
 
   //ToDo: Theme
   static final ThemeData lightTheme = ThemeData(

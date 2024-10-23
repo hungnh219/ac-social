@@ -1,7 +1,5 @@
 // Name the class UserModel to avoid duplicating the name of User class
 // in Firebase Authentication
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class UserModel {
   final String name;
   final String lastName;
@@ -35,7 +33,6 @@ class UserModel {
         followers = [],
         followingUsers = [],
         popularPosts = [];
-
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
@@ -88,6 +85,7 @@ class UserModel {
     List<String>? popularPosts, // Cập nhật tên trường
   }) {
     return UserModel(
+      avatar: avatar ?? this.avatar,
       name: name ?? this.name,
       lastName: lastName ?? this.lastName,
       location: location ?? this.location,

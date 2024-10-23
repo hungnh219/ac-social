@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:social_app/presentation/screens/auth/sign_in_screen.dart';
+import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/presentation/screens/boarding/boarding.dart';
+import 'package:social_app/presentation/screens/category/category_screen.dart';
+import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
 
-import '../../presentation/screens/auth/sign_up_screen.dart';
+import '../../presentation/screens/sign_in/sign_in_screen.dart';
+import '../../presentation/screens/sign_up/sign_up_screen.dart';
 
 class MyRouter {
   static final GoRouter router = GoRouter(
@@ -22,16 +25,36 @@ class MyRouter {
             },
           ),
           GoRoute(
-            path: 'signin',
+            path: 'auth',
             builder: (BuildContext context, GoRouterState state) {
-              return SignInScreen();
+              return const AuthScreen();
             },
           ),
           GoRoute(
-            path: 'signup',
+            path: 'signin',
             builder: (BuildContext context, GoRouterState state) {
-              return const SignUpScreen();
+              return const SignInScreen();
             },
+            routes: <RouteBase>[
+              GoRoute(
+                path: 'signup',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const SignUpScreen();
+                },
+              ),
+              GoRoute(
+                path: 'category',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const CategoryScreen();
+                },
+              ),
+              GoRoute(
+                path: 'home',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const HomeScreen();
+                },
+              ),
+            ],
           ),
         ],
       ),

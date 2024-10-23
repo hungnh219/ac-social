@@ -41,13 +41,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
 README.md
->>>>>>> c54b6180c08de781d1f9aca95ca25e3b753092b8
-=======
-
-README.md
->>>>>>> ba9553db81f41d22d460e377768bde05b6247408

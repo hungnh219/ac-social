@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 class AppColors {
-
   static const Color lightIris = Color(0x005151C6);
 
   static const Color erieBlack = Color(0xFF1A1A1A);
@@ -64,7 +63,6 @@ class AppColors {
 
   static const Color white = Color(0xFFFFFFFF); // Highest luminance (brightest)
 
-
   static const Color monstrousGreen = Color(0xFF18CE0F);
 
   static const Color limeShot = Color(0xFF1BE611);
@@ -104,5 +102,4 @@ class AppColors {
   static const Color corona = Color(0xFFFFB236);
 
   static const Color officeNeonLight = Color(0xFFFE2472);
-
 }
