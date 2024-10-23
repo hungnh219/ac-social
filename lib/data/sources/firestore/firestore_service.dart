@@ -39,6 +39,7 @@ class FirestoreServiceImpl extends  FirestoreService{
   User? get currentUser => _auth.currentUser;
 
   CollectionReference get _usersCollection => _firestoreDB.collection('users');
+  CollectionReference get _categoryCollection => _firestoreDB.collection('Category');
 
   @override
   Future<UserModel?> getUserData(String userID) async {

@@ -92,7 +92,6 @@ class UserModel {
       lastName: lastName ?? this.lastName,
       location: location ?? this.location,
       category: category ?? this.category,
-      avatar: avatar ?? this.avatar,
       socialAccounts: socialAccounts ?? this.socialAccounts,
       followers: followers ?? this.followers,
       followingUsers: followingUsers ?? this.followingUsers,

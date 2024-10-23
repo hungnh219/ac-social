@@ -6,7 +6,7 @@ import 'package:social_app/presentation/screens/category/cubit/category_state.da
 import 'package:social_app/utils/styles/colors.dart';
 import 'package:social_app/utils/styles/themes.dart';
 
-import '../../../../domain/repository/user/user.dart';
+import '../../../../domain/repository/user/user_repository.dart';
 import '../../../../service_locator.dart';
 import '../../../../utils/constants/image_path.dart';
 
