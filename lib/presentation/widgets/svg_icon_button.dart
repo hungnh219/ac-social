@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../utils/styles/themes.dart';
+
 class SvgIconButton extends StatelessWidget {
   final String assetPath;
   final double iconSize;
@@ -16,6 +18,7 @@ class SvgIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      color:  Colors.blue,
       icon: SvgPicture.asset(
         assetPath,
         height: iconSize,

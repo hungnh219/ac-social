@@ -75,7 +75,9 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         password: signUpUserReq.password,
       );
 
-      await userCredential.user!.sendEmailVerification();
+      await userCredential.user!.sendEmailVerification(
+
+      );
       await userCredential.user!.updatePhotoURL(defaultAvatarUrl);
       // signOut();
     } on FirebaseAuthException catch (e) {

@@ -48,7 +48,15 @@ class FirestoreServiceImpl extends FirestoreService {
   User? get currentUser => _auth.currentUser;
 
   CollectionReference get _usersCollection => _firestoreDB.collection('users');
+  CollectionReference _usersFollowersCollection(String uid) {
+    return _usersCollection.doc(uid).collection('followers');
+  }
+  CollectionReference _usersFollowingsCollection(String uid) {
+    return _usersCollection.doc(uid).collection('followings');
+  }
+
   CollectionReference get _categoryCollection => _firestoreDB.collection('Category');
+  CollectionReference get _collectionCollection => _firestoreDB.collection('Category');
 
   @override
   Future<UserModel?> getUserData(String userID) async {
@@ -133,8 +141,6 @@ class FirestoreServiceImpl extends FirestoreService {
     }
   }
 
-
-
   // CollectionReference get _newUsersCollection => _firestoreDB.collection('NewUser');
   //
   // Future<UserModel?> getNewUserData() async {
@@ -201,9 +207,8 @@ class FirestoreServiceImpl extends FirestoreService {
   Future<List<String>> getUserFollowers(String uid) async {
     List<String> followers = [];
 
-    // Fetch the followers nested collection for the user
     QuerySnapshot<Map<String, dynamic>> followersSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(uid).collection('followers').get();
+    await _usersFollowersCollection(uid).get() as QuerySnapshot<Map<String, dynamic>>;
 
     for (var doc in followersSnapshot.docs) {
       followers.add(doc.id);
@@ -216,15 +221,14 @@ class FirestoreServiceImpl extends FirestoreService {
   Future<List<String>> getUserFollowings(String uid) async {
     List<String> followings = [];
 
-  // Fetch the followers nested collection for the user
-  QuerySnapshot<Map<String, dynamic>> followersSnapshot =
-      await FirebaseFirestore.instance.collection('users').doc(uid).collection('followers').get();
+    QuerySnapshot<Map<String, dynamic>> followingsSnapshot =
+        await _usersFollowingsCollection(uid).get() as QuerySnapshot<Map<String, dynamic>>;
 
-  for (var doc in followersSnapshot.docs) {
-    followings.add(doc.id);
-  }
+    for (var doc in followingsSnapshot.docs) {
+      followings.add(doc.id);
+    }
 
-  return followings;
+    return followings;
   }
 
   //////////////////////////////////////////////////////////////////////////
@@ -232,7 +236,8 @@ class FirestoreServiceImpl extends FirestoreService {
   @override
   Future<TopicModel?> getTopicData(String topicID) async {
     try {
-      DocumentSnapshot topicDoc = await _firestoreDB.collection('NewTopic').doc(topicID).get();
+      DocumentSnapshot topicDoc =
+          await _firestoreDB.collection('NewTopic').doc(topicID).get();
 
       if (!topicDoc.exists) {
         throw CustomFirestoreException(
@@ -250,7 +255,8 @@ class FirestoreServiceImpl extends FirestoreService {
   @override
   Future<List<TopicModel>?>? getTopicsData() async {
     try {
-      QuerySnapshot topicsSnapshot = await _firestoreDB.collection('NewTopic').get();
+      QuerySnapshot topicsSnapshot =
+          await _firestoreDB.collection('NewTopic').get();
 
       if (topicsSnapshot.docs.isEmpty) {
         throw CustomFirestoreException(
@@ -259,7 +265,9 @@ class FirestoreServiceImpl extends FirestoreService {
         );
       }
 
-      return topicsSnapshot.docs.map((doc) => TopicModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+      return topicsSnapshot.docs
+          .map((doc) => TopicModel.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       rethrow;
     }
@@ -297,17 +305,19 @@ class FirestoreServiceImpl extends FirestoreService {
     String username = '';
     String userAvatar = '';
     // PostModel post = PostModel();
-      print('posts: $posts');
+    print('posts: $posts');
 
     try {
-      QuerySnapshot postsSnapshot = await _firestoreDB.collection('NewPost').get();
+      QuerySnapshot postsSnapshot = await _firestoreDB.collection('Post').get();
       // Future<Map<String, dynamic>> userData = userRef.get().then((value) => value.data() as Map<String, dynamic>);
+
       if (postsSnapshot.docs.isEmpty) {
         throw CustomFirestoreException(
           code: 'no-posts',
           message: 'No posts exist in Firestore',
         );
       }
+
       for (var doc in postsSnapshot.docs) {
         userRef = doc['user_id'];
         userData = userRef.get();
@@ -342,6 +352,29 @@ class FirestoreServiceImpl extends FirestoreService {
       rethrow;
     }
   }
+
+  // Future<List<CollectionModel>> getCollectionsData() async {
+  //   List<Map<String, String>> categories = [];
+  //   try {
+  //     QuerySnapshot snapshot = await _categoryCollection.get();
+  //
+  //     for (var doc in snapshot.docs) {
+  //       if (doc.exists) {}
+  //       categories.add({
+  //         'id': doc.id, // Lấy ID của tài liệu
+  //         'name': doc['name'], // Lấy trường 'name'
+  //       });
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print("Error get category list: $e");
+  //     }
+  //   }
+  //   if (kDebugMode) {
+  //     print(categories);
+  //   }
+  //   return categories;
+  // }
 }
 
 class CustomFirestoreException implements Exception {

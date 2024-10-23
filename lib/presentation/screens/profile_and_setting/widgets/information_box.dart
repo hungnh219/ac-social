@@ -26,7 +26,7 @@ class InformationBox extends StatelessWidget {
             height: 5,
           ),
           Text(
-            userModel.location,
+            userModel.location.isNotEmpty ? userModel.location: "Not updated" ,
             style: AppTheme.profileLocationStyle,
           ),
           const SizedBox(
