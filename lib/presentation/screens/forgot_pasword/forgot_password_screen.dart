@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/presentation/screens/forgot_pasword/cubit/forgot_password_cubit.dart';
+import 'package:social_app/presentation/screens/forgot_pasword/cubit/forgot_password_state.dart';
 import 'package:social_app/utils/styles/themes.dart';
 
 import '../../../mixin/validators/validators.dart';
@@ -10,20 +13,23 @@ import '../../widgets/forgot_password/linear_gradient_title.dart';
 import '../../widgets/forgot_password/message_content.dart';
 import '../../widgets/forgot_password/stacks_bottom.dart';
 
-class ForgotPasswordScreen extends StatefulWidget with Validator {
+class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
+    with Validator {
+  late final GlobalKey<FormState> _formKey;
   late final TextEditingController _emailController;
 
   late ValueNotifier<bool> _isLoading;
 
   @override
   void initState() {
+    _formKey = GlobalKey<FormState>();
     _emailController = TextEditingController();
     _isLoading = ValueNotifier<bool>(false);
     super.initState();
@@ -39,18 +45,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
-        child: Stack(
-      children: [
-        const AuthHeaderImage(
-          height: 0.38,
-          childAspectRatio: 1.69,
-        ),
-        AuthBody(
-          marginTop: MediaQuery.of(context).size.height * 0.28,
-          height: double.infinity,
-          padding: Padding(
-            padding: const EdgeInsets.all(25),
-            child: Column(
+      child: Stack(
+        children: [
+          const AuthHeaderImage(
+            height: 0.36,
+            childAspectRatio: 1.85,
+          ),
+          AuthBody(
+            marginTop: MediaQuery.of(context).size.height * 0.26,
+            height: double.infinity,
+            column: Column(
               children: [
                 LinearGradientTitle(
                   text: "TYPE YOUR EMAIL",
@@ -65,30 +69,42 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const SizedBox(
                   height: 25,
                 ),
-                AuthTextFormField(
-                  textEditingController: _emailController,
-                  hintText: "Email",
-                  textInputAction: TextInputAction.done,
-                  validator: (value) => widget.validateEmail(value),
+                Form(
+                  key: _formKey,
+                  child: AuthTextFormField(
+                    textEditingController: _emailController,
+                    hintText: "Email",
+                    textInputAction: TextInputAction.done,
+                    validator: (value) => validateEmail(value),
+                  ),
                 ),
                 const SizedBox(
                   height: 35,
                 ),
-                const AuthElevatedButton(
-                  width: double.infinity,
-                  height: 52,
-                  inputText: "Send",
-                  isLoading: false,
+                BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
+                  builder: (context, state) => AuthElevatedButton(
+                    width: double.infinity,
+                    height: 45,
+                    inputText: "SEND",
+                    onPressed: () => context
+                        .read<ForgotPasswordCubit>()
+                        .sendPasswordResetEmail(
+                          context,
+                          _formKey,
+                          _emailController.text.trim(),
+                        ),
+                    isLoading: (state is ForgotPasswordLoading ? true : false),
+                  ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 40,
                 ),
                 const StacksBottom(),
               ],
             ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }

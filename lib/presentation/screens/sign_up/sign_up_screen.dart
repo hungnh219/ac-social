@@ -21,6 +21,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> with Validator {
+  late final GlobalKey<FormState> _formKey;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
@@ -30,6 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> with Validator {
 
   @override
   void initState() {
+    _formKey = GlobalKey<FormState>();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
@@ -51,132 +53,127 @@ class _SignUpScreenState extends State<SignUpScreen> with Validator {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Stack(
-        children: [
-          AuthHeaderImage(
-            height: 0.44,
-            childAspectRatio: 1.33,
-            positioned: Positioned.fill(
-              top: -45,
-              child: Center(
-                child: Text(
-                  "WELCOME",
-                  style: AppTheme.authHeaderStyle,
-                ),
+      child: Stack(children: [
+        AuthHeaderImage(
+          height: 0.42,
+          childAspectRatio: 1.41,
+          positioned: Positioned.fill(
+            top: -45,
+            child: Center(
+              child: Text(
+                "WELCOME",
+                style: AppTheme.authHeaderStyle,
               ),
             ),
           ),
-          AuthBody(
-            marginTop: MediaQuery.of(context).size.height * 0.34,
-            height: double.infinity,
-            padding: Padding(
-              padding: const EdgeInsets.only(top: 30, left: 25, right: 25),
-              child: BlocBuilder<SignUpCubit, SignUpState>(
-                builder: (context, state) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+        ),
+        AuthBody(
+          marginTop: MediaQuery.of(context).size.height * 0.32,
+          height: double.infinity,
+          column: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Form(
+                key: _formKey,
+                child: Column(
                   children: [
-                    Form(
-                      key: context.read<SignUpCubit>().formKey,
-                      child: Column(
-                        children: [
-                          AuthTextFormField(
-                            textEditingController: _emailController,
-                            hintText: "Email",
-                            textInputAction: TextInputAction.next,
-                            validator: (value) => validateEmail(value),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          ValueListenableBuilder(
-                            valueListenable: _obscureText,
-                            builder: (context, value, child) {
-                              return AuthTextFormField(
-                                textEditingController: _passwordController,
-                                hintText: "Password",
-                                obscureText: value,
-                                textInputAction: TextInputAction.next,
-                                validator: (value) => validatePassword(value),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    _obscureText.value = !value;
-                                  },
-                                  icon: Icon(value
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          ValueListenableBuilder(
-                            valueListenable: _obscureConfirmText,
-                            builder: (context, value, child) {
-                              return AuthTextFormField(
-                                textEditingController:
-                                    _confirmPasswordController,
-                                hintText: "Password",
-                                obscureText: value,
-                                textInputAction: TextInputAction.done,
-                                validator: (value) => validateConfirmPassword(
-                                    _passwordController.text, value),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    _obscureConfirmText.value = !value;
-                                  },
-                                  icon: Icon(value
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                    AuthTextFormField(
+                      textEditingController: _emailController,
+                      hintText: "Email",
+                      textInputAction: TextInputAction.next,
+                      validator: (value) => validateEmail(value),
                     ),
                     const SizedBox(
-                      height: 35,
+                      height: 15,
                     ),
-                    AuthElevatedButton(
-                      width: double.infinity,
-                      height: 45,
-                      inputText: "SIGN IN",
-                      onPressed: () => context.read<SignUpCubit>().signup(
-                          context,
-                          SignUpUserReq(
-                              email: _emailController.text,
-                              password: _passwordController.text)),
-                      isLoading: (state is SignUpLoading ? true : false),
+                    ValueListenableBuilder(
+                      valueListenable: _obscureText,
+                      builder: (context, value, child) {
+                        return AuthTextFormField(
+                          textEditingController: _passwordController,
+                          hintText: "Password",
+                          obscureText: value,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) => validatePassword(value),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              _obscureText.value = !value;
+                            },
+                            icon: Icon(value
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined),
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Already have account?",
-                          style: AppTheme.authSignUpStyle
-                              .copyWith(color: AppColors.kettleman),
-                        ),
-                        TextButton(
-                          onPressed: () => context.go("/signin"),
-                          child: Text(
-                            "SIGN IN",
-                            style: AppTheme.authSignUpStyle,
+                    ValueListenableBuilder(
+                      valueListenable: _obscureConfirmText,
+                      builder: (context, value, child) {
+                        return AuthTextFormField(
+                          textEditingController: _confirmPasswordController,
+                          hintText: "Password",
+                          obscureText: value,
+                          textInputAction: TextInputAction.done,
+                          validator: (value) => validateConfirmPassword(
+                              _passwordController.text, value),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              _obscureConfirmText.value = !value;
+                            },
+                            icon: Icon(value
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined),
                           ),
-                        )
-                      ],
-                    )
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
-            ),
-          )
-        ],
-      ),
+              const SizedBox(
+                height: 35,
+              ),
+              BlocBuilder<SignUpCubit, SignUpState>(
+                builder: (context, state) => AuthElevatedButton(
+                  width: double.infinity,
+                  height: 45,
+                  inputText: "SIGN IN",
+                  onPressed: () => context.read<SignUpCubit>().signup(
+                      context,
+                      _formKey,
+                      SignUpUserReq(
+                          email: _emailController.text,
+                          password: _passwordController.text)),
+                  isLoading: (state is SignUpLoading ? true : false),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have account?",
+                    style: AppTheme.authSignUpStyle
+                        .copyWith(color: AppColors.kettleman),
+                  ),
+                  TextButton(
+                    onPressed: () => context.go("/signin"),
+                    child: Text(
+                      "SIGN IN",
+                      style: AppTheme.authSignUpStyle,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ]),
     );
   }
 }

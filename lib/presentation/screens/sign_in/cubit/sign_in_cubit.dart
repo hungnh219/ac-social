@@ -11,10 +11,9 @@ import '../../../../service_locator.dart';
 
 class SignInCubit extends Cubit<SignInState> {
   SignInCubit() : super(SignInInitial());
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  void loginWithEmailAndPassword(
-      BuildContext context, SignInUserReq signInUserReq) async {
+  void loginWithEmailAndPassword(BuildContext context,
+      GlobalKey<FormState> formKey, SignInUserReq signInUserReq) async {
     try {
       if (formKey.currentState!.validate()) {
         emit(SignInLoading());

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_app/data/models/auth/create_user_req.dart';
+import 'package:social_app/data/sources/firestore/firestore_service.dart';
 
 import '../../models/auth/sign_in_user_req.dart';
 
@@ -14,6 +15,8 @@ abstract class AuthFirebaseService {
   Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq);
 
   Future<void> signInWithGoogle();
+
+  Future<void> sendPasswordResetEmail(String email);
 
   User? getCurrentUser();
 
@@ -152,6 +155,28 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       if (kDebugMode) {
         print(error.toString());
       }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      final signInMethod = await _auth.fetchSignInMethodsForEmail(email);
+
+      if (signInMethod.isNotEmpty) {
+        await _auth.sendPasswordResetEmail(email: email);
+      } else {
+        throw CustomFirestoreException(
+          code: 'email-not-found',
+          message: 'Email does not exists',
+        );
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error send email reset password: $e");
+      }
+
       rethrow;
     }
   }

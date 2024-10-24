@@ -10,6 +10,8 @@ abstract class AuthRepository {
 
   Future<void> signInWithGoogle();
 
+  Future<void> sendPasswordResetEmail(String email);
+
   Future<dynamic> getCurrentUser();
 
   Future<void> signOut();

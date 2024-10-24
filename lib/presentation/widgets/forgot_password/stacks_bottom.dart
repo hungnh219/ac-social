@@ -5,17 +5,24 @@ class StacksBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Lấy kích thước màn hình
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Tính toán vị trí và kích thước dựa trên kích thước màn hình
+    final containerSize = screenWidth * 0.2; // 12.5% chiều rộng màn hình
+    final distanceBetweenContainers =
+        screenWidth * 0.1; // 10% chiều rộng màn hình
     return Stack(
       children: [
         Container(
           width: double.infinity,
-          height: 50,
+          height: containerSize + 10,
         ),
         Positioned(
-          left: 90,
+          left: screenWidth * 0.32 - containerSize / 2,
           child: Container(
-            width: 50,
-            height: 50,
+            width: containerSize,
+            height: containerSize,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -29,10 +36,12 @@ class StacksBottom extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 140,
+          left: screenWidth * 0.23 +
+              distanceBetweenContainers +
+              containerSize / 2,
           child: Container(
-            width: 50,
-            height: 50,
+            width: containerSize,
+            height: containerSize,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -46,10 +55,10 @@ class StacksBottom extends StatelessWidget {
           ),
         ),
         Positioned(
-          right: 30,
+          left: screenWidth * 0.74 - containerSize / 2,
           child: Container(
-            width: 50,
-            height: 50,
+            width: containerSize,
+            height: containerSize,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [

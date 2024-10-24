@@ -9,6 +9,7 @@ import 'package:social_app/presentation/screens/splash/splash.dart';
 
 import '../../presentation/screens/sign_in/sign_in_screen.dart';
 import '../../presentation/screens/sign_up/sign_up_screen.dart';
+import '../../presentation/screens/verification/verification_screen.dart';
 
 class MyRouter {
   static final GoRouter router = GoRouter(
@@ -48,6 +49,14 @@ class MyRouter {
                 builder: (BuildContext context, GoRouterState state) {
                   return const ForgotPasswordScreen();
                 },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'verification',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const VerificationScreen();
+                    },
+                  ),
+                ],
               ),
               GoRoute(
                 path: 'category',

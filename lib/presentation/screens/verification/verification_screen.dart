@@ -41,58 +41,55 @@ class _VerificationScreenState extends State<VerificationScreen> {
       child: Stack(
         children: [
           const AuthHeaderImage(
-            height: 0.38,
-            childAspectRatio: 1.69,
+            height: 0.36,
+            childAspectRatio: 1.85,
           ),
           AuthBody(
-            marginTop: MediaQuery.of(context).size.height * 0.28,
+            marginTop: MediaQuery.of(context).size.height * 0.26,
             height: double.infinity,
-            padding: Padding(
-              padding: EdgeInsets.all(25),
-              child: Column(
-                children: [
-                  LinearGradientTitle(
-                    text: "VERIFICATION",
-                    textStyle: AppTheme.forgotPasswordLabelStyle,
+            column: Column(
+              children: [
+                LinearGradientTitle(
+                  text: "VERIFICATION",
+                  textStyle: AppTheme.forgotPasswordLabelStyle,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const MessageContent(
+                    text:
+                        "A message with verification code was sent to your email."),
+                const SizedBox(
+                  height: 30,
+                ),
+                AuthTextFormField(
+                    textEditingController: _codeController,
+                    hintText: "Type verification code"),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Don't receive the code".toUpperCase(),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const MessageContent(
-                      text:
-                          "A message with verification code was sent to your email."),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  AuthTextFormField(
-                      textEditingController: _codeController,
-                      hintText: "Type verification code"),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Don't receive the code".toUpperCase(),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const AuthElevatedButton(
-                    width: double.infinity,
-                    height: 52,
-                    inputText: "VERIFY",
-                    isLoading: false,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const StacksBottom(),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const AuthElevatedButton(
+                  width: double.infinity,
+                  height: 52,
+                  inputText: "VERIFY",
+                  isLoading: false,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const StacksBottom(),
+              ],
             ),
-          )
+          ),
         ],
       ),
     );
