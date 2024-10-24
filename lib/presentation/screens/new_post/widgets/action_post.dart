@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:social_app/data/sources/firestore/firestore_service.dart';
 import 'package:social_app/presentation/screens/new_post/cubit/post_cubit.dart';
+import 'package:social_app/presentation/screens/new_post/cubit/post_state.dart';
+import 'package:social_app/service_locator.dart';
 
 class ActionPost extends StatefulWidget {
   const ActionPost({super.key});
@@ -43,6 +46,11 @@ class _ActionPostState extends State<ActionPost> {
     }
   }
 
+  Future _uploadPost() async {
+    // upload post to firestore
+    // await sl<FirestoreService>().uploadPost();
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -70,15 +78,21 @@ class _ActionPostState extends State<ActionPost> {
                   children: <Widget>[
                     const Text('Modal BottomSheet'),
                     ElevatedButton(
-                      child: const Text('Gallery'),
+                      child: const Text('Gallery', style: TextStyle(color: Colors.white),),
                       onPressed: () {
                         _pickImageFromGallery();
                       },
                     ),
                     ElevatedButton(
-                      child: const Text('Camera'),
+                      child: const Text('Camera', style: TextStyle(color: Colors.white),),
                       onPressed: () {
                         _pickImageFromCamera();
+                      },
+                    ),
+                    ElevatedButton(
+                      child: const Text('upload', style: TextStyle(color: Colors.white),),
+                      onPressed: () {
+                        // _uploadImage();
                       },
                     ),
                   ],

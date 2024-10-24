@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/domain/entities/collection.dart';
 import 'package:social_app/utils/styles/colors.dart';
+import 'package:social_app/utils/styles/text_style.dart';
 
 class CollectionList extends StatelessWidget {
-  const CollectionList({super.key});
+  CollectionList({super.key, required this.collections});
 
+  List<CollectionModel>? collections;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 148,
+      height: 240,
       child: Column(
         children: [
           Row(
@@ -20,22 +23,26 @@ class CollectionList extends StatelessWidget {
                   fontWeight: FontWeight.bold
                 ),
               ),
+
               InkWell(
                 onTap: () {},
                 child: Text('View more', style: TextStyle(color: AppColors.mutedLavender),),
               )
             ],
           ),
+
+          SizedBox(height: 16,),
+
           Expanded(
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return SingleCollection();
+                return SingleCollection(collection: collections![index],);
               },
               separatorBuilder: (context, index) {
                 return SizedBox(width: 10);
               },
-              itemCount: 10),
+              itemCount: collections!.length),
           ),
           // CollectionImageCustom()
         ],
@@ -45,18 +52,20 @@ class CollectionList extends StatelessWidget {
 }
 
 class SingleCollection extends StatelessWidget {
-  const SingleCollection({super.key});
+  SingleCollection({super.key, required this.collection});
+
+  CollectionModel collection;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 232,
-      width: 148,
+      width: 150,
       child: Column(
         children: [
-          Expanded(child: CollectionImageCustom()),
+          CollectionImageCustom(collection: collection),
           Center(
-            child: Text('hehe'),
+            child: Text(collection.name),
           )
         ],
       ),
@@ -64,22 +73,28 @@ class SingleCollection extends StatelessWidget {
   }
 }
 class CollectionImageCustom extends StatelessWidget {
-  const CollectionImageCustom({super.key});
+  CollectionImageCustom({super.key, required this.collection});
+
+  CollectionModel collection;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 160,
-      width: 148,
+      height: 150,
+      width: 150,
       child: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
               image: DecorationImage(
-                  image: AssetImage('assets/images/apps-cyclone-logo.png'))),
+                image: NetworkImage(collection.thumbnail),
+                fit: BoxFit.fill
+              )
+            ),
           ),
           Center(
-            child: Text('appscyclone'),
+            child: Text(collection.name.toUpperCase(), style: AppTextStyle.uppercaseWhiteNormalStyle,),
           )
         ],
       ),

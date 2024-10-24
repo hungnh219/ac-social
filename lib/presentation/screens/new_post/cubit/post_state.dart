@@ -11,6 +11,9 @@ class PostInitial extends PostState {
 class PostWithImage extends PostState {
   final File image;
   // final String caption;
+
+  File get getImage => image;
+
   PostWithImage(this.image);
 }
 

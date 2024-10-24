@@ -27,6 +27,29 @@ class PostModel {
     required this.views,
   });
 
+  factory PostModel.newPost({
+    required String postId,
+    required String username,
+    required String userAvatar,
+    required String content,
+    required String image,
+    required DateTime timestamp,
+  }) {
+    return PostModel(
+      postId: postId,
+      username: username,
+      userAvatar: userAvatar,
+      content: content,
+      image: image,
+      timestamp: timestamp,
+      likeAmount: 0,
+      commentAmount: 0,
+      viewAmount: 0,
+      comments: {},
+      likes: {},
+      views: {},
+    );
+  }
   // factory PostModel.fromJson(Map<String, dynamic> json) {
   //   return PostModel(
   //     username: json['userId'],

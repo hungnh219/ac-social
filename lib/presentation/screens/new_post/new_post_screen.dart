@@ -24,8 +24,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
   @override
   void dispose() {
-    postCubit.close();
     super.dispose();
+    postCubit.close();
   }
 
   @override

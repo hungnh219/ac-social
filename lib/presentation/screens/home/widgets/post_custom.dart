@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/domain/entities/post.dart';
 import 'package:social_app/presentation/screens/post_detail/post_detail_screen.dart';
+import 'package:social_app/presentation/widgets/add_collection_icon.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
 class PostCustom extends StatelessWidget {
@@ -46,10 +47,7 @@ class PostCustom extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.add_circle_outline, color: Colors.red,),
-                    onPressed: () {},
-                  ),
+                  AddCollectionIcon(),
                   Spacer(),
 
                   Text(post.commentAmount.toString()),
@@ -85,15 +83,26 @@ class PostInfo extends StatelessWidget {
       height: 48,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(children: [
-          CircleAvatar(
-            radius: 16,
-            backgroundImage: NetworkImage(post.userAvatar),
-          ),
-          const SizedBox(width: 8),
-          Text(post.username),
-          Spacer(),
-          Text('hehehe'),
+        child: Row(
+          // direction: Axis.horizontal,
+          // direction: Axis.horizontal,
+          // runAlignment: WrapAlignment.spaceBetween,
+          children: [
+            // Flex()
+            CircleAvatar(
+              radius: 16,
+              backgroundImage: NetworkImage(post.userAvatar),
+            ),
+            const SizedBox(width: 8),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: Text(post.username * 3, overflow: TextOverflow.ellipsis,),),
+            // Spacer(),  
+            Spacer(),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.2,
+              child: Text('fdsfdsffdsfdsfdsfsfsfs' * 3, overflow: TextOverflow.ellipsis,),
+            ),
           // Text(post['user_id'].toString()),
         ],),
       ),

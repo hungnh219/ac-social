@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/data/sources/firestore/firestore_service.dart';
+import 'package:social_app/domain/entities/collection.dart';
 import 'package:social_app/domain/entities/topic.dart';
+import 'package:social_app/domain/repository/collection/collection_repository.dart';
 import 'package:social_app/domain/repository/topic/topic_repository.dart';
 import 'package:social_app/presentation/screens/discover/widgets/collection_list.dart';
 import 'package:social_app/presentation/screens/discover/widgets/topic_list.dart';
@@ -37,7 +39,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     return SafeArea(child: 
       Scaffold(
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -56,8 +58,25 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   }
                 }
               ),
+
+              SizedBox(height: 24,),
               // TopicList(topics: topics),
-              CollectionList()
+              // CollectionList(),
+              FutureBuilder<List<CollectionModel>?>(
+                future: serviceLocator<CollectionRepository>().getCollections(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Text('No collections available');
+                  } else {
+                    // topics = snapshot.data;
+                    return CollectionList(collections: snapshot.data);
+                  }
+                }
+              ),
           ],),
         ), 
       ),

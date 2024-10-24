@@ -1,22 +1,32 @@
-import 'package:social_app/domain/entities/post.dart';
-
 class CollectionModel {
+  final String collectionId;
   final String name;
-  final List<PostModel> posts;
+  final String thumbnail;
 
-  CollectionModel( {required this.name, required this.posts,});
+  CollectionModel({
+    required this.collectionId,
+    required this.name,
+    required this.thumbnail,
+  });
 
-  factory CollectionModel.fromMap(Map<String, dynamic> map) {
-    return CollectionModel(
-      name: map['name'] ?? '',
-      posts: [],
-    );
-  }
+  // factory CollectionModel.fromJson(Map<String, dynamic> json) {
+  //   return CollectionModel(
+  //     name: json['name'],
+  //     thumbnail: json['thumbnail'],
+  //   );
+  // }
 
-  // Method to convert a CollectionModel to a Map (to store in Firestore)
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-    };
-  }
+  // factory CollectionModel.fromMap(Map<String, dynamic> map) {
+  //   return CollectionModel(
+  //     name: map['name'],
+  //     thumbnail: map['thumbnail'],
+  //   );
+  // }
+
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'name': name,
+  //     'thumbnail': thumbnail,
+  //   };
+  // }
 }

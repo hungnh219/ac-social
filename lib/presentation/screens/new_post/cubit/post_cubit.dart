@@ -7,8 +7,8 @@ class PostCubit extends Cubit<PostState> {
   PostCubit() : super(PostInitial());
 
   void createImagePost(File image) {
-    print('check');
-    print('image: $image');
+    // print('check');
+    // print('image: $image');
     emit(PostWithImage(image));
   }
 }
