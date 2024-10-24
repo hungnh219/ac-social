@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:social_app/domain/entities/comment.dart';
 import 'package:social_app/domain/entities/post.dart';
 import 'package:social_app/domain/entities/topic.dart';
 
@@ -39,6 +40,8 @@ abstract class FirestoreService {
   Future<List<TopicModel>?>? getTopicsData();
 
   Future<List<PostModel>?>? getPostsData();
+
+  Future<List<CommentModel>?> getCommentPost(PostModel post);
 }
 
 class FirestoreServiceImpl extends FirestoreService {
@@ -56,7 +59,6 @@ class FirestoreServiceImpl extends FirestoreService {
   }
 
   CollectionReference get _categoryCollection => _firestoreDB.collection('Category');
-  CollectionReference get _collectionCollection => _firestoreDB.collection('Category');
 
   @override
   Future<UserModel?> getUserData(String userID) async {
@@ -309,8 +311,6 @@ class FirestoreServiceImpl extends FirestoreService {
 
     try {
       QuerySnapshot postsSnapshot = await _firestoreDB.collection('Post').get();
-      // Future<Map<String, dynamic>> userData = userRef.get().then((value) => value.data() as Map<String, dynamic>);
-
       if (postsSnapshot.docs.isEmpty) {
         throw CustomFirestoreException(
           code: 'no-posts',
@@ -319,7 +319,8 @@ class FirestoreServiceImpl extends FirestoreService {
       }
 
       for (var doc in postsSnapshot.docs) {
-        userRef = doc['user_id'];
+        print(doc.id);
+        userRef = doc['userRef'];
         userData = userRef.get();
         await userData.then((value) {
           // userInfo = value;
@@ -328,12 +329,13 @@ class FirestoreServiceImpl extends FirestoreService {
         });
 
         PostModel post = PostModel(
+          postId: doc.id,
           username: username,
           userAvatar: userAvatar,
           content: doc['content'],
-          likeAmount: doc['like_amount'],
-          commentAmount: doc['comment_amount'],
-          viewAmount: doc['view_amount'],
+          likeAmount: doc['likeAmount'],
+          commentAmount: doc['commentAmount'],
+          viewAmount: doc['viewAmount'],
           image: doc['image'],
           timestamp: (doc['timestamp'] as Timestamp).toDate(),
           comments: null,
@@ -353,28 +355,82 @@ class FirestoreServiceImpl extends FirestoreService {
     }
   }
 
-  // Future<List<CollectionModel>> getCollectionsData() async {
-  //   List<Map<String, String>> categories = [];
-  //   try {
-  //     QuerySnapshot snapshot = await _categoryCollection.get();
-  //
-  //     for (var doc in snapshot.docs) {
-  //       if (doc.exists) {}
-  //       categories.add({
-  //         'id': doc.id, // Lấy ID của tài liệu
-  //         'name': doc['name'], // Lấy trường 'name'
-  //       });
-  //     }
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print("Error get category list: $e");
-  //     }
-  //   }
-  //   if (kDebugMode) {
-  //     print(categories);
-  //   }
-  //   return categories;
-  // }
+  @override
+  Future<List<CommentModel>?> getCommentPost(PostModel post) async {
+    List<CommentModel> comments = [];
+    DocumentReference commentRef;
+    Future<DocumentSnapshot<Object?>> commentData;
+
+    DocumentReference userRef;
+    Future<DocumentSnapshot<Object?>> userData;
+    String username = '';
+    String userAvatar = '';
+
+    try {
+      QuerySnapshot commentListSnapshot = await _firestoreDB.collection('NewPost').doc(post.postId).collection('lists').get();
+      // Future<Map<String, dynamic>> userData = userRef.get().then((value) => value.data() as Map<String, dynamic>);
+      if (commentListSnapshot.docs.isEmpty) {
+        throw CustomFirestoreException(
+          code: 'no-posts',
+          message: 'No posts exist in Firestore',
+        );
+      }
+      for (var doc in commentListSnapshot.docs) {
+        // print(doc.id);
+        print(doc['comments']);
+        for (var comment in doc['comments']) {
+          print('1');
+          commentRef = comment;
+          commentData = commentRef.get();
+          await commentData.then((comment) {
+            print(comment['content']);
+            print(comment['timestamp']);
+            print(comment['user_id']);
+            userRef = comment['user_id'];
+            userData = userRef.get();
+            userData.then((userSnapshot) {
+              username = userSnapshot['name'];
+              userAvatar = userSnapshot['avatar'];
+            });
+          });
+
+
+        }
+        // userRef = doc['user_id'];
+        // userData = userRef.get();
+        // await userData.then((value) {
+        //   // userInfo = value;
+        //   username = value['name'];
+        //   userAvatar = value['avatar'];
+        // });
+
+        // PostModel post = PostModel(
+        //   postId: doc.id,
+        //   username: username,
+        //   userAvatar: userAvatar,
+        //   content: doc['content'],
+        //   likeAmount: doc['like_amount'],
+        //   commentAmount: doc['comment_amount'],
+        //   viewAmount: doc['view_amount'],
+        //   image: doc['image'],
+        //   timestamp: (doc['timestamp'] as Timestamp).toDate(),
+        //   comments: null,
+        //   likes: null,
+        //   views: null,
+        // );
+        // // print('post: $post');
+        // posts.add(post);
+        // topics.add(TopicModel.fromMap(doc.data() as Map<String, dynamic>));
+      }
+
+      // print('posts: $posts');
+      return null;
+      // return postsSnapshot.docs.map((doc) => PostModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 }
 
 class CustomFirestoreException implements Exception {

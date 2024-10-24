@@ -1,4 +1,5 @@
 class PostModel {
+  final String postId;
   final String username;
   final String userAvatar;
   final String content;
@@ -12,6 +13,7 @@ class PostModel {
   final Map<String, dynamic>? views;
 
   PostModel({
+    required this.postId,
     required this.username,
     required this.userAvatar,
     required this.content,

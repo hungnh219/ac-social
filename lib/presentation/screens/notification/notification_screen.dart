@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:social_app/presentation/widgets/navigator_bar.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -7,6 +8,8 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return ElevatedButton(onPressed: () {
+      context.go('/signin');
+    }, child: Text('signout'));
   }
 }
