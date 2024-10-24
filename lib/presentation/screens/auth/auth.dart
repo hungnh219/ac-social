@@ -15,12 +15,15 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
-        if (state is Authenticated) {
-          return const NavigatorBarCustom();
-          // context.go("/signin/navigator");
-        } else if (state is Unauthenticated) {
-          return const SignInScreen();
-        }
+        // Giữ cho việc build hoàn tất
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (state is Authenticated) {
+            // Chuyển đến màn hình home khi đã đăng nhập trước đó
+            context.go("/signin/home");
+          } else if (state is Unauthenticated) {
+            context.go("/signin");
+          }
+        });
         return const Center(child: CircularProgressIndicator());
       },
     );

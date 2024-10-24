@@ -10,6 +10,7 @@ import 'package:social_app/firebase_options.dart';
 import 'package:social_app/presentation/screens/auth/cubit/auth_cubit.dart';
 import 'package:social_app/presentation/screens/auth/cubit/theme_cubit.dart';
 import 'package:social_app/presentation/screens/category/cubit/category_cubit.dart';
+import 'package:social_app/presentation/screens/forgot_pasword/cubit/forgot_password_cubit.dart';
 import 'package:social_app/presentation/screens/sign_in/cubit/sign_in_cubit.dart';
 import 'package:social_app/presentation/screens/sign_up/cubit/sign_up_cubit.dart';
 import 'package:social_app/service_locator.dart';
@@ -49,7 +50,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => SignInCubit()),
         BlocProvider(create: (_) => SignUpCubit()),
-        BlocProvider(create: (_) => CategoryCubit())
+        BlocProvider(create: (_) => CategoryCubit()),
+        BlocProvider(create: (_) => ForgotPasswordCubit()),
       ],
       child: SafeArea(
         child: BlocBuilder<ThemeCubit, ThemeMode>(

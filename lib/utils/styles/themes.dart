@@ -121,6 +121,12 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         letterSpacing: -0.1,
       );
+  static TextStyle get forgotPasswordLabelStyle => GoogleFonts.plusJakartaSans(
+        color: white,
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.1,
+      );
 
   static TextStyle get categoryBottomTitle => GoogleFonts.plusJakartaSans(
       fontWeight: FontWeight.w400,
