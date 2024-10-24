@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,15 +19,24 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         await serviceLocator<AuthFirebaseService>()
             .sendPasswordResetEmail(email);
         emit(ForgotPasswordSuccess());
-        context.go("/signin/forgotpassword/verification");
+        _showAlertDialog(context, "Success",
+            "Send reset password email success. Please check your mail to reset password");
+        // context.go("/signin/forgotpassword/verification");
       }
     } catch (e) {
       emit(ForgotPasswordFailure());
-      if (e is CustomFirestoreException) {
-        _showAlertDialog(context, "Error", e.message);
-      }
-      if (kDebugMode) {
-        print("Error send password reset email: $e");
+      if (e is FirebaseAuthException) {
+        if (e.code == "email-not-found") {
+          _showAlertDialog(context, "Error", e.message);
+        } else {
+          if (kDebugMode) {
+            print("Error send password reset email: $e");
+          }
+        }
+      } else {
+        if (kDebugMode) {
+          print("Error send password reset email: $e");
+        }
       }
     }
   }

@@ -167,7 +167,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       if (signInMethod.isNotEmpty) {
         await _auth.sendPasswordResetEmail(email: email);
       } else {
-        throw CustomFirestoreException(
+        throw FirebaseAuthException(
           code: 'email-not-found',
           message: 'Email does not exists',
         );
