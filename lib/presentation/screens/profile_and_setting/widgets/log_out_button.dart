@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../utils/constants/icon_path.dart';
 import '../../../../utils/styles/themes.dart';
-import '../cubit/setting_cubit.dart';
+import '../cubit/profile_cubit.dart';
 
 class LogOutButton extends StatelessWidget {
   const LogOutButton({super.key});
@@ -15,7 +15,7 @@ class LogOutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        context.read<SettingCubit>().signOut(); // Trigger logout
+        context.read<ProfileCubit>().signOut(); // Trigger logout
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: AppTheme.black,

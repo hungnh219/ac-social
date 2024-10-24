@@ -22,8 +22,6 @@ abstract class AuthFirebaseService {
 
   Future<void> signOut();
 
-  Future<void> updateCurrentUserEmail(String email);
-
   Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password);
 
 }
@@ -42,13 +40,13 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
       User user = userCredential.user!;
 
-      if (!user.emailVerified) {
-        await signOut();
-        throw FirebaseAuthException(
-          code: 'email-not-verified',
-          message: 'Your account is not verified. Please check your inbox',
-        );
-      }
+      // if (!user.emailVerified) {
+      //   await signOut();
+      //   throw FirebaseAuthException(
+      //     code: 'email-not-verified',
+      //     message: 'Your account is not verified. Please check your inbox',
+      //   );
+      // }
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
         print("Error ${e.code}");
@@ -212,30 +210,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   @override
   User? getCurrentUser() {
     return _auth.currentUser;
-  }
-
-  @override
-  Future<void> updateCurrentUserEmail(String email) async {
-    try {
-      User? user = _auth.currentUser;
-      if (user != null) {
-          await user.updateEmail(email);
-          await user.sendEmailVerification();
-          return;
-        } else {
-        throw FirebaseAuthException(code: 'no-user-singed-in',
-            message: 'No one is signed in');
-      }
-    } on FirebaseAuthException catch (e) {
-      if (kDebugMode) {
-        print('Error: ${e.code} - ${e.message}');
-      }
-      rethrow;
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error: $e');
-      }
-    }
   }
 
   Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password) async{

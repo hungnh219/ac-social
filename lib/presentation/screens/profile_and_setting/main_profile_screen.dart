@@ -5,13 +5,12 @@ import 'package:social_app/presentation/screens/edit_profile/cubit/edit_page_cub
 import 'package:social_app/presentation/screens/profile_and_setting/profile_part.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/setting_part.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/widgets/profile_box.dart';
+import 'package:social_app/presentation/screens/sign_in/cubit/sign_in_cubit.dart';
 
 import '../../../utils/constants/image_path.dart';
 import '../../../utils/styles/themes.dart';
 import 'cubit/profile_cubit.dart';
 import 'cubit/profile_state.dart';
-import 'cubit/setting_cubit.dart';
-import 'cubit/setting_state.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -26,22 +25,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => ProfileCubit()..fetchProfile()),
-        BlocProvider(create: (context) => SettingCubit()),
       ],
       child: MultiBlocListener(
         listeners: [
-          // Listener for SettingCubit to handle logout or errors
-          BlocListener<SettingCubit, SettingState>(
-            listener: (context, state) {
-              if (state is SettingLoggedOut) {
-                context.replace('/signin');
-              } else if (state is SettingError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
-                );
-              }
-            },
-          ),
           // Listener for ProfileCubit to handle email change
           BlocListener<ProfileCubit, ProfileState>(
             listener: (context, state) {
@@ -59,7 +45,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.of(buildContext).pop();
                             context.read<ProfileCubit>().signOut();
                             Future.delayed(Duration(milliseconds: 100), () {
-                              context.go('/signin'); // Then navigate to sign-in
+                              context.read<SignInCubit>().reset();
+                              context.go('/signin');
+
+
                             });
                           },
                           child: Text('OK'),

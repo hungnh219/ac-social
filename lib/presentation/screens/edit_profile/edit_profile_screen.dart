@@ -14,31 +14,55 @@ import 'package:social_app/utils/extensions/updated_field_extension.dart';
 import '../../../domain/entities/user.dart';
 import '../../../utils/constants/icon_path.dart';
 import '../../../utils/styles/themes.dart';
+import '../../widgets/custom_alert_dialog.dart';
 import '../../widgets/edit_profile/gradient_button.dart';
-import '../profile_and_setting/cubit/profile_cubit.dart';
-import '../profile_and_setting/cubit/setting_cubit.dart';
-import '../profile_and_setting/cubit/setting_state.dart';
+
 import 'cubit/edit_page_cubit.dart';
 import 'cubit/edit_page_state.dart';
 
-class EditProfile extends StatelessWidget {
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController locationController = TextEditingController();
-
-  final FocusNode nameFocus = FocusNode();
-  final FocusNode lastNameFocus = FocusNode();
-  final FocusNode emailFocus = FocusNode();
-  final FocusNode locationFocus = FocusNode();
+class EditProfile extends StatefulWidget {
 
   EditProfile({super.key});
 
-  void reAuthenticateAndChangeEmail(BuildContext context, UserModel user,
-      Map<String, dynamic> updatedFields) async {
+  @override
+  State<EditProfile> createState() => _EditProfileState();
+}
 
-    try{
+class _EditProfileState extends State<EditProfile> {
+  late TextEditingController nameController ;
+  late TextEditingController lastNameController ;
+  late TextEditingController emailController;
+  late TextEditingController locationController ;
+
+  late FocusNode nameFocus = FocusNode();
+  late FocusNode lastNameFocus = FocusNode();
+  late FocusNode emailFocus = FocusNode();
+  late FocusNode locationFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    lastNameController = TextEditingController();
+    emailController = TextEditingController();
+    locationController = TextEditingController();
+    nameFocus = FocusNode();
+    lastNameFocus = FocusNode();
+    emailFocus = FocusNode();
+    locationFocus = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    locationController.dispose();
+    super.dispose();
+  }
+
+  void reAuthenticateAndChangeEmail(BuildContext context, UserModel updatedUser) async {
+    try {
       TextEditingController emailController = TextEditingController();
       TextEditingController passwordController = TextEditingController();
 
@@ -77,31 +101,28 @@ class EditProfile extends StatelessWidget {
                   String password = passwordController.text;
 
                   try {
-                    await context
-                        .read<EditPageCubit>()
-                        .reAuthenticateAndChangeEmail(email, user.email, password);
+                    await context.read<EditPageCubit>()
+                        .reAuthenticateAndChangeEmail(context, updatedUser, email, password);
                   } catch (e) {
                     rethrow;
                   }
 
-                  Navigator.of(dialogContext).pop(); // Close the dialog
+                  Navigator.of(dialogContext).pop();
                 },
                 child: const Text('Submit'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(dialogContext).pop(); // Close the dialog without saving
+                  Navigator.of(dialogContext)
+                      .pop(); // Close the dialog without saving
                 },
                 child: const Text('Cancel'),
               ),
             ],
           );
-
         },
       );
-
-      saveChanges(context, user, updatedFields);
-    }catch(e){
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('Re-authentication failed. Email not updated.')),
@@ -109,48 +130,43 @@ class EditProfile extends StatelessWidget {
     }
   }
 
-  void saveChanges(BuildContext context, UserModel user,
-      Map<String, dynamic> updatedFields) {
-    if (updatedFields.isNotEmpty) {
-      UserModel updatedUser = user.copyWith(
-        name: updatedFields.updateField('name', user.name),
-        lastName: updatedFields.updateField('lastname', user.lastName),
-        newEmail: updatedFields.updateField('email', user.email),
-        location: updatedFields.updateField('location', user.location),
-      );
+@override
+Widget build(BuildContext context) {
+  double deviceHeight = MediaQuery
+      .of(context)
+      .size
+      .height;
+  double deviceWidth = MediaQuery
+      .of(context)
+      .size
+      .width;
 
-      Navigator.of(context).pop(updatedUser);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double deviceHeight = MediaQuery.of(context).size.height;
-    double deviceWidth = MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body:
-      BlocListener<EditPageCubit, EditPageState>(
-        listener: (context, state) {
-          if (state is EditPageAccepted) {
-            Navigator.of(context).pop();
+  return Scaffold(
+    resizeToAvoidBottomInset: false,
+    body: BlocBuilder<EditPageCubit, EditPageState>(
+        builder: (context, state) {
+          if (state is EditPageLoading) {
+            return const Center(child: CircularProgressIndicator());
           }
-        },
-            child: BlocBuilder<EditPageCubit, EditPageState>(builder: (context, state) {
-                    if (state is EditPageLoading) {
-            return const Center(child: const CircularProgressIndicator());
-                    } else if (state is EditPageLoaded) {
+          else if (state is EditPageLoaded ) {
             final user = state.user;
-            
-            return SingleChildScrollView(
+
+            if(user.emailChanged){
+              Navigator.of(context).pop(state.user);
+              return const SizedBox.shrink();
+            }
+            else {
+              return SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                    bottom: MediaQuery
+                        .of(context)
+                        .viewInsets
+                        .bottom),
                 child: Column(
                   children: [
                     HeaderAndAvatar(avatarURL: user.avatar),
-            
+
                     //TODO : Text fields
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -163,7 +179,8 @@ class EditProfile extends StatelessWidget {
                           width: deviceWidth * 0.8,
                           focusNode: nameFocus,
                           onFieldSubmitted: (value) {
-                            FocusScope.of(context).requestFocus(lastNameFocus);
+                            FocusScope.of(context).requestFocus(
+                                lastNameFocus);
                           },
                         ),
                         const SizedBox(height: 22),
@@ -209,40 +226,69 @@ class EditProfile extends StatelessWidget {
                 ),
               ),
             );
-                    } else {
-            return const AppPlaceHolder();
-                    }
-                  }),
-          ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: CustomFloatingActionButton(
-        width: deviceWidth * 0.8,
-        text: 'SAVE CHANGES',
-        onPressed: () {
-          final user =
-              (context.read<EditPageCubit>().state as EditPageLoaded).user;
-
-          Map<String, dynamic> updatedFields = {};
-
-          if (nameController.text != user.name) {
-            updatedFields['name'] = nameController.text;
-          }
-          if (lastNameController.text != user.lastName) {
-            updatedFields['lastname'] = lastNameController.text;
-          }
-          if (locationController.text != user.location) {
-            updatedFields['location'] = locationController.text;
-          }
-
-          if (emailController.text != user.email) {
-            updatedFields['email'] = emailController.text;
-            reAuthenticateAndChangeEmail(context, user, updatedFields);
+            }
           } else {
-            saveChanges(context, user,
-                updatedFields); // Save changes without email re-authentication
+            return const AppPlaceHolder();
           }
-        },
-      ),
-    );
-  }
-}
+        }),
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    floatingActionButton: CustomFloatingActionButton(
+      width: deviceWidth * 0.8,
+      text: 'SAVE CHANGES',
+      onPressed: () {
+        UserModel updatedUser =
+            (context
+                .read<EditPageCubit>()
+                .state as EditPageLoaded).user;
+
+        String newName = nameController.text;
+        String newEmail = emailController.text;
+        String lastname = lastNameController.text;
+        String location = locationController.text;
+
+        Map<String, dynamic> updatedFields = {};
+
+        // Check if fields are different from the user's current values
+        bool noChanges = true;
+
+        if (newName.isNotEmpty && newName != updatedUser.name) {
+          updatedUser = updatedUser.copyWith(name: newName);
+          noChanges = false;
+        }
+
+        if (lastname.isNotEmpty && lastname != updatedUser.lastName) {
+          updatedUser = updatedUser.copyWith(lastName: lastname);
+          noChanges = false;
+        }
+
+        if (location.isNotEmpty && location != updatedUser.location) {
+          updatedUser = updatedUser.copyWith(location: location);
+          noChanges = false;
+        }
+
+        if ((newEmail.isNotEmpty && newEmail != updatedUser.email)) {
+          updatedUser = updatedUser.copyWith(newEmail: newEmail);
+          noChanges = false;
+          reAuthenticateAndChangeEmail(context, updatedUser);
+          return;
+        }
+
+        if (noChanges) {
+          CustomAlertDialog(
+            titleText: 'No Changes Detected',
+            contentText: 'No fields were changed. Please modify some information to save changes.',
+            submitFunction: () {
+              Navigator.of(context).pop();
+            },
+            submitButtonText: 'OK',
+            cancelFunction: () {},
+            cancelButtonText: 'Dismiss',
+            showCancelButton: false,
+          ).show(context);
+        } else {
+          Navigator.of(context).pop(updatedUser);
+        }
+      },
+    ),
+  );
+}}

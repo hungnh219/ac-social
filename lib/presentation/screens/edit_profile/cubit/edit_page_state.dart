@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../../../domain/entities/user.dart';
 
 abstract class EditPageState {}
@@ -13,8 +15,9 @@ class EditPageLoaded extends EditPageState {
 class EditPageUpdating extends EditPageState {}
 
 class EditPageAccepted extends EditPageState {
-  // final UserModel user;
-  // EditPageUpdated(this.user);
+  final UserModel user;
+
+  EditPageAccepted({ required this.user});
 }
 
 class EditPageError extends EditPageState {

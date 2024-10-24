@@ -7,8 +7,6 @@ abstract class ProfileState {}
 
 class ProfileLoading extends ProfileState {}
 
-class ProfileUpdating extends ProfileState{}
-
 class ProfileUpdated extends ProfileState{
   final UserModel userModel;
   final List<String> userFollowers;

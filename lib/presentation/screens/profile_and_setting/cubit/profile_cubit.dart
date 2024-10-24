@@ -25,6 +25,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   ProfileCubit() : super(ProfileLoading());
 
+
   Future<void> fetchProfile() async {
     emit(ProfileLoading());
     try {
@@ -47,7 +48,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateProfile(UserModel updatedUser) async {
-    emit(ProfileUpdating());
+    emit(ProfileLoading());
     try {
       UpdateUserReq updateUserReq = UpdateUserReq(updatedUser);
       await userRepository.updateCurrentUserData(updateUserReq);
@@ -58,13 +59,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateProfileWithEmail(UserModel updatedUser) async {
-    emit(ProfileUpdating());
+    emit(ProfileLoading());
     try {
       UpdateUserReq updateUserReq = UpdateUserReq(updatedUser);
-      await authRepository.updateCurrentUserEmail(updatedUser.email);
       await userRepository.updateCurrentUserData(updateUserReq);
-
-      print(updatedUser.email);
 
       emit(ProfileEmailChanged());
     } catch (e) {

@@ -35,6 +35,7 @@ class _SignInScreenState extends State<SignInScreen> with Validator {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _obscureText = ValueNotifier<bool>(true);
+    context.read<SignInCubit>().reset();
     super.initState();
   }
 

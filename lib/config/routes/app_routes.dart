@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/presentation/screens/boarding/boarding.dart';
@@ -9,6 +10,7 @@ import 'package:social_app/presentation/widgets/navigator_bar.dart';
 
 import '../../presentation/screens/forgot_pasword/forgot_password_screen.dart';
 import '../../presentation/screens/edit_profile/edit_profile_screen.dart';
+import '../../presentation/screens/sign_in/cubit/sign_in_cubit.dart';
 import '../../presentation/screens/sign_in/sign_in_screen.dart';
 import '../../presentation/screens/sign_up/sign_up_screen.dart';
 import '../../presentation/screens/verification/verification_screen.dart';
@@ -37,7 +39,10 @@ class MyRouter {
           GoRoute(
             path: 'signin',
             builder: (BuildContext context, GoRouterState state) {
-              return const SignInScreen();
+              // return const SignInScreen();
+              return BlocProvider(
+                  create: (_) => SignInCubit(),
+              child: const SignInScreen());
             },
             routes: <RouteBase>[
               GoRoute(

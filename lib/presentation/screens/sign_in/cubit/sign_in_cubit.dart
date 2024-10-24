@@ -12,6 +12,10 @@ import '../../../../service_locator.dart';
 class SignInCubit extends Cubit<SignInState> {
   SignInCubit() : super(SignInInitial());
 
+  void reset() {
+    emit(SignInInitial()); // Reset to initial state
+  }
+
   void loginWithEmailAndPassword(BuildContext context,
       GlobalKey<FormState> formKey, SignInUserReq signInUserReq) async {
     try {

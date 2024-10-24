@@ -399,10 +399,28 @@ class FirestoreServiceImpl extends FirestoreService {
   }
 
   @override
-  Future<List<CollectionModel>> getCollectionsData(List<String> collectionIDsList) {
-    // TODO: implement getCollectionsData
-    throw UnimplementedError();
+  Future<List<CollectionModel>> getCollectionsData(List<String> collectionIDsList) async {
+    List<CollectionModel> collections = [];
+
+    try {
+      for (String collectionID in collectionIDsList) {
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _collectionRef.doc(collectionID).get() as DocumentSnapshot<Map<String, dynamic>>;
+
+        if (snapshot.exists && snapshot.data() != null) {
+          CollectionModel collection = CollectionModel.fromMap(snapshot.data()!);
+          collections.add(collection);  // Add to list of collections
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error fetching collection data: $e");
+      }
+    }
+
+    return collections;  // Return the list of CollectionModel objects
   }
+
 
 }
 
