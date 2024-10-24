@@ -6,8 +6,6 @@ import 'package:social_app/service_locator.dart';
 class TopicRepositoryImpl extends TopicRepository {
   @override
   Future<TopicModel?>? getTopicData(String topicID) {
-    print('hehehe');
-
     return null;
   }
 

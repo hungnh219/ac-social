@@ -7,6 +7,7 @@ import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
 import 'package:social_app/presentation/widgets/navigator_bar.dart';
 
+import '../../presentation/screens/edit_profile/edit_profile_screen.dart';
 import '../../presentation/screens/sign_in/sign_in_screen.dart';
 import '../../presentation/screens/sign_up/sign_up_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
@@ -75,6 +76,12 @@ class MyRouter {
                 path: 'navigator',
                 builder: (BuildContext context, GoRouterState state) {
                   return const NavigatorBarCustom();
+                },
+              ),
+              GoRoute(
+                path: 'edit',
+                builder: (BuildContext context, GoRouterState state) {
+                  return EditProfile();
                 },
               ),
             ],

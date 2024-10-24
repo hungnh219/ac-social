@@ -5,7 +5,6 @@ import 'package:social_app/presentation/screens/sign_in/cubit/sign_in_state.dart
 
 import '../../../../data/models/auth/sign_in_user_req.dart';
 import '../../../../data/sources/firestore/firestore_service.dart';
-import '../../../../domain/repository/auth/auth.dart';
 import '../../../../domain/repository/auth/auth_repository.dart';
 import '../../../../domain/repository/user/user_repository.dart';
 import '../../../../service_locator.dart';

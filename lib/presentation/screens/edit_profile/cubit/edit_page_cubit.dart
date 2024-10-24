@@ -1,35 +1,46 @@
 import 'package:bloc/bloc.dart';
+import 'package:social_app/data/models/user_firestore/update_user_req.dart';
+import 'package:social_app/data/repository/auth/auth_repository_impl.dart';
 import 'package:social_app/data/repository/user/user_repository_impl.dart';
+import 'package:social_app/domain/repository/auth/auth_repository.dart';
 
 import '../../../../data/sources/firestore/firestore_service.dart';
 import '../../../../domain/entities/user.dart';
 import '../../../../domain/repository/user/user_repository.dart';
-import 'edit_state.dart';
+import 'edit_page_state.dart';
 
-
-class UserCubit extends Cubit<UserState> {
+class EditPageCubit extends Cubit<EditPageState> {
+  final AuthRepository authRepository = AuthRepositoryImpl();
   final UserRepository userRepository = UserRepositoryImpl();
 
-  UserCubit() : super(UserInitial()) {
-    fetchCurrentUser();
+  EditPageCubit() : super(EditPageInitial()) {
+    loadCurrentUserData();
   }
 
-  // Fetches the current user data and handles any errors
-  Future<void> fetchCurrentUser() async {
-    emit(UserLoading());
+  Future<void> loadCurrentUserData() async {
+    emit(EditPageLoading());
     try {
-      final UserModel? user = await userRepository.getCurrentUserData();
-      if (user != null) {
-        emit(UserLoaded(user));
-      }
-    } on CustomFirestoreException catch (error) {
-      if (error.code == 'user-firestore-not-exist') {
-        emit(UserNotFound());
+      final userModel = await userRepository.getCurrentUserData();
+      if (userModel != null) {
+        emit(EditPageLoaded(userModel));
       } else {
-        emit(UserError(error.message ?? 'An unknown error occurred'));
+        emit(EditPageError("User data not found"));
       }
     } catch (e) {
-      emit(UserError('Failed to load user data'));
+      emit(EditPageError(e.toString()));
     }
   }
+
+  Future<void> reAuthenticateAndChangeEmail(String email, String newEmail, String password) async {
+    emit(EditPageLoading());
+    try {
+      print("Changing.....");
+      await authRepository.reAuthenticationAndChangeEmail(email,newEmail, password);
+      emit(EditPageAccepted());
+    } catch (e) {
+      emit(EditPageError('Re-authentication failed. Email not updated.'));
+  }
+
+// Save changes to user data
+}
 }

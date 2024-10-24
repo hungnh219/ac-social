@@ -5,12 +5,14 @@ class AppPlaceHolder extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey.shade300,
-      child: const Icon(
-        Icons.image_not_supported,
-        size: 50,
-        color: Colors.grey,
+    return Center(
+      child: Container(
+        color: Colors.grey.shade300,
+        child: const Icon(
+          Icons.image_not_supported,
+          size: 50,
+          color: Colors.grey,
+        ),
       ),
     );
   }

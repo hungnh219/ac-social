@@ -12,6 +12,7 @@ class InformationBox extends StatelessWidget {
   final List<String> userFollowers;
   final List<String> userFollowings;
 
+
   const InformationBox({super.key, required this.userModel, required this.userFollowers, required this.userFollowings});
 
   @override

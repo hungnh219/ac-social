@@ -58,50 +58,53 @@ class _NavigatorBarCustomState extends State<NavigatorBarCustom> {
         shape: const CircularNotchedRectangle(),
         // elevation: 0,
         notchMargin: 4,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: IconButton(
-              icon: Icon(Icons.home, size: 20, color: _screenIndex == 0 ? Colors.red : Colors.grey),
-              onPressed: () {
-                setState(() {
-                _screenIndex = 0;
-                });
-              },
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: IconButton(
+                icon: Icon(Icons.home, size: 20, color: _screenIndex == 0 ? Colors.red : Colors.grey),
+                onPressed: () {
+                  setState(() {
+                  _screenIndex = 0;
+                  });
+                },
+                ),
               ),
-            ),
-            Expanded(
-              child: IconButton(
-              icon: Icon(Icons.category_sharp, size: 20, color: _screenIndex == 1 ? Colors.red : Colors.grey),
-              onPressed: () {
-                setState(() {
-                _screenIndex = 1;
-                });
-              },
+              Expanded(
+                child: IconButton(
+                icon: Icon(Icons.category_sharp, size: 20, color: _screenIndex == 1 ? Colors.red : Colors.grey),
+                onPressed: () {
+                  setState(() {
+                  _screenIndex = 1;
+                  });
+                },
+                ),
               ),
-            ),
-            Expanded(
-              child: IconButton(
-              icon: Icon(Icons.notifications, size: 20, color: _screenIndex == 2 ? Colors.red : Colors.grey),
-              onPressed: () {
-                setState(() {
-                _screenIndex = 2;
-                });
-              },
+              Expanded(
+                child: IconButton(
+                icon: Icon(Icons.notifications, size: 20, color: _screenIndex == 2 ? Colors.red : Colors.grey),
+                onPressed: () {
+                  setState(() {
+                  _screenIndex = 2;
+                  });
+                },
+                ),
               ),
-            ),
-            Expanded(
-              child: IconButton(
-              icon: Icon(Icons.person, size: 20, color: _screenIndex == 3 ? Colors.red : Colors.grey),
-              onPressed: () {
-                setState(() {
-                _screenIndex = 3;
-                });
-              },
+              Expanded(
+                child: IconButton(
+                icon: Icon(Icons.person, size: 20, color: _screenIndex == 3 ? Colors.red : Colors.grey),
+                onPressed: () {
+                  setState(() {
+                  _screenIndex = 3;
+                  });
+                },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       )
     );

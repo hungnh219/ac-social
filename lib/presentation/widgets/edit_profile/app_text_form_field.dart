@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/utils/styles/colors.dart';
 import 'package:social_app/utils/styles/themes.dart';
 
 class AppTextFormField extends StatelessWidget {
@@ -12,9 +13,10 @@ class AppTextFormField extends StatelessWidget {
         this.obscureText = false,
         this.validator,
         this.textInputAction,
-        this.textAlign});
+        this.textAlign, required this.focusNode, required this.onFieldSubmitted});
 
   final TextEditingController controller;
+  final FocusNode focusNode;
   final String label;
   final String hintText;
   final double width;
@@ -23,8 +25,8 @@ class AppTextFormField extends StatelessWidget {
   final FormFieldValidator? validator;
   final TextInputAction? textInputAction;
   final TextAlign? textAlign;
+  final Function(String?) onFieldSubmitted;
 
-  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
@@ -35,6 +37,8 @@ class AppTextFormField extends StatelessWidget {
           const SizedBox(height: 10,),
           TextFormField(
             controller: controller,
+            focusNode: focusNode,
+            onFieldSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
               hintText: hintText,
               contentPadding:
@@ -44,6 +48,7 @@ class AppTextFormField extends StatelessWidget {
             obscureText: obscureText,
             validator: validator,
             textInputAction: textInputAction,
+            style: AppTheme.profileCasualStyle.copyWith(color: AppColors.blackOak),
             textAlign: textAlign ?? TextAlign.start,
           ),
         ],

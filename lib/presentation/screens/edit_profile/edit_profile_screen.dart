@@ -1,153 +1,246 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:social_app/presentation/screens/edit_profile/widgets/header_and_avatar.dart';
+import 'package:social_app/presentation/widgets/placeholder.dart';
 import 'package:social_app/presentation/widgets/svg_icon_button.dart';
 import 'package:social_app/presentation/widgets/edit_profile/app_text_form_field.dart';
 import 'package:social_app/presentation/widgets/edit_profile/bottom_rounded_appbar.dart';
 import 'package:social_app/utils/constants/image_path.dart';
+import 'package:social_app/utils/extensions/updated_field_extension.dart';
 
+import '../../../domain/entities/user.dart';
 import '../../../utils/constants/icon_path.dart';
 import '../../../utils/styles/themes.dart';
 import '../../widgets/edit_profile/gradient_button.dart';
-
-const String avatarURL =
-    'https://firebasestorage.googleapis.com/v0/b/ac-social-internship.appspot.com/o/default_avatar.png?alt=media&token=822ddf23-8cf3-434e-87e3-81fd35491e84';
+import '../profile_and_setting/cubit/profile_cubit.dart';
+import '../profile_and_setting/cubit/setting_cubit.dart';
+import '../profile_and_setting/cubit/setting_state.dart';
+import 'cubit/edit_page_cubit.dart';
+import 'cubit/edit_page_state.dart';
 
 class EditProfile extends StatelessWidget {
-  final TextEditingController firstNameController = TextEditingController();
+
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+
+  final FocusNode nameFocus = FocusNode();
+  final FocusNode lastNameFocus = FocusNode();
+  final FocusNode emailFocus = FocusNode();
+  final FocusNode locationFocus = FocusNode();
 
   EditProfile({super.key});
+
+  void reAuthenticateAndChangeEmail(BuildContext context, UserModel user,
+      Map<String, dynamic> updatedFields) async {
+
+    try{
+      TextEditingController emailController = TextEditingController();
+      TextEditingController passwordController = TextEditingController();
+
+      await showDialog(
+        context: context,
+        builder: (BuildContext dialogContext) {
+          return AlertDialog(
+            title: const Text('Re-authentication Required'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('You need to re-authenticate to change your email.'),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    hintText: 'Enter your email',
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    hintText: 'Enter your password',
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  String email = emailController.text;
+                  String password = passwordController.text;
+
+                  try {
+                    await context
+                        .read<EditPageCubit>()
+                        .reAuthenticateAndChangeEmail(email, user.email, password);
+                  } catch (e) {
+                    rethrow;
+                  }
+
+                  Navigator.of(dialogContext).pop(); // Close the dialog
+                },
+                child: const Text('Submit'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop(); // Close the dialog without saving
+                },
+                child: const Text('Cancel'),
+              ),
+            ],
+          );
+
+        },
+      );
+
+      saveChanges(context, user, updatedFields);
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Re-authentication failed. Email not updated.')),
+      );
+    }
+  }
+
+  void saveChanges(BuildContext context, UserModel user,
+      Map<String, dynamic> updatedFields) {
+    if (updatedFields.isNotEmpty) {
+      UserModel updatedUser = user.copyWith(
+        name: updatedFields.updateField('name', user.name),
+        lastName: updatedFields.updateField('lastname', user.lastName),
+        newEmail: updatedFields.updateField('email', user.email),
+        location: updatedFields.updateField('location', user.location),
+      );
+
+      Navigator.of(context).pop(updatedUser);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 250,
-                child: Stack(
+      body:
+      BlocListener<EditPageCubit, EditPageState>(
+        listener: (context, state) {
+          if (state is EditPageAccepted) {
+            Navigator.of(context).pop();
+          }
+        },
+            child: BlocBuilder<EditPageCubit, EditPageState>(builder: (context, state) {
+                    if (state is EditPageLoading) {
+            return const Center(child: const CircularProgressIndicator());
+                    } else if (state is EditPageLoaded) {
+            final user = state.user;
+            
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Column(
                   children: [
-                    const Align(
-                      alignment: Alignment.topCenter,
-                      child: SizedBox(
-                        height: 200,
-                        child: BottomRoundedAppBar(
-                          bannerPath: AppImages.editProfileAppbarBackground,
+                    HeaderAndAvatar(avatarURL: user.avatar),
+            
+                    //TODO : Text fields
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppTextFormField(
+                          controller: nameController,
+                          label: 'Name',
+                          hintText: user.name.isNotEmpty ? user.name : 'Name',
+                          width: deviceWidth * 0.8,
+                          focusNode: nameFocus,
+                          onFieldSubmitted: (value) {
+                            FocusScope.of(context).requestFocus(lastNameFocus);
+                          },
                         ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 40),
-                      child: IntrinsicHeight(
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.arrow_back_sharp),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Edit profile',
-                                textAlign: TextAlign.center,
-                                style: AppTheme.headerStyle,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(height: 22),
+                        AppTextFormField(
+                          controller: lastNameController,
+                          label: 'Last Name',
+                          hintText: user.lastName.isNotEmpty
+                              ? user.lastName
+                              : 'Last Name',
+                          width: deviceWidth * 0.8,
+                          focusNode: lastNameFocus,
+                          onFieldSubmitted: (value) {
+                            FocusScope.of(context).requestFocus(emailFocus);
+                          },
                         ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SizedBox(
-                        width: 160,
-                        height: 120,
-                        child: Stack(
-                          children: [
-                            Align(
-                              child: CircleAvatar(
-                                // 0.6 Appbar Background
-                                radius: 60,
-                                child: CachedNetworkImage(
-                                  imageUrl: avatarURL,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Container(
-                                // 0.3 Avatar height
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(12)),
-                                  gradient: AppTheme.mainGradient,
-                                ),
-                                child: SvgIconButton(
-                                  iconSize: 18,
-                                  onPressed: () {
-                                  },
-                                  assetPath: AppIcons.camera,
-                                ),
-                              ),
-                            ),
-                          ],
+                        const SizedBox(height: 22),
+                        AppTextFormField(
+                          controller: emailController,
+                          label: 'Email',
+                          hintText: user.email.isNotEmpty
+                              ? user.email
+                              : 'your_email@gmail.com',
+                          width: deviceWidth * 0.8,
+                          focusNode: emailFocus,
+                          onFieldSubmitted: (value) {},
                         ),
-                      ),
+                        const SizedBox(height: 22),
+                        AppTextFormField(
+                          controller: locationController,
+                          label: 'Location',
+                          hintText: user.location.isNotEmpty
+                              ? user.location
+                              : 'Your Location',
+                          width: deviceWidth * 0.8,
+                          focusNode: locationFocus,
+                          onFieldSubmitted: (value) {
+                            FocusScope.of(context).requestFocus(emailFocus);
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-
-              //TODO : Text fields
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppTextFormField(
-                    controller: firstNameController,
-                    label: 'First Name',
-                    hintText: 'First Name',
-                    width: deviceWidth * 0.8,
-                  ),
-                  const SizedBox(height: 22),
-                  AppTextFormField(
-                    controller: lastNameController,
-                    label: 'Last Name',
-                    hintText: 'Last Name',
-                    width: deviceWidth * 0.8,
-                  ),
-                  const SizedBox(height: 22),
-                  AppTextFormField(
-                    controller: lastNameController,
-                    label: 'Email',
-                    hintText: 'your_email@gmail.com',
-                    width: deviceWidth * 0.8,
-                  ),
-                ],
-              ),
-            ],
+            );
+                    } else {
+            return const AppPlaceHolder();
+                    }
+                  }),
           ),
-        ),
-      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: CustomFloatingActionButton(
         width: deviceWidth * 0.8,
         text: 'SAVE CHANGES',
         onPressed: () {
-          // Handle save changes action
+          final user =
+              (context.read<EditPageCubit>().state as EditPageLoaded).user;
+
+          Map<String, dynamic> updatedFields = {};
+
+          if (nameController.text != user.name) {
+            updatedFields['name'] = nameController.text;
+          }
+          if (lastNameController.text != user.lastName) {
+            updatedFields['lastname'] = lastNameController.text;
+          }
+          if (locationController.text != user.location) {
+            updatedFields['location'] = locationController.text;
+          }
+
+          if (emailController.text != user.email) {
+            updatedFields['email'] = emailController.text;
+            reAuthenticateAndChangeEmail(context, user, updatedFields);
+          } else {
+            saveChanges(context, user,
+                updatedFields); // Save changes without email re-authentication
+          }
         },
       ),
     );

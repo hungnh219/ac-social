@@ -21,6 +21,11 @@ abstract class AuthFirebaseService {
   User? getCurrentUser();
 
   Future<void> signOut();
+
+  Future<void> updateCurrentUserEmail(String email);
+
+  Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password);
+
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
@@ -36,9 +41,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       );
 
       User user = userCredential.user!;
-      if (kDebugMode) {
-        print("User đăng nhập: ${user.email}");
-      }
+
       if (!user.emailVerified) {
         await signOut();
         throw FirebaseAuthException(
@@ -48,7 +51,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       }
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
-        print("mã ${e.code}");
+        print("Error ${e.code}");
       }
       switch (e.code) {
         case 'email-not-verified':
@@ -93,6 +96,26 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
       rethrow;
     }
+
+    // Future<void> reAuthenticateUser() async {
+    //   try {
+    //     User? user = _auth.currentUser;
+    //
+    //     AuthCredential credential = EmailAuthProvider.credential(
+    //       email: user!.email!,
+    //       password: 'user_password',
+    //     );
+    //
+    //     // Re-authenticate the user
+    //     await user.reauthenticateWithCredential(credential);
+    //
+    //     // After re-authentication, you can update the email
+    //     await _updateEmail();
+    //   } on FirebaseAuthException catch (e) {
+    //     print('Re-authentication error: ${e.message}');
+    //   }
+    // }
+
   }
 
   // @override
@@ -132,7 +155,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       } else {
         final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
         final GoogleSignInAuthentication googleAuth =
-            await googleUser!.authentication;
+        await googleUser!.authentication;
 
         // Create a GoogleAuthProvider credential
         final AuthCredential googleCredential = GoogleAuthProvider.credential(
@@ -142,7 +165,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
         // Sign in to Firebase with Google credentials
         UserCredential googleUserCredential =
-            await _auth.signInWithCredential(googleCredential);
+        await _auth.signInWithCredential(googleCredential);
 
         // User? currentUser = _auth.currentUser;
         // final userModel = await getUserModel();
@@ -189,5 +212,57 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   @override
   User? getCurrentUser() {
     return _auth.currentUser;
+  }
+
+  @override
+  Future<void> updateCurrentUserEmail(String email) async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+          await user.updateEmail(email);
+          await user.sendEmailVerification();
+          return;
+        } else {
+        throw FirebaseAuthException(code: 'no-user-singed-in',
+            message: 'No one is signed in');
+      }
+    } on FirebaseAuthException catch (e) {
+      if (kDebugMode) {
+        print('Error: ${e.code} - ${e.message}');
+      }
+      rethrow;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+    }
+  }
+
+  Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password) async{
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: email,
+          password: password,
+        );
+
+        await user.reauthenticateWithCredential(credential).then((userCredential) {
+        userCredential.user?.updateEmail(newEmail);
+        userCredential.user?.sendEmailVerification();
+        });
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        throw ("The account already exists for that email.");
+      } else {
+        rethrow;
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      rethrow;
+    }
   }
 }

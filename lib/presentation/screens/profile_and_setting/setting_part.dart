@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/presentation/screens/profile_and_setting/widgets/drawer_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/presentation/screens/profile_and_setting/widgets/log_out_button.dart';
+import 'package:social_app/presentation/screens/profile_and_setting/widgets/rounded_icon_image.dart';
+
+import '../../../utils/constants/strings.dart';
+import '../../../utils/styles/themes.dart';
 
 class SettingPart extends StatefulWidget {
   const SettingPart({super.key});
@@ -9,20 +14,14 @@ class SettingPart extends StatefulWidget {
 }
 
 class _SettingPartState extends State<SettingPart> {
-
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
-        padding: EdgeInsets.only(top: MediaQuery
-            .of(context)
-            .size
-            .height * 0.15),
-        width: MediaQuery
-            .of(context)
-            .size
-            .width * 0.66,
+        padding:
+            EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
+        width: MediaQuery.of(context).size.width * 0.66,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -33,7 +32,14 @@ class _SettingPartState extends State<SettingPart> {
             DrawerItem(title: AppStrings.paypal, onPressed: () {}),
             DrawerItem(title: AppStrings.changePassword, onPressed: () {}),
             DrawerItem(title: AppStrings.aboutIClick, onPressed: () {}),
-            DrawerItem(title: AppStrings.termPrivacy, onPressed: () {}),
+            DrawerItem(
+              title: AppStrings.termPrivacy,
+              onPressed: () {},
+            ),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: LogOutButton(),
+            )
           ],
         ),
       ),
@@ -47,7 +53,8 @@ class DrawerItem extends StatelessWidget {
 
   const DrawerItem({
     super.key,
-    required this.title, required this.onPressed,
+    required this.title,
+    required this.onPressed,
   });
 
   @override
@@ -55,8 +62,9 @@ class DrawerItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.66,
-        height: MediaQuery.of(context).size.height * 0.05,
+        width: MediaQuery.of(context).size.width * 0.7,
+        height: MediaQuery.of(context).size.height * 0.06,
+        padding: const EdgeInsets.only(left: 16, right: 0, top: 7, bottom: 7),
         decoration: ShapeDecoration(
           color: Colors.white.withOpacity(0.3),
           shape: const RoundedRectangleBorder(
@@ -66,16 +74,18 @@ class DrawerItem extends StatelessWidget {
             ),
           ),
         ),
-        child: SizedBox(
-          width: double.infinity,
-          child: ListTile(
-            contentPadding: const EdgeInsets.only(top: 0, bottom: 0, left: 16),
-            title: Text(
+        child: Row(
+          children: [
+            Text(
               title,
               style: AppTheme.drawerItemStyle,
             ),
-            trailing: SvgIconButton(assetPath: AppIcons.whiteChevronRightButton, iconSize: 36, onPressed: onPressed),
-          ),
+            const Spacer(),
+            RoundedTrailingIcon(
+              ovalColor: AppTheme.white.withOpacity(0.4),
+              iconSize: 36,
+            ),
+          ],
         ),
       ),
     );
