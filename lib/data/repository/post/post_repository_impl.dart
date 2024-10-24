@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:social_app/data/sources/firestore/firestore_service.dart';
 import 'package:social_app/domain/entities/comment.dart';
 import 'package:social_app/domain/entities/post.dart';
@@ -13,5 +15,10 @@ class PostRepositoryImpl extends PostRepository {
   @override
   Future<List<CommentModel>?> getCommentPost(PostModel post) {
     return serviceLocator.get<FirestoreService>().getCommentPost(post);
+  }
+
+  @override
+  Future<void> createPost(String content, File image) {
+    return serviceLocator.get<FirestoreService>().createPost(content, image);
   }
 }

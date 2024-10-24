@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/presentation/screens/boarding/boarding.dart';
 import 'package:social_app/presentation/screens/category/category_screen.dart';
+import 'package:social_app/presentation/screens/comment/comment_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
 import 'package:social_app/presentation/widgets/navigator_bar.dart';
@@ -63,6 +64,12 @@ class MyRouter {
                 },
               ),
             ],
+          ),
+          GoRoute(
+            path: 'comment',
+            builder: (BuildContext context, GoRouterState state) {
+              return const CommentScreen();
+            },
           ),
         ],
       ),

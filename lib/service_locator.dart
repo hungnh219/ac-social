@@ -1,6 +1,9 @@
 import 'package:get_it/get_it.dart';
+import 'package:social_app/data/repository/collection/collection_repository_impl.dart';
 import 'package:social_app/data/repository/post/post_repository_impl.dart';
 import 'package:social_app/data/repository/topic/topic_repository_impl.dart';
+
+import 'package:social_app/domain/repository/collection/collection_repository.dart';
 import 'package:social_app/domain/repository/post/post_repository.dart';
 import 'package:social_app/domain/repository/topic/topic_repository.dart';
 import 'data/repository/auth/auth_repository_impl.dart';
@@ -21,4 +24,5 @@ Future<void> initializeDependencies() async {
   serviceLocator.registerSingleton<UserRepository>(UserRepositoryImpl());
   serviceLocator.registerSingleton<TopicRepository>(TopicRepositoryImpl());
   serviceLocator.registerSingleton<PostRepository>(PostRepositoryImpl());
+  serviceLocator.registerSingleton<CollectionRepository>(CollectionRepositoryImpl());
 }

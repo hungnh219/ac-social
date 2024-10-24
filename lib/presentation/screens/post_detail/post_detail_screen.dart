@@ -5,6 +5,7 @@ import 'package:social_app/domain/repository/post/post_repository.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/post_detail/comment_list/comment_list.dart';
 import 'package:social_app/presentation/screens/post_detail/post_detail/post_detail.dart';
+import 'package:social_app/presentation/widgets/add_collection_icon.dart';
 import 'package:social_app/service_locator.dart';
 
 class PostDetailScreen extends StatelessWidget {
@@ -27,18 +28,7 @@ class PostDetailScreen extends StatelessWidget {
               ),
                 
               Spacer(),
-              IconButton(
-                icon: Icon(Icons.favorite_border),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.add_circle_outline),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.ios_share),
-                onPressed: () {},
-              ),
+              AddCollectionIcon()
             ],),
         
             PostDetail(post: post),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_app/domain/entities/topic.dart';
 import 'package:social_app/presentation/screens/topic/topic_screen.dart';
 import 'package:social_app/utils/styles/colors.dart';
+import 'package:social_app/utils/styles/text_style.dart';
 
 class TopicList extends StatelessWidget {
   TopicList({super.key, required this.topics});
@@ -9,6 +10,7 @@ class TopicList extends StatelessWidget {
   List<TopicModel>? topics;
   @override
   Widget build(BuildContext context) {
+    print('topics: $topics');
     return SizedBox(
       height: 148,
       child: Column(
@@ -22,6 +24,7 @@ class TopicList extends StatelessWidget {
                   fontWeight: FontWeight.bold
                 ),
               ),
+
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -35,6 +38,9 @@ class TopicList extends StatelessWidget {
               )
             ],
           ),
+
+          SizedBox(height: 16,),
+
           Expanded(
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
@@ -77,7 +83,7 @@ class TopicImageCustom extends StatelessWidget {
             ),
           ),
           Center(
-            child: Text(topic.name),
+            child: Text(topic.name.toUpperCase(), style: AppTextStyle.uppercaseWhiteNormalStyle,),
           )
         ],
       ),

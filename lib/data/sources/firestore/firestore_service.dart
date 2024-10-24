@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:social_app/domain/entities/collection.dart';
 import 'package:social_app/domain/entities/comment.dart';
 import 'package:social_app/domain/entities/post.dart';
 import 'package:social_app/domain/entities/topic.dart';
@@ -42,6 +46,10 @@ abstract class FirestoreService {
   Future<List<PostModel>?>? getPostsData();
 
   Future<List<CommentModel>?> getCommentPost(PostModel post);
+
+  Future<void> createPost(String content, File image);
+
+  Future<List<CollectionModel>?>? getCollections();
 }
 
 class FirestoreServiceImpl extends FirestoreService {
@@ -423,6 +431,77 @@ class FirestoreServiceImpl extends FirestoreService {
     }
   }
 
+  Future<String>? uploadImage(String folderName, File image) async {
+    try {
+      final storageReference = FirebaseStorage.instance.ref().child('images/${DateTime.now().toString()}');
+      
+      UploadTask uploadTask = storageReference.putFile(image);
+
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      print('Uploaded Image URL: $downloadUrl');
+
+      return downloadUrl;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> createPost(String content, File image) async {
+    String? imageUrl = await uploadImage('Post', image);
+
+    print('imageUrl: $imageUrl');
+    print('content: $content');
+    // print('image: $image');
+    print('currentUser: $currentUser');
+
+    if (imageUrl != null) {
+      CollectionReference collectionRef = _firestoreDB.collection('Post');
+      collectionRef.add(
+        {
+          'content': content,
+          'image': imageUrl,
+          'timestamp': FieldValue.serverTimestamp(),
+          'likeAmount': 0,
+          'commentAmount': 0,
+          'viewAmount': 0,
+          'userRef': _usersCollection.doc(currentUser!.uid),
+        },
+      );
+    }
+  }
+
+  Future<List<CollectionModel>?>? getCollections() async {
+        print('name: 123');  
+    List<CollectionModel> collections = [];
+    try {
+      QuerySnapshot collectionSnapshot = await _firestoreDB.collection('NewCollection').get();
+
+      if (collectionSnapshot.docs.isEmpty) {
+        throw CustomFirestoreException(
+          code: 'no-topics',
+          message: 'No topics exist in Firestore',
+        );
+      }
+
+      for (var doc in collectionSnapshot.docs) {
+        // print(doc.id);
+        print('name: ${doc['name']}');  
+        CollectionModel collection = CollectionModel(
+          collectionId: doc.id,
+          name: doc['name'],
+          thumbnail: doc['thumbnail'],
+        );
+        collections.add(collection);
+      }
+
+      return collections.length == 0 ? null : collections;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 class CustomFirestoreException implements Exception {
@@ -436,3 +515,4 @@ class CustomFirestoreException implements Exception {
     return 'CustomFirestoreException($code): $message';
   }
 }
+
