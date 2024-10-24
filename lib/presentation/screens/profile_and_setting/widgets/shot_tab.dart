@@ -18,28 +18,28 @@ class ShotTab extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child:
-        StaggeredGridView.countBuilder(
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          itemCount: imageUrls.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-              imageUrl: imageUrls[index],
-              fit: BoxFit.cover,
-              placeholder: (context, url) =>
-              const Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) => const Icon(
-                  Icons.error), // Error widget if image fails to load
-                                ),
-            );
-          },
-          staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
-          mainAxisSpacing: 16.0,
-          crossAxisSpacing: 16.0, // Horizontal space between items
-        ),
+        // StaggeredGridView.countBuilder(
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   crossAxisCount: 2,
+        //   itemCount: imageUrls.length,
+        //   shrinkWrap: true,
+        //   itemBuilder: (context, index) {
+        //     return ClipRRect(
+        //       borderRadius: BorderRadius.circular(10),
+        //       child: CachedNetworkImage(
+        //       imageUrl: imageUrls[index],
+        //       fit: BoxFit.cover,
+        //       placeholder: (context, url) =>
+        //       const Center(child: CircularProgressIndicator()),
+        //       errorWidget: (context, url, error) => const Icon(
+        //           Icons.error), // Error widget if image fails to load
+        //                         ),
+        //     );
+        //   },
+        //   staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
+        //   mainAxisSpacing: 16.0,
+        //   crossAxisSpacing: 16.0, // Horizontal space between items
+        // ),
 
         // GridView.custom(
         //   gridDelegate: SliverQuiltedGridDelegate(
@@ -70,26 +70,26 @@ class ShotTab extends StatelessWidget {
         //   ),)
 
 
-        // MasonryGridView.count(
-        //   crossAxisCount: 2, // Updated crossAxisCount to 2
-        //   mainAxisSpacing: 16.0, // Space between items vertically
-        //   crossAxisSpacing: 16.0, // Space between items horizontally
-        //   itemBuilder: (context, index) {
-        //     if (index < imageUrls.length) {
-        //       return ClipRRect(
-        //         borderRadius: BorderRadius.circular(10),
-        //         child: CachedNetworkImage(
-        //           imageUrl: imageUrls[index],
-        //           fit: BoxFit.cover,
-        //           placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-        //           errorWidget: (context, url, error) => const Icon(Icons.error),
-        //         ),
-        //       );
-        //     } else {
-        //       return SizedBox(); // Return an empty widget if index is out of bounds
-        //     }
-        //   },
-        // )
+        MasonryGridView.count(
+          crossAxisCount: 2, // Updated crossAxisCount to 2
+          mainAxisSpacing: 16.0, // Space between items vertically
+          crossAxisSpacing: 16.0, // Space between items horizontally
+          itemBuilder: (context, index) {
+            if (index < imageUrls.length) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrls[index],
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
+              );
+            } else {
+              return SizedBox(); // Return an empty widget if index is out of bounds
+            }
+          },
+        )
 
 
       );

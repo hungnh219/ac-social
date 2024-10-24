@@ -33,4 +33,15 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<void> signOut() async {
     return await serviceLocator<AuthFirebaseService>().signOut();
   }
+
+  @override
+  Future<void> updateCurrentUserEmail(String email) async{
+    return await serviceLocator<AuthFirebaseService>().updateCurrentUserEmail(email);
+  }
+
+  @override
+  Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password) async{
+    return await serviceLocator<AuthFirebaseService>().reAuthenticationAndChangeEmail(email,newEmail, password);
+  }
+
 }

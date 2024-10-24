@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/cubit/profile_state.dart';
 
+import '../../../../data/models/user_firestore/update_user_req.dart';
 import '../../../../data/repository/auth/auth_repository_impl.dart';
 import '../../../../data/repository/collection/collection_repository_impl.dart';
 import '../../../../data/repository/post/post_repository_impl.dart';
@@ -21,7 +25,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   ProfileCubit() : super(ProfileLoading());
 
-  Future<void> fetchUserData() async {
+  Future<void> fetchProfile() async {
     emit(ProfileLoading());
     try {
       final User? currentUser = await authRepository.getCurrentUser();
@@ -32,7 +36,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       final userCollectionIDs = await userRepository.getUserCollectionIDs(currentUser.uid);
       final List<CollectionModel> collections = await collectionRepository.getCollectionsData(userCollectionIDs);
 
-
       if (userModel != null) {
         emit(ProfileLoaded(userModel, userFollowers, userFollowings, collections));
       } else {
@@ -40,6 +43,48 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
     } catch (e) {
       emit(ProfileError(e.toString()));
+    }
+  }
+
+  Future<void> updateProfile(UserModel updatedUser) async {
+    emit(ProfileUpdating());
+    try {
+      UpdateUserReq updateUserReq = UpdateUserReq(updatedUser);
+      await userRepository.updateCurrentUserData(updateUserReq);
+      fetchProfile();
+    } catch (e) {
+      emit(ProfileError(e.toString()));
+    }
+  }
+
+  Future<void> updateProfileWithEmail(UserModel updatedUser) async {
+    emit(ProfileUpdating());
+    try {
+      UpdateUserReq updateUserReq = UpdateUserReq(updatedUser);
+      await authRepository.updateCurrentUserEmail(updatedUser.email);
+      await userRepository.updateCurrentUserData(updateUserReq);
+
+      print(updatedUser.email);
+
+      emit(ProfileEmailChanged());
+    } catch (e) {
+      if(e is FirebaseAuthException){
+        emit(ProfileError(e.toString()));
+      }
+      else {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await authRepository.signOut();
+      emit(ProfileLoggedOut());
+    } catch (e) {
+      emit(ProfileError('Logout failed: $e'));
     }
   }
 }

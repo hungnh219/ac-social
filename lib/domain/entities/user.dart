@@ -4,10 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
   final String name;
+  final String email;
   final String lastName;
   final String location;
   final String category;
   final String avatar;
+  bool emailChanged;
   final Map<String, String> socialAccounts;
 
   UserModel({
@@ -16,20 +18,26 @@ class UserModel {
     required this.location,
     required this.category,
     required this.avatar,
+    required this.email,
     required this.socialAccounts,
+    this.emailChanged = false,
   });
 
-  UserModel.newUser(String categoryID, String userAvatar)
+  UserModel.newUser(String categoryID, String? userAvatar, String? userEmail)
       : name = '',
         lastName = '',
         location = '',
+        emailChanged = false,
         category = categoryID,
-        avatar = userAvatar, // Khởi tạo avatar
+        avatar = userAvatar!,
+        email = userEmail!,
         socialAccounts = {};
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
+      emailChanged: false,
       name: map['name'] ?? '',
+      email: map['email'] ?? '',
       lastName: map['lastname'] ?? '',
       location: map['location'] ?? '',
       category: map['category'] is DocumentReference // Checking if it's a single DocumentReference
@@ -44,6 +52,7 @@ class UserModel {
     return {
       'name': name,
       'lastname': lastName,
+      'email': email,
       'location': location,
       'category': category,
       'avatar': avatar,
@@ -53,21 +62,27 @@ class UserModel {
 
   UserModel copyWith({
     String? name,
+    String? newEmail,
     String? lastName,
     String? location,
     String? category,
-    String? avatar, // Thêm avatar vào copyWith
-    Map<String, String>? socialAccounts, // Cập nhật tên trường
+    String? avatar,
+    Map<String, String>? socialAccounts,
     List<String>? followers,
     List<String>? followingUsers,
   }) {
+    if(newEmail != null && newEmail != email){
+      this.emailChanged = true;
+    }
     return UserModel(
+      emailChanged: emailChanged,
       avatar: avatar ?? this.avatar,
       name: name ?? this.name,
       lastName: lastName ?? this.lastName,
       location: location ?? this.location,
       category: category ?? this.category,
       socialAccounts: socialAccounts ?? this.socialAccounts,
+      email: newEmail ?? this.email,
     );
   }
 }

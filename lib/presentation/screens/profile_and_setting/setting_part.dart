@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/widgets/log_out_button.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/widgets/rounded_icon_image.dart';
 
-import '../../../utils/constants/icon_path.dart';
 import '../../../utils/constants/strings.dart';
 import '../../../utils/styles/themes.dart';
-import 'cubit/setting_cubit.dart';
 
 class SettingPart extends StatefulWidget {
   const SettingPart({super.key});

@@ -215,31 +215,29 @@ class _PostListViewState extends State<PostListView> with AutomaticKeepAliveClie
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Expanded(
-              child: FutureBuilder(
-                future: serviceLocator.get<PostRepository>().getPostsData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No data found.'));
-                  }
-        
-                  // print(snapshot.data);
-                  // for (var doc in snapshot.data!.docs) {
-                  //   print(doc.data());
-                  // }
-                  return ListView(
-                    children: snapshot.data!.map((doc) {
-                      print(doc);
-                      // commentPostCollection = postCollection.doc(doc.id).collection('lists');
-                      return PostCustom(post: doc);
-                    }).toList(),
-                  );
-                },
-              )
-            );
+    return FutureBuilder(
+      future: serviceLocator.get<PostRepository>().getPostsData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No data found.'));
+        }
+
+        // print(snapshot.data);
+        // for (var doc in snapshot.data!.docs) {
+        //   print(doc.data());
+        // }
+        return ListView(
+          children: snapshot.data!.map((doc) {
+            print(doc);
+            // commentPostCollection = postCollection.doc(doc.id).collection('lists');
+            return PostCustom(post: doc);
+          }).toList(),
+        );
+      },
+    );
   }
 }

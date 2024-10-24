@@ -258,9 +258,6 @@ class FirestoreServiceImpl extends FirestoreService {
         print("Error get category list: $e");
       }
     }
-    if (kDebugMode) {
-      print(categories);
-    }
     return categories;
   }
 
@@ -272,7 +269,6 @@ class FirestoreServiceImpl extends FirestoreService {
     Future<DocumentSnapshot<Object?>> userData;
     String username = '';
     String userAvatar = '';
-    print('posts: $posts');
 
     try {
       QuerySnapshot postsSnapshot = await _postRef.get();
@@ -338,10 +334,6 @@ class FirestoreServiceImpl extends FirestoreService {
       if (kDebugMode) {
         print("Error fetching collection data: $e");
       }
-    }
-
-    if (kDebugMode) {
-      print(collections);  // Debugging output
     }
 
     return collections;  // Return the list of CollectionModel objects
