@@ -59,7 +59,7 @@ class _EditProfileState extends State<EditProfile> {
     lastNameFocus = FocusNode();
     emailFocus = FocusNode();
     locationFocus = FocusNode();
-
+    context.read<EditPageCubit>().loadCurrentUserData();
   }
 
   @override
@@ -268,20 +268,26 @@ Widget build(BuildContext context) {
         bool noChanges = true;
 
         if(rawAvatar.isNotEmpty){
-          StorageRepository storageRepository = StorageRepositoryImpl();
-          AuthRepository authRepository = AuthRepositoryImpl();
-          File newAvatarFile = File(rawAvatar);
-          User? currentUser = await authRepository.getCurrentUser();
+          try{
+            StorageRepository storageRepository = StorageRepositoryImpl();
+            AuthRepository authRepository = AuthRepositoryImpl();
+            File newAvatarFile = File(rawAvatar);
+            User? currentUser = await authRepository.getCurrentUser();
 
-          // Call uploadAvatar from the repository and await its result
-          String? newAvatarUrl =  await storageRepository.uploadAvatar(newAvatarFile,currentUser!.uid);
-          if (newAvatarUrl!.isNotEmpty && newAvatarUrl != updatedUser.avatar) {
-            await authRepository.updateCurrentUserAvatarUrl(newAvatarUrl);
-            updatedUser = updatedUser.copyWith(name: newAvatarUrl);
-            noChanges = false;
+            // Call uploadAvatar from the repository and await its result
+            String? newAvatarUrl =  await storageRepository.uploadAvatar(newAvatarFile,currentUser!.uid);
+            if (newAvatarUrl!.isNotEmpty && newAvatarUrl != updatedUser.avatar) {
+              await authRepository.updateCurrentUserAvatarUrl(newAvatarUrl);
+              updatedUser = updatedUser.copyWith(newAvatar: newAvatarUrl);
+              noChanges = false;
+            }
+          } catch(e){
+            if (kDebugMode) {
+              print(e);
+            }
           }
-        }
 
+        }
 
 
         if (newName.isNotEmpty && newName != updatedUser.name) {
