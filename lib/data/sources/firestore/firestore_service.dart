@@ -50,7 +50,7 @@ class FirestoreServiceImpl extends FirestoreService {
 
 
   // ToDo : Reference Define
-  CollectionReference get _usersRef => _firestoreDB.collection('users');
+  CollectionReference get _usersRef => _firestoreDB.collection('User');
   CollectionReference _usersFollowersRef(String uid) {
     return _usersRef.doc(uid).collection('followers');
   }

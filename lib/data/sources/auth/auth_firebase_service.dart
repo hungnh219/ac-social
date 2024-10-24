@@ -112,37 +112,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
     //   } on FirebaseAuthException catch (e) {
     //     print('Re-authentication error: ${e.message}');
     //   }
-    // }
-
-  }
-
-  // @override
-  // Future<UserModel?> getUserModel() async {
-  //   try {
-  //     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  //
-  //     User? user = _auth.currentUser;
-  //     CollectionReference usersCollection =
-  //         firebaseFirestore.collection('User');
-  //
-  //     DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
-  //
-  //     if (userDoc.exists) {
-  //       // Nếu user đã tồn tại, trả về UserModel từ Firestore
-  //       return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
-  //     } else {
-  //       if (kDebugMode) {
-  //         print("User document does not exist.");
-  //       }
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print("Error fetching user data: $e");
-  //     }
-  //     return null;
-  //   }
-  // }
+    }
 
   @override
   Future<void> signInWithGoogle() async {
