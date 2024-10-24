@@ -13,35 +13,54 @@ class PostContent extends StatefulWidget {
 }
 
 class _PostContentState extends State<PostContent> {
-  late PostCubit postCubit;
+  late PostCubit _postCubit;
+  late TextEditingController _textController;
 
   @override
   void initState() {
     super.initState();
-    postCubit = context.read<PostCubit>();
+    _textController = TextEditingController();
+    _postCubit = context.read<PostCubit>();
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const TextField(
+        TextField(
+          controller: _textController,
           maxLines: null,
           decoration: InputDecoration(
             hintText: 'What\'s on your mind?',
           ),
+          onChanged: (value) {
+            // _postCubit.createPost(content: value);
+            _postCubit.updateContent(value.isEmpty ? null : value);
+          },
         ),
         BlocBuilder<PostCubit, PostState>(
           builder: (context, state) {
-            if (state is PostWithImage) {
-              return Image.file(state.image);
+            print('state: $state');
+            if (state is PostWithData) {
+              if (state.getImage != null) {
+                print('check 1');
+                return Image.file(state.getImage!);
+              } else {
+                print('check 2');
+                return const SizedBox.shrink();
+              }
             } else {
-              return Image.asset('assets/images/appscyclone.png');
+                print('check 3');
+              return const SizedBox.shrink();
             }
           }
         ),
-        // const SizedBox(height: 8),
-        // ActionPost(),
       ],
     );
   }

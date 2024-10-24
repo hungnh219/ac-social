@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SignInCubit()),
         BlocProvider(create: (_) => SignUpCubit()),
         BlocProvider(create: (_) => CategoryCubit()),
-        BlocProvider(create: (context) => PostCubit(),)
+        BlocProvider(create: (_) => PostCubit(),)
       ],
       child: SafeArea(
         child: BlocBuilder<ThemeCubit, ThemeMode>(

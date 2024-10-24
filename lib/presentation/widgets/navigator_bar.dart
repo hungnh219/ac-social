@@ -1,6 +1,7 @@
 // import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/new_post/new_post_screen.dart';
@@ -39,10 +40,11 @@ class _NavigatorBarCustomState extends State<NavigatorBarCustom> {
       floatingActionButton: FloatingActionButton(
         // backgroundColor: Colors.transparent,
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const NewPostScreen()),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const NewPostScreen()),
+            // );
+            context.go('/signin/newpost');
           },
           child: const Icon(Icons.add,
           ),

@@ -225,17 +225,15 @@ class _PostListViewState extends State<PostListView> with AutomaticKeepAliveClie
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(child: Text('No data found.'));
         }
-            
-        // print(snapshot.data);
-        // for (var doc in snapshot.data!.docs) {
-        //   print(doc.data());
-        // }
-        return ListView(
-          children: snapshot.data!.map((doc) {
-            print(doc);
-            // commentPostCollection = postCollection.doc(doc.id).collection('lists');
-            return PostCustom(post: doc);
-          }).toList(),
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 60),
+          child: ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              return PostCustom(post: snapshot.data![index]);
+            },
+          ),
         );
       },
     );

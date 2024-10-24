@@ -28,16 +28,26 @@ class _HeaderNewPostState extends State<HeaderNewPost> {
   Future _uploadPost() async {
     PostState state = _postCubit.state;
     File? image;
-    if (state is PostWithImage) {
+    String? content;
+
+    if (state is PostWithData) {
       // print('image: ${state.getImage}');
       image = state.getImage;
+      content = state.getContent;
+      if (content == null) {
+        content = '';
+      }
     }
 
     if (image != null) {
-      await serviceLocator<FirestoreService>().createPost('create new post from ui', image);
+      print('image: $image');
+      print('content: $content');
+      // await serviceLocator<FirestoreService>().createPost(content!, image);
     }
 
-    Navigator.pop(context);
+    _postCubit.closeNewPost();
+
+    context.go('/signin/navigator');
   }
 
   @override
@@ -50,8 +60,8 @@ class _HeaderNewPostState extends State<HeaderNewPost> {
         children: [
           IconButton(
             onPressed: () {
-              // context.go('/signin/navigator');
-              Navigator.pop(context);
+              _postCubit.closeNewPost();
+              context.go('/signin/navigator');
             },
             icon: const Icon(Icons.arrow_back),
           ),

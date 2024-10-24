@@ -5,6 +5,7 @@ import 'package:social_app/presentation/screens/boarding/boarding.dart';
 import 'package:social_app/presentation/screens/category/category_screen.dart';
 import 'package:social_app/presentation/screens/comment/comment_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
+import 'package:social_app/presentation/screens/new_post/new_post_screen.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
 import 'package:social_app/presentation/widgets/navigator_bar.dart';
 
@@ -63,14 +64,21 @@ class MyRouter {
                   return const NavigatorBarCustom();
                 },
               ),
+              GoRoute(
+                path: 'comment',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const CommentScreen();
+                },
+              ),
+              GoRoute(
+                path: 'newpost',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const NewPostScreen();
+                },
+              ),
             ],
           ),
-          GoRoute(
-            path: 'comment',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CommentScreen();
-            },
-          ),
+          
         ],
       ),
     ],

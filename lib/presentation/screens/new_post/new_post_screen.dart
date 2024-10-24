@@ -14,18 +14,20 @@ class NewPostScreen extends StatefulWidget {
 }
 
 class _NewPostScreenState extends State<NewPostScreen> {
-  late PostCubit postCubit;
+  late PostCubit _postCubit;
 
   @override
   void initState() {
+    print('initState cubit post');
     super.initState();
-    postCubit = PostCubit();
+    _postCubit = PostCubit();
   }
 
   @override
   void dispose() {
+    print('dispose cubit post');
+    _postCubit.close();
     super.dispose();
-    postCubit.close();
   }
 
   @override

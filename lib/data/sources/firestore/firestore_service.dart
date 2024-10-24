@@ -58,8 +58,9 @@ class FirestoreServiceImpl extends FirestoreService {
 
   User? get currentUser => _auth.currentUser;
 
-  CollectionReference get _usersCollection => _firestoreDB.collection('users');
+  CollectionReference get _usersCollection => _firestoreDB.collection('User');
   CollectionReference get _categoryCollection => _firestoreDB.collection('Category');
+  CollectionReference get _postCollection => _firestoreDB.collection('Post');
 
   @override
   Future<UserModel?> getUserData(String userID) async {
@@ -311,7 +312,7 @@ class FirestoreServiceImpl extends FirestoreService {
       print('posts: $posts');
 
     try {
-      QuerySnapshot postsSnapshot = await _firestoreDB.collection('Post').get();
+      QuerySnapshot postsSnapshot = await _postCollection.orderBy('timestamp', descending: true).get();
       if (postsSnapshot.docs.isEmpty) {
         throw CustomFirestoreException(
           code: 'no-posts',
@@ -319,9 +320,11 @@ class FirestoreServiceImpl extends FirestoreService {
         );
       }
       for (var doc in postsSnapshot.docs) {
-        print(doc.id);
+        print('docId: ${doc.id}');
+
         userRef = doc['userRef'];
         userData = userRef.get();
+
         await userData.then((value) {
           // userInfo = value;
           username = value['name'];

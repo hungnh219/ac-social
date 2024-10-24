@@ -8,7 +8,7 @@ class CommentIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(onPressed: () {
-      context.go('/comment');
+      context.go('/signin/comment');
     }, icon: Icon(Icons.comment_outlined, color: Colors.pink,));
   }
 }
