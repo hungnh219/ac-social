@@ -398,6 +398,12 @@ class FirestoreServiceImpl extends FirestoreService {
     }
   }
 
+  @override
+  Future<List<CollectionModel>> getCollectionsData(List<String> collectionIDsList) {
+    // TODO: implement getCollectionsData
+    throw UnimplementedError();
+  }
+
 }
 
 class CustomFirestoreException implements Exception {

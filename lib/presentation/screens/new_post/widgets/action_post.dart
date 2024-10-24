@@ -46,7 +46,7 @@ class _ActionPostState extends State<ActionPost> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Spacer(),

@@ -19,7 +19,7 @@ class AuthScreen extends StatelessWidget {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (state is Authenticated) {
             // Chuyển đến màn hình home khi đã đăng nhập trước đó
-            context.go("/signin/home");
+            context.go("/signin/navigator");
           } else if (state is Unauthenticated) {
             context.go("/signin");
           }

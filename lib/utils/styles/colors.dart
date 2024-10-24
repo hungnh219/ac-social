@@ -90,9 +90,7 @@ class AppColors {
   static const Color lavenderBlueShadow = Color(0xFF888BF4);
 
   static const Color pinkSpyro = Color(0xFF9C26B0);
-
-  static const Color foundationWhite = Color(0xFFF1F1FE);
-
+  
   static const Color lynxWhite = Color(0xFFF6F7F9);
 
   static const Color circus = Color(0xFFF96332);

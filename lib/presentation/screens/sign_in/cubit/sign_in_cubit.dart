@@ -17,8 +17,7 @@ class SignInCubit extends Cubit<SignInState> {
     try {
       if (formKey.currentState!.validate()) {
         emit(SignInLoading());
-        await serviceLocator<AuthRepository>()
-            .signInWithEmailAndPassword(signInUserReq);
+        await serviceLocator<AuthRepository>().signInWithEmailAndPassword(signInUserReq);
         await serviceLocator<UserRepository>().getCurrentUserData();
         emit(SignInSuccess());
         print('sign in');

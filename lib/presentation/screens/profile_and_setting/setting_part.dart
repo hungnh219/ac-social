@@ -6,6 +6,10 @@ import 'package:social_app/presentation/screens/profile_and_setting/widgets/roun
 import '../../../utils/constants/strings.dart';
 import '../../../utils/styles/themes.dart';
 
+import '../../../utils/constants/icon_path.dart';
+import '../../../utils/constants/strings.dart';
+import '../../../utils/styles/themes.dart';
+
 class SettingPart extends StatefulWidget {
   const SettingPart({super.key});
 

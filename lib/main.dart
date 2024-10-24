@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => CategoryCubit()),
         BlocProvider(create: (_) => ForgotPasswordCubit()),
         BlocProvider(create: (_) => CategoryCubit()),
-        BlocProvider(create: (context) => PostCubit(),)
+        BlocProvider(create: (_) => PostCubit(),),
         BlocProvider(create: (_) => CategoryCubit()),
         BlocProvider(create: (_) => EditPageCubit()),
 
