@@ -8,12 +8,15 @@ import '../../../domain/entities/collection.dart';
 import '../../../domain/repository/collection/collection_repository.dart';
 import '../../sources/firestore/firestore_service.dart';
 
-class CollectionRepositoryImpl extends CollectionRepository{
+class CollectionRepositoryImpl extends CollectionRepository {
   @override
   Future<List<CollectionModel>?>? getCollections() {
     return serviceLocator.get<FirestoreService>().getCollections();
-  Future<List<CollectionModel>> getCollectionsData(List<String> collectionIDsList){
-    return serviceLocator<FirestoreService>().getCollectionsData(collectionIDsList);
   }
 
+  Future<List<CollectionModel>> getCollectionsData(
+      List<String> collectionIDsList) {
+    return serviceLocator<FirestoreService>()
+        .getCollectionsData(collectionIDsList);
+  }
 }

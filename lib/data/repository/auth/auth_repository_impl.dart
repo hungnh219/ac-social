@@ -42,4 +42,9 @@ class AuthRepositoryImpl extends AuthRepository {
     return await serviceLocator<AuthFirebaseService>().reAuthenticationAndChangeEmail(email,newEmail, password);
   }
 
+  @override
+  Future<void> updateCurrentUserAvatarUrl(String avatarUrl) async{
+    return await serviceLocator<AuthFirebaseService>().updateAvatarUrl(avatarUrl);
+  }
+
 }

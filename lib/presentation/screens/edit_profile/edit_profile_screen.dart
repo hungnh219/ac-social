@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_app/data/repository/auth/auth_repository_impl.dart';
+import 'package:social_app/data/repository/storage/storate_repository_impl.dart';
+import 'package:social_app/domain/repository/auth/auth_repository.dart';
 import 'package:social_app/presentation/screens/edit_profile/widgets/header_and_avatar.dart';
 import 'package:social_app/presentation/widgets/placeholder.dart';
 import 'package:social_app/presentation/widgets/svg_icon_button.dart';
@@ -12,6 +18,7 @@ import 'package:social_app/utils/constants/image_path.dart';
 import 'package:social_app/utils/extensions/updated_field_extension.dart';
 
 import '../../../domain/entities/user.dart';
+import '../../../domain/repository/storage/storage_repository.dart';
 import '../../../utils/constants/icon_path.dart';
 import '../../../utils/styles/themes.dart';
 import '../../widgets/custom_alert_dialog.dart';
@@ -34,6 +41,8 @@ class _EditProfileState extends State<EditProfile> {
   late TextEditingController emailController;
   late TextEditingController locationController ;
 
+  late ValueNotifier<String> avatarNotifier;
+
   late FocusNode nameFocus = FocusNode();
   late FocusNode lastNameFocus = FocusNode();
   late FocusNode emailFocus = FocusNode();
@@ -50,6 +59,7 @@ class _EditProfileState extends State<EditProfile> {
     lastNameFocus = FocusNode();
     emailFocus = FocusNode();
     locationFocus = FocusNode();
+
   }
 
   @override
@@ -58,6 +68,8 @@ class _EditProfileState extends State<EditProfile> {
     lastNameController.dispose();
     emailController.dispose();
     locationController.dispose();
+
+    avatarNotifier.dispose();
     super.dispose();
   }
 
@@ -114,7 +126,7 @@ class _EditProfileState extends State<EditProfile> {
               TextButton(
                 onPressed: () {
                   Navigator.of(dialogContext)
-                      .pop(); // Close the dialog without saving
+                      .pop();
                 },
                 child: const Text('Cancel'),
               ),
@@ -151,6 +163,10 @@ Widget build(BuildContext context) {
           else if (state is EditPageLoaded ) {
             final user = state.user;
 
+            // if (avatarNotifier == null) {
+            avatarNotifier = ValueNotifier<String>(user.avatar);
+            // }
+
             if(user.emailChanged){
               Navigator.of(context).pop(state.user);
               return const SizedBox.shrink();
@@ -165,7 +181,8 @@ Widget build(BuildContext context) {
                         .bottom),
                 child: Column(
                   children: [
-                    HeaderAndAvatar(avatarURL: user.avatar),
+                    // HeaderAndAvatar(avatarURL: user.avatar),
+                    HeaderAndAvatar(avatarNotifier: avatarNotifier),
 
                     //TODO : Text fields
                     Column(
@@ -235,7 +252,7 @@ Widget build(BuildContext context) {
     floatingActionButton: CustomFloatingActionButton(
       width: deviceWidth * 0.8,
       text: 'SAVE CHANGES',
-      onPressed: () {
+      onPressed: () async {
         UserModel updatedUser =
             (context
                 .read<EditPageCubit>()
@@ -246,10 +263,26 @@ Widget build(BuildContext context) {
         String lastname = lastNameController.text;
         String location = locationController.text;
 
-        Map<String, dynamic> updatedFields = {};
+        String rawAvatar = avatarNotifier.value;
 
-        // Check if fields are different from the user's current values
         bool noChanges = true;
+
+        if(rawAvatar.isNotEmpty){
+          StorageRepository storageRepository = StorageRepositoryImpl();
+          AuthRepository authRepository = AuthRepositoryImpl();
+          File newAvatarFile = File(rawAvatar);
+          User? currentUser = await authRepository.getCurrentUser();
+
+          // Call uploadAvatar from the repository and await its result
+          String? newAvatarUrl =  await storageRepository.uploadAvatar(newAvatarFile,currentUser!.uid);
+          if (newAvatarUrl!.isNotEmpty && newAvatarUrl != updatedUser.avatar) {
+            await authRepository.updateCurrentUserAvatarUrl(newAvatarUrl);
+            updatedUser = updatedUser.copyWith(name: newAvatarUrl);
+            noChanges = false;
+          }
+        }
+
+
 
         if (newName.isNotEmpty && newName != updatedUser.name) {
           updatedUser = updatedUser.copyWith(name: newName);

@@ -16,4 +16,6 @@ abstract class AuthRepository {
   Future<void> signOut();
 
   Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password);
+
+  Future<void> updateCurrentUserAvatarUrl(String avatarUrl);
 }

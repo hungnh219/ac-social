@@ -24,6 +24,8 @@ abstract class AuthFirebaseService {
 
   Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password);
 
+  Future<void> updateAvatarUrl(String avatarUrl);
+
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
@@ -209,4 +211,21 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       rethrow;
     }
   }
+
+  Future<void> updateAvatarUrl(String avatarUrl) async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        await user.updatePhotoURL(avatarUrl);
+
+        await user.reload();
+      } else {
+        throw FirebaseAuthException(code: 'no-user-is-currently-signed-in');
+      }
+    } catch (e) {
+      print("Failed to update avatar: $e");
+    }
+  }
+
 }

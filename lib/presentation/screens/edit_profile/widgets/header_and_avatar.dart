@@ -11,8 +11,6 @@ import '../../../../utils/styles/themes.dart';
 import '../../../widgets/edit_profile/bottom_rounded_appbar.dart';
 import '../../../widgets/svg_icon_button.dart';
 
-
-
 class ImagePickerHelper {
   final ImagePicker _imagePicker = ImagePicker();
 
@@ -33,22 +31,21 @@ class ImagePickerHelper {
 
 class HeaderAndAvatar extends StatefulWidget {
   final ValueNotifier<String> avatarNotifier;
-  final ValueNotifier<bool> isFileImageNotifier; // Boolean to determine image type
+  final ValueNotifier<bool> isFileImageNotifier;
 
-  HeaderAndAvatar({super.key, required String avatarURL})
-      : avatarNotifier = ValueNotifier<String>(avatarURL),
-        isFileImageNotifier = ValueNotifier<bool>(false);
+  HeaderAndAvatar({super.key, required this.avatarNotifier})
+      :isFileImageNotifier = ValueNotifier<bool>(false);
+
+  String get avatarValue => avatarNotifier.value;
+
   @override
   State<HeaderAndAvatar> createState() => _HeaderAndAvatarState();
 }
 
 class _HeaderAndAvatarState extends State<HeaderAndAvatar> {
   double avatarRadius = 60;
-
   late double appBarBackgroundHeight = avatarRadius * 2 / 0.6;
-
   late double appBarContainerHeight = avatarRadius * (1 + 2 / 0.6);
-
   final _imagePickerHelper = ImagePickerHelper();
 
   Future<void> _showImageSourceOptions(BuildContext context) async {

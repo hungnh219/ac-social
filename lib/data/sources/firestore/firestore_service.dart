@@ -8,11 +8,13 @@ import 'package:social_app/domain/entities/collection.dart';
 import 'package:social_app/domain/entities/comment.dart';
 import 'package:social_app/domain/entities/post.dart';
 import 'package:social_app/domain/entities/topic.dart';
+import 'package:social_app/data/sources/storage/storage_service.dart';
 
 import '../../../domain/entities/collection.dart';
 import '../../../domain/entities/user.dart';
 import '../../models/user_firestore/add_user_data.dart';
 import '../../models/user_firestore/update_user_req.dart';
+
 
 abstract class FirestoreService {
   Future<UserModel?>? getUserData(String userID);
@@ -53,9 +55,9 @@ abstract class FirestoreService {
 class FirestoreServiceImpl extends FirestoreService {
   final FirebaseFirestore _firestoreDB = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final StorageService _storage = StorageServiceImpl();
 
   User? get currentUser => _auth.currentUser;
-
 
   // ToDo : Reference Define
   CollectionReference get _usersRef => _firestoreDB.collection('User');
@@ -406,26 +408,9 @@ class FirestoreServiceImpl extends FirestoreService {
     }
   }
 
-  Future<String>? uploadImage(String folderName, File image) async {
-    try {
-      final storageReference = FirebaseStorage.instance.ref().child('images/${DateTime.now().toString()}');
-
-      UploadTask uploadTask = storageReference.putFile(image);
-
-      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
-
-      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-      print('Uploaded Image URL: $downloadUrl');
-
-      return downloadUrl;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   @override
   Future<void> createPost(String content, File image) async {
-    String? imageUrl = await uploadImage('Post', image);
+    String? imageUrl = await _storage.uploadPostImage('Post', image);
 
     print('imageUrl: $imageUrl');
     print('content: $content');
@@ -442,7 +427,7 @@ class FirestoreServiceImpl extends FirestoreService {
           'likeAmount': 0,
           'commentAmount': 0,
           'viewAmount': 0,
-          'userRef': _usersCollection.doc(currentUser!.uid),
+          'userRef': _usersRef.doc(currentUser!.uid),
         },
       );
     }

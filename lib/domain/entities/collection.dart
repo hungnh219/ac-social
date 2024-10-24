@@ -29,4 +29,22 @@ class CollectionModel {
   //     'thumbnail': thumbnail,
   //   };
   // }
+
+  factory CollectionModel.fromMap(Map<String, dynamic> map) {
+    return CollectionModel(
+      collectionId: map['collectionId'] ?? '',  // Provide default value if null
+      name: map['name'] ?? '',
+      thumbnail: map['thumbnail'] ?? '',
+    );
+  }
+
+  // toMap method
+  Map<String, dynamic> toMap() {
+    return {
+      'collectionId': collectionId,
+      'name': name,
+      'thumbnail': thumbnail,
+    };
+  }
+
 }
