@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:social_app/data/repository/auth/auth_repository_impl.dart';
+import 'package:social_app/domain/repository/auth/auth_repository.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/widgets/collection_tab.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/widgets/information_box.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/widgets/shot_tab.dart';
@@ -28,7 +31,7 @@ class ProfilePart extends StatefulWidget {
 
 class _ProfilePartState extends State<ProfilePart>
     with SingleTickerProviderStateMixin {
-  int numberOfShots = 10;
+  final AuthRepository authRepository = AuthRepositoryImpl();
 
   double avatarRadius = 50;
   late double appBarBackgroundHeight = avatarRadius * 2 / 0.6;
@@ -67,7 +70,9 @@ class _ProfilePartState extends State<ProfilePart>
   Future<void> didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    urls = await getImageUrlsForUserPosts('atpFNshDxQOeoPavpluSI2CKrqu2');
+    User? currentUser = await authRepository.getCurrentUser();
+
+    urls = await getImageUrlsForUserPosts(currentUser!.uid);
   }
 
   void _onTabChanged() {
