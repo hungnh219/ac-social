@@ -14,9 +14,15 @@ class CollectionRepositoryImpl extends CollectionRepository {
     return serviceLocator.get<FirestoreService>().getCollections();
   }
 
+  @override
   Future<List<CollectionModel>> getCollectionsData(
       List<String> collectionIDsList) {
     return serviceLocator<FirestoreService>()
         .getCollectionsData(collectionIDsList);
+  }
+
+  @override
+  Future<List<String>> getCollectionPostsID(String collectionID){
+    return serviceLocator<FirestoreService>().getCollectionPostsID(collectionID);
   }
 }

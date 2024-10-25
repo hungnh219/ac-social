@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PostModel {
   final String postId;
   final String username;
@@ -50,15 +52,21 @@ class PostModel {
       views: {},
     );
   }
-  // factory PostModel.fromJson(Map<String, dynamic> json) {
+
+  // factory PostModel.fromMap(String postId, Map<String, dynamic> data) {
   //   return PostModel(
-  //     username: json['userId'],
-  //     content: json['content'],
-  //     image: json['imageUrl'],
-  //     timestamp: json['timestamp'],
-  //     comments: json['comments'] ?? {},
-  //     likes: json['likes'] ?? {},
-  //     views: json['views'] ?? {},
+  //     postId: postId,
+  //     username: data['username'] ?? '', // Ensure fields are non-null
+  //     userAvatar: data['userAvatar'] ?? '',
+  //     content: data['content'] ?? '',
+  //     likeAmount: data['likeAmount'] ?? 0,
+  //     commentAmount: data['commentAmount'] ?? 0,
+  //     viewAmount: data['viewAmount'] ?? 0,
+  //     image: data['image'] ?? '',
+  //     timestamp: (data['timestamp'] as Timestamp).toDate(), // Convert Firestore timestamp
+  //     comments: data['comments'] as Map<String, dynamic>?, // Cast nullable maps
+  //     likes: data['likes'] as Map<String, dynamic>?,
+  //     views: data['views'] as Map<String, dynamic>?,
   //   );
   // }
 

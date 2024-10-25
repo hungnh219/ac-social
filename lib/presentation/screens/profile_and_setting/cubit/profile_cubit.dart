@@ -11,6 +11,7 @@ import '../../../../data/repository/collection/collection_repository_impl.dart';
 import '../../../../data/repository/post/post_repository_impl.dart';
 import '../../../../data/repository/user/user_repository_impl.dart';
 import '../../../../domain/entities/collection.dart';
+import '../../../../domain/entities/post.dart';
 import '../../../../domain/entities/user.dart';
 import '../../../../domain/repository/auth/auth_repository.dart';
 import '../../../../domain/repository/collection/collection_repository.dart';
@@ -25,20 +26,22 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   ProfileCubit() : super(ProfileLoading());
 
-
   Future<void> fetchProfile() async {
     emit(ProfileLoading());
     try {
+
       final User? currentUser = await authRepository.getCurrentUser();
-      final UserModel?  userModel = await userRepository.getCurrentUserData();
+      final UserModel? userModel = await userRepository.getCurrentUserData();
 
       final userFollowers = await userRepository.getUserFollowers(currentUser!.uid);
       final userFollowings = await userRepository.getUserFollowings(currentUser.uid);
       final userCollectionIDs = await userRepository.getUserCollectionIDs(currentUser.uid);
       final List<CollectionModel> collections = await collectionRepository.getCollectionsData(userCollectionIDs);
 
+
       if (userModel != null) {
-        emit(ProfileLoaded(userModel, userFollowers, userFollowings, collections));
+        emit(ProfileLoaded(
+            userModel, userFollowers, userFollowings, collections));
       } else {
         emit(ProfileError("User data not found"));
       }
@@ -67,10 +70,9 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       emit(ProfileEmailChanged());
     } catch (e) {
-      if(e is FirebaseAuthException){
+      if (e is FirebaseAuthException) {
         emit(ProfileError(e.toString()));
-      }
-      else {
+      } else {
         if (kDebugMode) {
           print(e);
         }

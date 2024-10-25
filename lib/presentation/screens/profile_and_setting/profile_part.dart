@@ -29,7 +29,6 @@ class ProfilePart extends StatefulWidget {
 class _ProfilePartState extends State<ProfilePart>
     with SingleTickerProviderStateMixin {
   int numberOfShots = 10;
-  int numberOfCollections = 10;
 
   double avatarRadius = 50;
   late double appBarBackgroundHeight = avatarRadius * 2 / 0.6;
@@ -247,7 +246,7 @@ class _ProfilePartState extends State<ProfilePart>
                                   ProfileTab(
                                     index: 0,
                                     selectedIndexNotifier: _selectedIndexNotifier,
-                                    label: '$numberOfShots Shots',
+                                    label: '${urls.length} Shots',
                                     onTabSelected: _onTabSelected,
                                   ),
                                   ProfileTab(

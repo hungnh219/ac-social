@@ -26,6 +26,7 @@ class PostRepositoryImpl extends PostRepository {
     return serviceLocator.get<FirestoreService>().getPostsByUserId(userId);
   }
 
+  @override
   Future<String?> getPostImageById(String postId){
     return serviceLocator.get<FirestoreService>().getPostImageById(postId);
   }

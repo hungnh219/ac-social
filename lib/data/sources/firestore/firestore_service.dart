@@ -53,6 +53,8 @@ abstract class FirestoreService {
   Future<String?> getPostImageById(String postId);
 
   Future<List<CollectionModel>?>? getCollections();
+
+  Future<List<String>> getCollectionPostsID(String collectionID);
 }
 
 class FirestoreServiceImpl extends FirestoreService {
@@ -78,7 +80,7 @@ class FirestoreServiceImpl extends FirestoreService {
 
   CollectionReference get _collectionRef => _firestoreDB.collection('Collection');
   CollectionReference _collectionPostsRef(String collectionId) {
-    return _usersRef.doc(collectionId).collection('posts');
+    return _collectionRef.doc(collectionId).collection('posts');
   }
 
   CollectionReference get _categoryCollection => _firestoreDB.collection('Category');
@@ -334,6 +336,7 @@ class FirestoreServiceImpl extends FirestoreService {
     }
   }
 
+  @override
   Future<List<PostModel>?> getPostsByUserId(String userId) async {
     List<PostModel> posts = [];
 
@@ -344,7 +347,11 @@ class FirestoreServiceImpl extends FirestoreService {
 
     try {
       QuerySnapshot aPostsSnapshot = await _postRef.get();
-      QuerySnapshot postsSnapshot = await _postRef.where('userRef', isEqualTo: '/User/$userId').get();
+      String userRefString = "User/$userId";
+      DocumentReference tempUserRef = _usersRef.doc(userId);
+
+      QuerySnapshot postsSnapshot = await _postRef.where('userRef', isEqualTo: tempUserRef ).get();
+
 
       if (postsSnapshot.docs.isEmpty) {
         throw CustomFirestoreException(
@@ -385,9 +392,8 @@ class FirestoreServiceImpl extends FirestoreService {
     }
   }
 
-  Future<String?> getPostImageById(String postId) async {
+  Future<DocumentSnapshot> getPostDataById(String postId) async {
     try {
-      // Retrieve the post document by its ID
       DocumentSnapshot postSnapshot = await _postRef.doc(postId).get();
 
       if (!postSnapshot.exists) {
@@ -397,12 +403,22 @@ class FirestoreServiceImpl extends FirestoreService {
         );
       }
 
-      // Extract the image URL from the post document
-      String? image = postSnapshot['image'];
-
-      return image; // Return the image URL or null if it doesn't exist
+      return postSnapshot;
     } catch (e) {
       rethrow; // Rethrow the error for further handling
+    }
+  }
+
+  @override
+  Future<String?> getPostImageById(String postId) async {
+    try {
+      DocumentSnapshot documentSnapshot = await getPostDataById(postId);
+
+      Map<String, dynamic>? postData = documentSnapshot.data() as Map<String, dynamic>?;
+
+      return postData?["image"] as String?;
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -509,8 +525,8 @@ class FirestoreServiceImpl extends FirestoreService {
     }
   }
 
+  @override
   Future<List<CollectionModel>?>? getCollections() async {
-        print('name: 123');
     List<CollectionModel> collections = [];
     try {
       QuerySnapshot collectionSnapshot = await _firestoreDB.collection('NewCollection').get();
@@ -538,6 +554,7 @@ class FirestoreServiceImpl extends FirestoreService {
       rethrow;
     }
   }
+
   @override
   Future<List<CollectionModel>> getCollectionsData(List<String> collectionIDsList) async {
     List<CollectionModel> collections = [];
@@ -561,7 +578,19 @@ class FirestoreServiceImpl extends FirestoreService {
     return collections;  // Return the list of CollectionModel objects
   }
 
+  @override
+  Future<List<String>> getCollectionPostsID(String collectionID) async {
+    List<String> postIDs = [];
 
+    QuerySnapshot<Map<String, dynamic>> followingsSnapshot =
+        await _collectionPostsRef(collectionID).get() as QuerySnapshot<Map<String, dynamic>>;
+
+    for (var doc in followingsSnapshot.docs) {
+      postIDs.add(doc.id);
+    }
+
+    return postIDs;
+  }
 }
 
 class CustomFirestoreException implements Exception {

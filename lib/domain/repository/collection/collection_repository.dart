@@ -12,4 +12,6 @@ abstract class CollectionRepository {
 
   Future<List<CollectionModel>> getCollectionsData(
       List<String> collectionIDsList);
+
+  Future<List<String>> getCollectionPostsID(String collectionID);
 }

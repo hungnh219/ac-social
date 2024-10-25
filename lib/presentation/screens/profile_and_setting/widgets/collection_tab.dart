@@ -1,116 +1,104 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:social_app/domain/entities/collection.dart';
 
-import '../../../../domain/entities/post.dart';
-import '../../../../utils/constants/image_path.dart';
+import '../../../../data/repository/collection/collection_repository_impl.dart';
+import '../../../../data/repository/post/post_repository_impl.dart';
+import '../../../../domain/repository/collection/collection_repository.dart';
+import '../../../../domain/repository/post/post_repository.dart';
 import '../../../../utils/styles/themes.dart';
 import 'collection_grid_view.dart';
 
-class CollectionTab extends StatelessWidget {
+class CollectionTab extends StatefulWidget {
   final List<CollectionModel> collections;
 
   const CollectionTab({super.key, required this.collections});
 
-  SliverGridDelegateWithFixedCrossAxisCount get collectionDelegates => const SliverGridDelegateWithFixedCrossAxisCount(
-  crossAxisCount: 2, // Adjust the number of columns as needed
-  crossAxisSpacing: 10.0,
-  mainAxisSpacing: 10.0,
-  );
+  @override
+  State<CollectionTab> createState() => _CollectionTabState();
+}
+
+class _CollectionTabState extends State<CollectionTab> {
+  late CollectionRepository collectionRepository;
+  late PostRepository postRepository;
+  late Map<String, List<String?>> collectionImagesMap;
+
+  @override
+  void initState() {
+    super.initState();
+    collectionRepository = CollectionRepositoryImpl();
+    postRepository = PostRepositoryImpl();
+    collectionImagesMap = {};
+    fetchAllCollectionImages();
+  }
+
+  Future<void> fetchAllCollectionImages() async {
+    for (var collection in widget.collections) {
+      List<String?> collectionPostImages = await getImagesOfCollection(collection.collectionId);
+      setState(() {
+        collectionImagesMap[collection.collectionId] = collectionPostImages;
+      });
+    }
+  }
+
+  Future<List<String?>> getImagesOfCollection(String collectionID) async {
+    List<String?> collectionPostImages = [];
+    List<String> collectionPostsID = await collectionRepository.getCollectionPostsID(collectionID);
+    for (String postId in collectionPostsID) {
+      String? imageUrls = await postRepository.getPostImageById(postId);
+      collectionPostImages.add(imageUrls);
+    }
+    return collectionPostImages;
+  }
+
+  SliverGridDelegateWithFixedCrossAxisCount get collectionDelegates =>
+      const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // Adjust the number of columns as needed
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+      );
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       gridDelegate: collectionDelegates,
-      itemCount: collections.length,
+      itemCount: widget.collections.length,
       itemBuilder: (context, index) {
-        final collection = collections[index];
-        return Stack(
-          alignment: Alignment.center,
-          children: [
+        final collection = widget.collections[index];
 
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: GridTile(
-                child: Container(color: Colors.blue,),
-                // child: ImagesGrid(posts: collection.posts),
-              ),
-            ),
-            Center(
-              child: Text(
-                  collection.name,
-                  style: AppTheme.gridItemStyle),
-            ),
-          ],
+        return FutureBuilder<List<String?>>(
+          future: Future.value(
+              collectionImagesMap[collection.collectionId] ?? []), // Ensure non-null value
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return const Center(child: Text('Error loading images'));
+            }
+
+            List<String?>? collectionPostImages = snapshot.data ?? [];
+
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: GridTile(
+                    child: RadiusContainer(imageUrls: collectionPostImages),
+                  ),
+                ),
+                Center(
+                  child: Text(collection.name, style: AppTheme.gridItemStyle),
+                ),
+              ],
+            );
+          },
         );
       },
     );
-  }
-}
-
-class ImagesGrid extends StatelessWidget {
-  final List<PostModel> posts;
-
-  const ImagesGrid({super.key, required this.posts});
-
-  @override
-  Widget build(BuildContext context) {
-    if (posts.isEmpty) {
-      return const Center(child: Text("No images available"));
-    } else if (posts.length == 1) {
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          Image.network(
-            posts[0].image,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-          Container(
-            color: Colors.black54,
-            child: Text(
-              posts[0].username,
-              style: const TextStyle(color: Colors.white, fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
-      );
-    } else {
-      return GridView.builder(
-        physics: const NeverScrollableScrollPhysics(), // Prevent scrolling inside the tile
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Show 4 images max (2x2 grid)
-          crossAxisSpacing: 2.0,
-          mainAxisSpacing: 2.0,
-        ),
-        itemCount: posts.length > 4 ? 4 : posts.length,
-        itemBuilder: (context, index) {
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              Image.network(
-                posts[index].image,
-                fit: BoxFit.cover,
-              ),
-              Container(
-                color: Colors.black54, // Optional: semi-transparent background for readability
-                child: Text(
-                  posts[index].username,
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
   }
 }
