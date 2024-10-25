@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_app/data/sources/firestore/firestore_service.dart';
+import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/new_post/cubit/post_cubit.dart';
 import 'package:social_app/presentation/screens/new_post/cubit/post_state.dart';
 import 'package:social_app/service_locator.dart';
+import 'package:social_app/utils/styles/colors.dart';
 
 class HeaderNewPost extends StatefulWidget {
   const HeaderNewPost({super.key});
@@ -28,47 +30,71 @@ class _HeaderNewPostState extends State<HeaderNewPost> {
   Future _uploadPost() async {
     PostState state = _postCubit.state;
     File? image;
-    if (state is PostWithImage) {
+    String? content;
+
+    if (state is PostWithData) {
       // print('image: ${state.getImage}');
       image = state.getImage;
+      content = state.getContent;
+      if (content == null) {
+        content = '';
+      }
     }
 
     if (image != null) {
-      await serviceLocator<FirestoreService>().createPost('create new post from ui', image);
+      print('image: $image');
+      print('content: $content');
+      await serviceLocator<FirestoreService>().createPost(content!, image);
     }
 
-    Navigator.pop(context);
+    _postCubit.closeNewPost();
+
+    context.go('/signin/navigator');
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 64,
-      color: Colors.amberAccent,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      height: 40,
+      color: AppColors.lavenderBlueShadow,
+      child: Stack(
         children: [
-          IconButton(
-            onPressed: () {
-              // context.go('/signin/navigator');
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,  
+            children: [
+              IconButton(
+                onPressed: () {
+                  _postCubit.closeNewPost();
+                  context.go('/signin/navigator');
+                },
+                icon: const Icon(Icons.arrow_back, color: AppColors.white,),
+              ),
+              
+              TextButton(
+                onPressed: () {
+                  _uploadPost();
+                },
+                child: const Text('Post', style: TextStyle(color: AppColors.white,),),
+              ),
+            ],
           ),
 
-          Expanded(
-            child: Center(
-              child: Text('Create post', textAlign: TextAlign.center),
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: SizedBox(
+              child: Center(
+                child: Text(
+                  'Create post'.toUpperCase(),
+                  style: TextStyle(color: AppColors.white, fontSize: 16, fontWeight: FontWeight.bold)
+                  ),
+              ),
+            )
             ),
-          ),
-
-          TextButton(
-            onPressed: () {
-              _uploadPost();
-            },
-            child: const Text('Post'),
-          ),
-        ],
+        ] 
       ),
     );
   }

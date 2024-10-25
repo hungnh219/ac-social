@@ -8,8 +8,13 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: () {
-      context.go('/signin');
-    }, child: Text('signout'));
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        body: ElevatedButton(onPressed: () {
+          context.go('/signin');
+        }, child: Text('signout')),
+      ),
+    );
   }
 }

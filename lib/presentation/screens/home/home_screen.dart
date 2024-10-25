@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/data/sources/firestore/firestore_service.dart';
+import 'package:social_app/domain/entities/post.dart';
 import 'package:social_app/domain/repository/post/post_repository.dart';
 import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/widgets/home_header_custom.dart';
@@ -165,25 +166,29 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               child: Container(
                 height: 40,
-                margin: const EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: Colors.green.shade100,
+                  color: AppColors.white,
+                  // color: Colors.green.shade100,
                 ),
-                child: const TabBar(
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  dividerColor: Colors.transparent,
-                  indicator: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: TabBar(
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    dividerColor: Colors.transparent,
+                    indicator: BoxDecoration(
+                      color: AppColors.iric.withOpacity(0.1),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    labelColor: AppColors.iric,
+                    unselectedLabelColor: AppColors.erieBlack.withOpacity(0.5),
+                    tabs: [
+                      TabItem(title: 'Popular',),
+                      TabItem(title: 'Trending'),
+                      TabItem(title: 'Following'),
+                    ],
                   ),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.black54,
-                  tabs: [
-                    TabItem(title: 'Popular'),
-                    TabItem(title: 'Trending'),
-                    TabItem(title: 'Following'),
-                  ],
                 ),
               ),
             ),
@@ -192,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: TabBarView(
           children: [
             PostListView(),
-            Center(child: Text('Trending Fake')),
+            PostListView(),
             PostListView(),
           ],
         ),
@@ -221,21 +226,22 @@ class _PostListViewState extends State<PostListView> with AutomaticKeepAliveClie
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
-
+        
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(child: Text('No data found.'));
         }
 
-        // print(snapshot.data);
-        // for (var doc in snapshot.data!.docs) {
-        //   print(doc.data());
-        // }
-        return ListView(
-          children: snapshot.data!.map((doc) {
-            print(doc);
-            // commentPostCollection = postCollection.doc(doc.id).collection('lists');
-            return PostCustom(post: doc);
-          }).toList(),
+        return Container(
+          color: AppColors.orochimaru,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 60),
+            child: ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return PostCustom(post: snapshot.data![index]);
+              },
+            ),
+          ),
         );
       },
     );

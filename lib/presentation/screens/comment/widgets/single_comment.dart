@@ -1,31 +1,30 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/domain/entities/comment.dart';
-import 'package:social_app/domain/entities/post.dart';
+import 'package:social_app/mixin/methods/convert_timestamp.dart';
 
-class CommentList extends StatelessWidget {
-  CommentList({super.key, required this.comments});
+class SingleComment extends StatefulWidget {
+  SingleComment({super.key, required this.comment});
 
-  List<CommentModel>? comments;
-  
+  CommentModel comment;
+
   @override
-  Widget build(BuildContext context) {
-    return comments == null ? Center(child: Text('No comments')) :
-      ListView.builder(
-      itemBuilder: (context, index) {
-        return Text('213');
-      },
-      itemCount: comments!.length,
-    );
-  }
+  State<SingleComment> createState() => _SingleCommentState();
 }
 
-class UserComment extends StatelessWidget {
-  const UserComment({super.key});
+class _SingleCommentState extends State<SingleComment> with Methods{
+  late String timestamp;
+
+  @override
+  void initState() {
+    super.initState();
+    timestamp = calculateTimeFromNow(widget.comment.timestamp);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 108,
+      height: 140,
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(8),
@@ -34,38 +33,44 @@ class UserComment extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: CircleAvatar(),
+              child: CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(
+                  widget.comment.userAvatar,
+                ),
+              ),
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('username'),
-                  Text('comment'),
+                  Text(widget.comment.username),
+                  Text(widget.comment.content),
                   Row(
                     children: [
-                      Text('timestamp'),
+                      Text(timestamp, overflow: TextOverflow.ellipsis,),
                       InkWell(
                         onTap: () {},
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text('like'),
+                          child: Text('Like'),
                         ),
                       ),
                       Spacer(),
                       Text('02'),
                       IconButton(
-                        icon: Icon(Icons.favorite_border),
                         onPressed: () {},
-                      ),
+                        icon: Icon(Icons.favorite_border),
+                      )
                     ],
                   )
                 ],
               ),
             ),
+            
           ],
         ),
       ),

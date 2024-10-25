@@ -4,6 +4,7 @@ import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/notification/notification_screen.dart';
 import 'package:social_app/presentation/screens/post_detail/post_detail_screen.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/main_profile_screen.dart';
+import 'package:social_app/utils/styles/colors.dart';
 
 class ScaffoldCustom extends StatefulWidget {
   final Widget body;
@@ -49,7 +50,7 @@ class _ScaffoldCustomState extends State<ScaffoldCustom> with AutomaticKeepAlive
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 IconButton(
-                  icon: const Icon(Icons.home, size: 20, color: Colors.black),
+                  icon: const Icon(Icons.home, size: 20, color: AppColors.carbon),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -58,7 +59,7 @@ class _ScaffoldCustomState extends State<ScaffoldCustom> with AutomaticKeepAlive
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.category_sharp, size: 20, color: Colors.black),
+                  icon: const Icon(Icons.category_sharp, size: 20, color: AppColors.carbon),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -67,7 +68,7 @@ class _ScaffoldCustomState extends State<ScaffoldCustom> with AutomaticKeepAlive
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications, size: 20, color: Colors.black),
+                  icon: const Icon(Icons.notifications, size: 20, color: AppColors.carbon),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -76,7 +77,7 @@ class _ScaffoldCustomState extends State<ScaffoldCustom> with AutomaticKeepAlive
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.person, size: 20, color: Colors.black),
+                  icon: const Icon(Icons.person, size: 20, color: AppColors.carbon),
                   onPressed: () {
                     Navigator.push(
                       context,

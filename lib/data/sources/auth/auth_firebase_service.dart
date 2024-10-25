@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_app/data/models/auth/create_user_req.dart';
+import 'package:social_app/domain/entities/user.dart';
 import 'package:social_app/data/sources/firestore/firestore_service.dart';
 
 import '../../models/auth/sign_in_user_req.dart';
@@ -21,11 +22,6 @@ abstract class AuthFirebaseService {
   User? getCurrentUser();
 
   Future<void> signOut();
-
-  Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password);
-
-  Future<void> updateAvatarUrl(String avatarUrl);
-
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
@@ -35,16 +31,15 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   @override
   Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq) async {
     try {
-
       final userCredential = await _auth.signInWithEmailAndPassword(
         email: signInUserReq.email.trim(),
         password: signInUserReq.password.trim(),
       );
 
       User user = userCredential.user!;
-
-      // user.sendEmailVerification();
-
+      if (kDebugMode) {
+        print("User đăng nhập: ${user.email}");
+      }
       if (!user.emailVerified) {
         await signOut();
         throw FirebaseAuthException(
@@ -100,24 +95,33 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       rethrow;
     }
 
-    // Future<void> reAuthenticateUser() async {
-    //   try {
-    //     User? user = _auth.currentUser;
-    //
-    //     AuthCredential credential = EmailAuthProvider.credential(
-    //       email: user!.email!,
-    //       password: 'user_password',
-    //     );
-    //
-    //     // Re-authenticate the user
-    //     await user.reauthenticateWithCredential(credential);
-    //
-    //     // After re-authentication, you can update the email
-    //     await _updateEmail();
-    //   } on FirebaseAuthException catch (e) {
-    //     print('Re-authentication error: ${e.message}');
-    //   }
-    }
+  // @override
+  // Future<UserModel?> getUserModel() async {
+  //   try {
+  //     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  //
+  //     User? user = _auth.currentUser;
+  //     CollectionReference usersCollection =
+  //         firebaseFirestore.collection('User');
+  //
+  //     DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
+  //
+  //     if (userDoc.exists) {
+  //       // Nếu user đã tồn tại, trả về UserModel từ Firestore
+  //       return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+  //     } else {
+  //       if (kDebugMode) {
+  //         print("User document does not exist.");
+  //       }
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print("Error fetching user data: $e");
+  //     }
+  //     return null;
+  //   }
+  // }
 
   @override
   Future<void> signInWithGoogle() async {

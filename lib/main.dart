@@ -12,6 +12,8 @@ import 'package:social_app/presentation/screens/auth/cubit/auth_cubit.dart';
 import 'package:social_app/presentation/screens/auth/cubit/theme_cubit.dart';
 import 'package:social_app/presentation/screens/category/cubit/category_cubit.dart';
 import 'package:social_app/presentation/screens/forgot_pasword/cubit/forgot_password_cubit.dart';
+import 'package:social_app/presentation/screens/home/home_screen.dart';
+import 'package:social_app/presentation/screens/new_post/cubit/post_cubit.dart';
 import 'package:social_app/presentation/screens/new_post/cubit/post_cubit.dart';
 import 'package:social_app/presentation/screens/edit_profile/cubit/edit_page_cubit.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/cubit/profile_cubit.dart';
@@ -60,6 +62,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => SignInCubit()),
         BlocProvider(create: (_) => SignUpCubit()),
         BlocProvider(create: (_) => CategoryCubit()),
+        BlocProvider(create: (_) => PostCubit(),),
         BlocProvider(create: (_) => ForgotPasswordCubit()),
         BlocProvider(create: (_) => CategoryCubit()),
         BlocProvider(create: (_) => PostCubit(),),

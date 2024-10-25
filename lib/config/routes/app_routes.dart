@@ -5,8 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/presentation/screens/boarding/boarding.dart';
 import 'package:social_app/presentation/screens/category/category_screen.dart';
+import 'package:social_app/presentation/screens/forgot_pasword/forgot_password_screen.dart';
+import 'package:social_app/presentation/screens/comment/comment_screen.dart';
 import 'package:social_app/presentation/screens/comment/comment_screen.dart';
 import 'package:social_app/presentation/screens/home/home_screen.dart';
+import 'package:social_app/presentation/screens/new_post/new_post_screen.dart';
 import 'package:social_app/presentation/screens/splash/splash.dart';
 import 'package:social_app/presentation/widgets/navigator_bar.dart';
 
@@ -16,6 +19,7 @@ import '../../presentation/screens/sign_in/cubit/sign_in_cubit.dart';
 import '../../presentation/screens/sign_in/sign_in_screen.dart';
 import '../../presentation/screens/sign_up/sign_up_screen.dart';
 import '../../presentation/screens/verification/verification_screen.dart';
+import '../../presentation/screens/home/home_screen.dart';
 
 class MyRouter {
   static final GoRouter router = GoRouter(
@@ -93,6 +97,27 @@ class MyRouter {
                 builder: (BuildContext context, GoRouterState state) {
                   return _wrapWithWillPopScope(context, EditProfile());
                 },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'newpost',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const NewPostScreen();
+                    },
+                  ),
+                ]
+              ),
+              GoRoute(
+                path: 'navigator',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const NavigatorBarCustom();
+                },
+              ),
+
+              GoRoute(
+                path: 'newpost',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const NewPostScreen();
+                },
               ),
             ],
           ),
@@ -102,6 +127,7 @@ class MyRouter {
               return _wrapWithWillPopScope(context, const CommentScreen());
             },
           ),
+
         ],
       ),
     ],

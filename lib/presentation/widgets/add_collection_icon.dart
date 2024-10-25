@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/utils/styles/colors.dart';
 
 class AddCollectionIcon extends StatelessWidget {
   const AddCollectionIcon({super.key});
@@ -17,14 +18,14 @@ class AddCollectionIcon extends StatelessWidget {
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(16),
                             topRight: Radius.circular(16)),
-                        color: Colors.white),
+                        color: AppColors.white),
                     // height: 400,
                     child: AddPostModal());
               });
         },
         icon: Icon(
           Icons.add_circle_outline,
-          color: Colors.red,
+          color: AppColors.carbon,
         ));
   }
 }
@@ -38,8 +39,6 @@ class AddPostModal extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 24, 12, 0),
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(

@@ -64,6 +64,7 @@ class FirestoreServiceImpl extends FirestoreService {
 
   User? get currentUser => _auth.currentUser;
 
+  CollectionReference get _usersCollection => _firestoreDB.collection('User');
   // ToDo : Reference Define
   CollectionReference get _usersRef => _firestoreDB.collection('User');
   CollectionReference _usersFollowersRef(String uid) {
@@ -84,6 +85,7 @@ class FirestoreServiceImpl extends FirestoreService {
   }
 
   CollectionReference get _categoryCollection => _firestoreDB.collection('Category');
+  CollectionReference get _postCollection => _firestoreDB.collection('Post');
   CollectionReference get _postRef => _firestoreDB.collection('Post');
 
 
@@ -283,16 +285,16 @@ class FirestoreServiceImpl extends FirestoreService {
   @override
   Future<List<PostModel>?>? getPostsData() async {
     List<PostModel> posts = [];
-
     DocumentReference userRef;
     Future<DocumentSnapshot<Object?>> userData;
     String username = '';
     String userAvatar = '';
 
     try {
-      QuerySnapshot postsSnapshot = await _postRef.get();
+      // QuerySnapshot postsSnapshot = await _postRef.get();
       // Future<Map<String, dynamic>> userData = userRef.get().then((value) => value.data() as Map<String, dynamic>);
 
+      QuerySnapshot postsSnapshot = await _postCollection.orderBy('timestamp', descending: true).get();
       if (postsSnapshot.docs.isEmpty) {
         throw CustomFirestoreException(
           code: 'no-posts',
@@ -303,6 +305,7 @@ class FirestoreServiceImpl extends FirestoreService {
       for (var doc in postsSnapshot.docs) {
         userRef = doc['userRef'];
         userData = userRef.get();
+
         await userData.then((value) {
           // userInfo = value;
           username = value['name'];
@@ -426,6 +429,7 @@ class FirestoreServiceImpl extends FirestoreService {
 
   @override
   Future<List<CommentModel>?> getCommentPost(PostModel post) async {
+    print('check');
     List<CommentModel> comments = [];
     DocumentReference commentRef;
     Future<DocumentSnapshot<Object?>> commentData;
@@ -436,7 +440,9 @@ class FirestoreServiceImpl extends FirestoreService {
     String userAvatar = '';
 
     try {
-      QuerySnapshot commentListSnapshot = await _firestoreDB.collection('NewPost').doc(post.postId).collection('lists').get();
+      QuerySnapshot commentListSnapshot = await _firestoreDB.collection('Post').doc(post.postId).collection('comments').get();
+      print('check2');
+      print(commentListSnapshot.docs);
       // Future<Map<String, dynamic>> userData = userRef.get().then((value) => value.data() as Map<String, dynamic>);
       if (commentListSnapshot.docs.isEmpty) {
         throw CustomFirestoreException(
@@ -445,26 +451,55 @@ class FirestoreServiceImpl extends FirestoreService {
         );
       }
       for (var doc in commentListSnapshot.docs) {
-        // print(doc.id);
-        print(doc['comments']);
-        for (var comment in doc['comments']) {
-          print('1');
-          commentRef = comment;
-          commentData = commentRef.get();
-          await commentData.then((comment) {
-            print(comment['content']);
-            print(comment['timestamp']);
-            print(comment['user_id']);
-            userRef = comment['user_id'];
-            userData = userRef.get();
-            userData.then((userSnapshot) {
-              username = userSnapshot['name'];
-              userAvatar = userSnapshot['avatar'];
-            });
+        // print(doc.id); 
+        // print(doc.data());
+        // print(doc['commentRef']);
+        commentRef = doc['commentRef'];
+        commentData = commentRef.get();
+        await commentData.then((comment) {
+          print(comment['content']);
+
+          userRef = comment['userRef'];
+          userData = userRef.get();
+
+          userData.then((user) {
+            username = user['name'];
+            userAvatar = user['avatar'];
+
+            CommentModel singleComment = CommentModel(
+              commentId: doc.id,
+              username: username,
+              userAvatar: userAvatar,
+              content: comment['content'],
+              timestamp: (comment['timestamp'] as Timestamp).toDate(),
+              likes: null,
+            );
+
+            comments.add(singleComment);
           });
+        });
+        // commentRef = doc.reference;
+        // commentRef = commentListSnapshot
+        // print(doc['comments']);
+        // for (var comment in doc['comments']) {
+        //   print('1');
+        //   print(comment);
+        //   // commentRef = comment;
+        //   // commentData = commentRef.get();
+        //   // await commentData.then((comment) {
+        //   //   print(comment['content']);
+        //   //   print(comment['timestamp']);
+        //   //   print(comment['user_id']);
+        //   //   userRef = comment['user_id'];
+        //   //   userData = userRef.get();
+        //   //   userData.then((userSnapshot) {
+        //   //     username = userSnapshot['name'];
+        //   //     userAvatar = userSnapshot['avatar'];
+        //   //   });
+        //   // });
 
-
-        }
+        
+        // }
         // userRef = doc['user_id'];
         // userData = userRef.get();
         // await userData.then((value) {
@@ -493,7 +528,7 @@ class FirestoreServiceImpl extends FirestoreService {
       }
 
       // print('posts: $posts');
-      return null;
+      return comments;
       // return postsSnapshot.docs.map((doc) => PostModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
     } catch (e) {
       rethrow;
