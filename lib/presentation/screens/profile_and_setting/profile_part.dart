@@ -56,6 +56,13 @@ class _ProfilePartState extends State<ProfilePart>
     _tabController.addListener(() {
       _onTabChanged();
     });
+
+    getShotsForUser();
+  }
+
+  void getShotsForUser()async{
+    User? currentUser = await authRepository.getCurrentUser();
+    urls = await getImageUrlsForUserPosts(currentUser!.uid);
   }
 
   @override
