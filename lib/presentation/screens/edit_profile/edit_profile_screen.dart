@@ -1,28 +1,19 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_app/data/repository/auth/auth_repository_impl.dart';
 import 'package:social_app/data/repository/storage/storate_repository_impl.dart';
 import 'package:social_app/domain/repository/auth/auth_repository.dart';
 import 'package:social_app/presentation/screens/edit_profile/widgets/header_and_avatar.dart';
 import 'package:social_app/presentation/widgets/placeholder.dart';
-import 'package:social_app/presentation/widgets/svg_icon_button.dart';
 import 'package:social_app/presentation/widgets/edit_profile/app_text_form_field.dart';
-import 'package:social_app/presentation/widgets/edit_profile/bottom_rounded_appbar.dart';
-import 'package:social_app/utils/constants/image_path.dart';
-import 'package:social_app/utils/extensions/updated_field_extension.dart';
 
 import '../../../domain/entities/user.dart';
 import '../../../domain/repository/storage/storage_repository.dart';
 import '../../../mixin/validators/validators.dart';
-import '../../../utils/constants/icon_path.dart';
-import '../../../utils/styles/themes.dart';
 import '../../widgets/custom_alert_dialog.dart';
 import '../../widgets/edit_profile/gradient_button.dart';
 
@@ -148,10 +139,7 @@ class _EditProfileState extends State<EditProfile> with Validator {
 
 @override
 Widget build(BuildContext context) {
-  double deviceHeight = MediaQuery
-      .of(context)
-      .size
-      .height;
+
   double deviceWidth = MediaQuery
       .of(context)
       .size
@@ -317,18 +305,18 @@ Widget build(BuildContext context) {
           noChanges = false;
         }
 
-        // if ((newEmail.isNotEmpty && newEmail != updatedUser.email)) {
-        //
-        //   noChanges = false;
-        //   await reAuthenticateAndChangeEmail(context, newEmail, updatedUser);
-        //   // if (!isFinished) {
-        //   //   return;
-        //   // }
-        //   currentUser = await authRepository.getCurrentUser();
-        //   if(currentUser?.email != updatedUser.email){
-        //     updatedUser = updatedUser.copyWith(newEmail: newEmail);
-        //   }
-        // }
+        if ((newEmail.isNotEmpty && newEmail != updatedUser.email)) {
+
+          noChanges = false;
+          await reAuthenticateAndChangeEmail(context, newEmail, updatedUser);
+          // if (!isFinished) {
+          //   return;
+          // }
+          currentUser = await authRepository.getCurrentUser();
+          if(currentUser?.email != updatedUser.email){
+            updatedUser = updatedUser.copyWith(newEmail: newEmail);
+          }
+        }
 
         if (noChanges) {
           CustomAlertDialog(
