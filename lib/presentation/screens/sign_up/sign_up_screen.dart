@@ -1,66 +1,179 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:social_app/data/providers/auth_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:social_app/data/models/auth/create_user_req.dart';
+import 'package:social_app/mixin/validators/validators.dart';
+import 'package:social_app/presentation/screens/sign_up/cubit/sign_up_cubit.dart';
+import 'package:social_app/presentation/screens/sign_up/cubit/sign_up_state.dart';
+import 'package:social_app/utils/styles/colors.dart';
 
-class SignupScreen extends StatelessWidget {
-  final VoidCallback onToggle;
+import '../../../utils/styles/themes.dart';
+import '../../widgets/auth/auth_body.dart';
+import '../../widgets/auth/auth_elevated_button.dart';
+import '../../widgets/auth/auth_header_image.dart';
+import '../../widgets/auth/auth_text_form_field.dart';
 
-  SignupScreen({super.key, required this.onToggle});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
 
-  void _signup(BuildContext context) async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
+class _SignUpScreenState extends State<SignUpScreen> with Validator {
+  late final GlobalKey<FormState> _formKey;
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
 
-    if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
-      return;
-    }
+  late ValueNotifier<bool> _obscureText;
+  late ValueNotifier<bool> _obscureConfirmText;
 
-    try {
-      await auth.signUp(_emailController.text, _passwordController.text);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign-up failed')),
-      );
-    }
+  @override
+  void initState() {
+    _formKey = GlobalKey<FormState>();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+    _obscureText = ValueNotifier<bool>(true);
+    _obscureConfirmText = ValueNotifier<bool>(true);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _obscureText.dispose();
+    _obscureConfirmText.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextField(
-            controller: _emailController,
-            decoration: const InputDecoration(labelText: 'Email'),
+    return Material(
+      child: Stack(children: [
+        AuthHeaderImage(
+          height: 0.42,
+          childAspectRatio: 1.41,
+          positioned: Positioned.fill(
+            top: -45,
+            child: Center(
+              child: Text(
+                "WELCOME",
+                style: AppTheme.authHeaderStyle,
+              ),
+            ),
           ),
-          TextField(
-            controller: _passwordController,
-            decoration: const InputDecoration(labelText: 'Password'),
-            obscureText: true,
+        ),
+        AuthBody(
+          marginTop: MediaQuery.of(context).size.height * 0.32,
+          height: double.infinity,
+          column: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    AuthTextFormField(
+                      textEditingController: _emailController,
+                      hintText: "Email",
+                      textInputAction: TextInputAction.next,
+                      validator: (value) => validateEmail(value),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: _obscureText,
+                      builder: (context, value, child) {
+                        return AuthTextFormField(
+                          textEditingController: _passwordController,
+                          hintText: "Password",
+                          obscureText: value,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) => validatePassword(value),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              _obscureText.value = !value;
+                            },
+                            icon: Icon(value
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: _obscureConfirmText,
+                      builder: (context, value, child) {
+                        return AuthTextFormField(
+                          textEditingController: _confirmPasswordController,
+                          hintText: "Password",
+                          obscureText: value,
+                          textInputAction: TextInputAction.done,
+                          validator: (value) => validateConfirmPassword(
+                              _passwordController.text, value),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              _obscureConfirmText.value = !value;
+                            },
+                            icon: Icon(value
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 35,
+              ),
+              BlocBuilder<SignUpCubit, SignUpState>(
+                builder: (context, state) => AuthElevatedButton(
+                  width: double.infinity,
+                  height: 45,
+                  inputText: "SIGN IN",
+                  onPressed: () => context.read<SignUpCubit>().signup(
+                      context,
+                      _formKey,
+                      SignUpUserReq(
+                          email: _emailController.text,
+                          password: _passwordController.text)),
+                  isLoading: (state is SignUpLoading ? true : false),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have account?",
+                    style: AppTheme.authSignUpStyle
+                        .copyWith(color: AppColors.kettleman),
+                  ),
+                  TextButton(
+                    onPressed: () => context.go("/signin"),
+                    child: Text(
+                      "SIGN IN",
+                      style: AppTheme.authSignUpStyle,
+                    ),
+                  )
+                ],
+              )
+            ],
           ),
-          TextField(
-            controller: _confirmPasswordController,
-            decoration: const InputDecoration(labelText: 'Confirm Password'),
-            obscureText: true,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () => _signup(context),
-            child: const Text('Sign Up'),
-          ),
-          TextButton(
-            onPressed: onToggle,
-            child: const Text('Already have an account? Login'),
-          ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 }

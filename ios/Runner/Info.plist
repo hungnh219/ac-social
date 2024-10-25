@@ -10,10 +10,14 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 =======
 	<string>com.project.socialapp.social_app</string>
 >>>>>>> c54b6180c08de781d1f9aca95ca25e3b753092b8
+=======
+	<string>com.project.socialapp.social_app</string>
+>>>>>>> f28edecfd4261b4e0e99b727f5e94bdf20d7e6e2
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
