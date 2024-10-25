@@ -7,30 +7,17 @@ import 'package:social_app/presentation/screens/profile_and_setting/widgets/info
 import 'package:social_app/presentation/screens/profile_and_setting/widgets/shot_tab.dart';
 import 'package:social_app/utils/styles/colors.dart';
 
+import '../../../data/repository/post/post_repository_impl.dart';
 import '../../../domain/entities/collection.dart';
+import '../../../domain/entities/post.dart';
 import '../../../domain/entities/user.dart';
+import '../../../domain/repository/post/post_repository.dart';
 import '../../../utils/constants/icon_path.dart';
 import '../../../utils/constants/image_path.dart';
 import '../../../utils/styles/themes.dart';
 import '../../widgets/edit_profile/bottom_rounded_appbar.dart';
 import 'cubit/profile_cubit.dart';
 import 'cubit/profile_state.dart';
-
-
-const urls = [
-  'https://loremflickr.com/200/200?random=1',
-  'https://images.pexels.com/photos/2486168/pexels-photo-2486168.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  'https://loremflickr.com/200/200?random=5',
-  'https://loremflickr.com/200/200?random=9',
-  'https://loremflickr.com/200/200?random=1',
-  'https://images.pexels.com/photos/2486168/pexels-photo-2486168.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  'https://loremflickr.com/200/200?random=5',
-  'https://loremflickr.com/200/200?random=9',
-  'https://loremflickr.com/200/200?random=1',
-  'https://images.pexels.com/photos/2486168/pexels-photo-2486168.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  'https://loremflickr.com/200/200?random=5',
-  'https://loremflickr.com/200/200?random=9',
-];
 
 class ProfilePart extends StatefulWidget {
   const ProfilePart({super.key});
@@ -57,6 +44,7 @@ class _ProfilePartState extends State<ProfilePart>
   late TabController _tabController;
 
   final ValueNotifier<int> _selectedIndexNotifier = ValueNotifier(0);
+  late List<String> urls = [];
 
   @override
   void initState() {
@@ -77,9 +65,10 @@ class _ProfilePartState extends State<ProfilePart>
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    urls = await getImageUrlsForUserPosts('atpFNshDxQOeoPavpluSI2CKrqu2');
   }
 
   void _onTabChanged() {
@@ -106,6 +95,24 @@ class _ProfilePartState extends State<ProfilePart>
       }
     });
   }
+
+  Future<List<String>> getImageUrlsForUserPosts(String userId) async {
+    PostRepository postRepository = PostRepositoryImpl();
+    List<PostModel>? posts = await postRepository.getPostsByUserId(userId);
+    List<String> imageUrls = [];
+
+    if (posts != null) {
+      for (var post in posts) {
+        String? imageUrl = await postRepository.getPostImageById(post.postId);
+        if (imageUrl != null) {
+          imageUrls.add(imageUrl);
+        }
+      }
+    }
+
+    return imageUrls;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -270,11 +277,8 @@ class _ProfilePartState extends State<ProfilePart>
                     child: TabBarView(
                       controller: _tabController,
                       children: [
-                        // Shots Tab Content
-                        const ShotTab(imageUrls: urls),
-
-                        // Collections Tab Content
-                        CollectionTab(collections: userCollections,)
+                        ShotTab(imageUrls: urls),
+                        CollectionTab(collections: userCollections,),
                       ],
                     ),
                   ),

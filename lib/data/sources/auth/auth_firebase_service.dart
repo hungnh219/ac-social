@@ -35,6 +35,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   @override
   Future<void> signInWithEmailAndPassword(SignInUserReq signInUserReq) async {
     try {
+
       final userCredential = await _auth.signInWithEmailAndPassword(
         email: signInUserReq.email.trim(),
         password: signInUserReq.password.trim(),
@@ -42,13 +43,15 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
 
       User user = userCredential.user!;
 
-      // if (!user.emailVerified) {
-      //   await signOut();
-      //   throw FirebaseAuthException(
-      //     code: 'email-not-verified',
-      //     message: 'Your account is not verified. Please check your inbox',
-      //   );
-      // }
+      // user.sendEmailVerification();
+
+      if (!user.emailVerified) {
+        await signOut();
+        throw FirebaseAuthException(
+          code: 'email-not-verified',
+          message: 'Your account is not verified. Please check your inbox',
+        );
+      }
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
         print("Error ${e.code}");
@@ -193,9 +196,10 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           password: password,
         );
 
-        await user.reauthenticateWithCredential(credential).then((userCredential) {
-        userCredential.user?.updateEmail(newEmail);
-        userCredential.user?.sendEmailVerification();
+        await user.reauthenticateWithCredential(credential).then((userCredential) async {
+        await userCredential.user?.updateEmail(newEmail);
+        await userCredential.user?.reload();
+        await userCredential.user?.sendEmailVerification();
         });
       }
     } on FirebaseAuthException catch (e) {

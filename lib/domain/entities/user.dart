@@ -64,6 +64,20 @@ class UserModel {
     };
   }
 
+  UserModel resetState(){
+    return UserModel(
+      emailChanged: false,
+      avatarChanged: false,
+      avatar:  avatar,
+      name:  name,
+      lastName: lastName,
+      location: location,
+      category: category ,
+      socialAccounts: socialAccounts,
+      email: email,
+    );
+}
+
   UserModel copyWith({
     String? name,
     String? newEmail,

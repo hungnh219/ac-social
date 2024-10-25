@@ -39,13 +39,15 @@ class EditPageCubit extends Cubit<EditPageState> {
   Future<void> reAuthenticateAndChangeEmail(
       BuildContext context,
       UserModel updatedUser,
+      String newEmail,
       String email,
       String password) async {
     emit(EditPageLoading());
     try {
       print("Changing.....");
-      await authRepository.reAuthenticationAndChangeEmail(email, updatedUser.email, password);
-      emit(EditPageLoaded(updatedUser));
+      await authRepository.reAuthenticationAndChangeEmail(email, newEmail, password).then((_){
+        emit(EditPageLoaded(updatedUser.copyWith(newEmail: newEmail)));
+      });
     } catch (e) {
       emit(EditPageError('Re-authentication failed. Email not updated.'));
     }

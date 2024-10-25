@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
 import 'package:social_app/presentation/screens/auth/auth.dart';
 import 'package:social_app/presentation/screens/boarding/boarding.dart';
 import 'package:social_app/presentation/screens/category/category_screen.dart';
@@ -22,46 +23,49 @@ class MyRouter {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const SplashScreen();
+          return _wrapWithWillPopScope(context, const SplashScreen());
         },
         routes: <RouteBase>[
           GoRoute(
             path: 'boarding',
             builder: (BuildContext context, GoRouterState state) {
-              return const BoardingScreen();
+              return _wrapWithWillPopScope(context, const BoardingScreen());
             },
           ),
           GoRoute(
             path: 'auth',
             builder: (BuildContext context, GoRouterState state) {
-              return const AuthScreen();
+              return _wrapWithWillPopScope(context, const AuthScreen());
             },
           ),
           GoRoute(
             path: 'signin',
             builder: (BuildContext context, GoRouterState state) {
-              // return const SignInScreen();
-              return BlocProvider(
+              return _wrapWithWillPopScope(
+                context,
+                BlocProvider(
                   create: (_) => SignInCubit(),
-              child: const SignInScreen());
+                  child: const SignInScreen(),
+                ),
+              );
             },
             routes: <RouteBase>[
               GoRoute(
                 path: 'signup',
                 builder: (BuildContext context, GoRouterState state) {
-                  return const SignUpScreen();
+                  return _wrapWithWillPopScope(context, const SignUpScreen());
                 },
               ),
               GoRoute(
                 path: 'forgotpassword',
                 builder: (BuildContext context, GoRouterState state) {
-                  return const ForgotPasswordScreen();
+                  return _wrapWithWillPopScope(context, const ForgotPasswordScreen());
                 },
                 routes: <RouteBase>[
                   GoRoute(
                     path: 'verification',
                     builder: (BuildContext context, GoRouterState state) {
-                      return const VerificationScreen();
+                      return _wrapWithWillPopScope(context, const VerificationScreen());
                     },
                   ),
                 ],
@@ -69,25 +73,25 @@ class MyRouter {
               GoRoute(
                 path: 'category',
                 builder: (BuildContext context, GoRouterState state) {
-                  return const CategoryScreen();
+                  return _wrapWithWillPopScope(context, const CategoryScreen());
                 },
               ),
               GoRoute(
                 path: 'home',
                 builder: (BuildContext context, GoRouterState state) {
-                  return const HomeScreen();
+                  return _wrapWithWillPopScope(context, const HomeScreen());
                 },
               ),
               GoRoute(
                 path: 'navigator',
                 builder: (BuildContext context, GoRouterState state) {
-                  return const NavigatorBarCustom();
+                  return _wrapWithWillPopScope(context, const NavigatorBarCustom());
                 },
               ),
               GoRoute(
                 path: 'edit',
                 builder: (BuildContext context, GoRouterState state) {
-                  return EditProfile();
+                  return _wrapWithWillPopScope(context, EditProfile());
                 },
               ),
             ],
@@ -95,11 +99,46 @@ class MyRouter {
           GoRoute(
             path: 'comment',
             builder: (BuildContext context, GoRouterState state) {
-              return const CommentScreen();
+              return _wrapWithWillPopScope(context, const CommentScreen());
             },
           ),
         ],
       ),
     ],
   );
+
+  static Future<bool> _onWillPop(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Are you sure?"),
+          content: const Text("Do you want to exit this application?"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text("Yes"),
+              onPressed: () {
+                SystemNavigator.pop();  // Exits the app
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    ) ?? false;
+  }
+
+  // Helper function to wrap screens with WillPopScope
+  static Widget _wrapWithWillPopScope(BuildContext context, Widget screen) {
+    return WillPopScope(
+      onWillPop: () => _onWillPop(context),
+      child: screen,
+    );
+  }
 }

@@ -73,12 +73,12 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
-  void reAuthenticateAndChangeEmail(BuildContext context, UserModel updatedUser) async {
+  Future<bool> reAuthenticateAndChangeEmail(BuildContext context, String newEmail, UserModel updatedUser) async {
     try {
       TextEditingController emailController = TextEditingController();
       TextEditingController passwordController = TextEditingController();
 
-      await showDialog(
+      bool? isAuthenticated = await showDialog<bool>(
         context: context,
         builder: (BuildContext dialogContext) {
           return AlertDialog(
@@ -112,33 +112,32 @@ class _EditProfileState extends State<EditProfile> {
                   String email = emailController.text;
                   String password = passwordController.text;
 
-                  try {
-                    await context.read<EditPageCubit>()
-                        .reAuthenticateAndChangeEmail(context, updatedUser, email, password);
-                  } catch (e) {
-                    rethrow;
-                  }
+                  await context.read<EditPageCubit>()
+                        .reAuthenticateAndChangeEmail(context, updatedUser,newEmail, email, password);
 
-                  Navigator.of(dialogContext).pop();
+                    Navigator.of(dialogContext).pop(true);
                 },
                 child: const Text('Submit'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(dialogContext)
-                      .pop();
+                    Navigator.of(dialogContext).pop(false); // Close the dialog after successful re-authentication
                 },
                 child: const Text('Cancel'),
               ),
             ],
           );
         },
-      );
+      ) ?? false;
+
+
+      return isAuthenticated;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('Re-authentication failed. Email not updated.')),
       );
+      return false;
     }
   }
 
@@ -168,7 +167,9 @@ Widget build(BuildContext context) {
             // }
 
             if(user.emailChanged){
-              Navigator.of(context).pop(state.user);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pop(state.user);
+              });
               return const SizedBox.shrink();
             }
             else {
@@ -263,31 +264,36 @@ Widget build(BuildContext context) {
         String lastname = lastNameController.text;
         String location = locationController.text;
 
+            AuthRepository authRepository = AuthRepositoryImpl();
+        User? currentUser = await authRepository.getCurrentUser();
         String rawAvatar = avatarNotifier.value;
 
         bool noChanges = true;
 
-        if(rawAvatar.isNotEmpty){
-          try{
-            StorageRepository storageRepository = StorageRepositoryImpl();
-            AuthRepository authRepository = AuthRepositoryImpl();
-            File newAvatarFile = File(rawAvatar);
-            User? currentUser = await authRepository.getCurrentUser();
+        // if(rawAvatar.isNotEmpty && rawAvatar != updatedUser.avatar){
+        //   try{
+        //     StorageRepository storageRepository = StorageRepositoryImpl();
 
-            // Call uploadAvatar from the repository and await its result
-            String? newAvatarUrl =  await storageRepository.uploadAvatar(newAvatarFile,currentUser!.uid);
-            if (newAvatarUrl!.isNotEmpty && newAvatarUrl != updatedUser.avatar) {
-              await authRepository.updateCurrentUserAvatarUrl(newAvatarUrl);
-              updatedUser = updatedUser.copyWith(newAvatar: newAvatarUrl);
-              noChanges = false;
-            }
-          } catch(e){
-            if (kDebugMode) {
-              print(e);
-            }
-          }
+        //     File newAvatarFile = File(rawAvatar);
 
-        }
+        //
+        //     if (!newAvatarFile.existsSync()) {
+        //       throw Exception('"File does not exist at path: $rawAvatar"');
+        //     }
+        //
+        //     String? newAvatarUrl =  await storageRepository.uploadAvatar(newAvatarFile,currentUser!.uid);
+        //     if (newAvatarUrl!.isNotEmpty && newAvatarUrl != updatedUser.avatar) {
+        //       await authRepository.updateCurrentUserAvatarUrl(newAvatarUrl);
+        //       updatedUser = updatedUser.copyWith(newAvatar: newAvatarUrl);
+        //       noChanges = false;
+        //     }
+        //   } catch(e){
+        //     if (kDebugMode) {
+        //       print(e);
+        //     }
+        //   }
+        //
+        // }
 
 
         if (newName.isNotEmpty && newName != updatedUser.name) {
@@ -306,10 +312,16 @@ Widget build(BuildContext context) {
         }
 
         if ((newEmail.isNotEmpty && newEmail != updatedUser.email)) {
-          updatedUser = updatedUser.copyWith(newEmail: newEmail);
+
           noChanges = false;
-          reAuthenticateAndChangeEmail(context, updatedUser);
-          return;
+          await reAuthenticateAndChangeEmail(context, newEmail, updatedUser);
+          // if (!isFinished) {
+          //   return;
+          // }
+          currentUser = await authRepository.getCurrentUser();
+          if(currentUser?.email != updatedUser.email){
+            updatedUser = updatedUser.copyWith(newEmail: newEmail);
+          }
         }
 
         if (noChanges) {
@@ -325,7 +337,9 @@ Widget build(BuildContext context) {
             showCancelButton: false,
           ).show(context);
         } else {
-          Navigator.of(context).pop(updatedUser);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(context).pop(updatedUser);
+          });
         }
       },
     ),

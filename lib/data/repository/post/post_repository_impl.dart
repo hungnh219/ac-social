@@ -21,4 +21,12 @@ class PostRepositoryImpl extends PostRepository {
   Future<void> createPost(String content, File image) {
     return serviceLocator.get<FirestoreService>().createPost(content, image);
   }
+
+  Future<List<PostModel>?> getPostsByUserId(String userId){
+    return serviceLocator.get<FirestoreService>().getPostsByUserId(userId);
+  }
+
+  Future<String?> getPostImageById(String postId){
+    return serviceLocator.get<FirestoreService>().getPostImageById(postId);
+  }
 }

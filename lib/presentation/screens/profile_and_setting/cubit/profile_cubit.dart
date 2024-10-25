@@ -62,6 +62,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(ProfileLoading());
     try {
       UpdateUserReq updateUserReq = UpdateUserReq(updatedUser);
+      updatedUser.resetState();
       await userRepository.updateCurrentUserData(updateUserReq);
 
       emit(ProfileEmailChanged());

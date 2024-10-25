@@ -46,8 +46,11 @@ abstract class FirestoreService {
 
   Future<List<CollectionModel>> getCollectionsData(List<String> collectionIDsList);
 
+  Future<List<PostModel>?> getPostsByUserId(String userId);
 
   Future<void> createPost(String content, File image);
+
+  Future<String?> getPostImageById(String postId);
 
   Future<List<CollectionModel>?>? getCollections();
 }
@@ -79,7 +82,7 @@ class FirestoreServiceImpl extends FirestoreService {
   }
 
   CollectionReference get _categoryCollection => _firestoreDB.collection('Category');
-  CollectionReference get _postRef => _firestoreDB.collection('NewPost');
+  CollectionReference get _postRef => _firestoreDB.collection('Post');
 
 
   // ToDo: Service Functions
@@ -296,7 +299,6 @@ class FirestoreServiceImpl extends FirestoreService {
       }
 
       for (var doc in postsSnapshot.docs) {
-        print(doc.id);
         userRef = doc['userRef'];
         userData = userRef.get();
         await userData.then((value) {
@@ -331,6 +333,80 @@ class FirestoreServiceImpl extends FirestoreService {
       rethrow;
     }
   }
+
+  Future<List<PostModel>?> getPostsByUserId(String userId) async {
+    List<PostModel> posts = [];
+
+    DocumentReference userRef;
+    Future<DocumentSnapshot<Object?>> userData;
+    String username = '';
+    String userAvatar = '';
+
+    try {
+      QuerySnapshot aPostsSnapshot = await _postRef.get();
+      QuerySnapshot postsSnapshot = await _postRef.where('userRef', isEqualTo: '/User/$userId').get();
+
+      if (postsSnapshot.docs.isEmpty) {
+        throw CustomFirestoreException(
+          code: 'no-posts',
+          message: 'No posts exist for this user in Firestore',
+        );
+      }
+
+      for (var doc in postsSnapshot.docs) {
+        userRef = doc['userRef'];
+        userData = userRef.get();
+        await userData.then((value) {
+          username = value['name'];
+          userAvatar = value['avatar'];
+        });
+
+        PostModel post = PostModel(
+          postId: doc.id,
+          username: username,
+          userAvatar: userAvatar,
+          content: doc['content'],
+          likeAmount: doc['likeAmount'],
+          commentAmount: doc['commentAmount'],
+          viewAmount: doc['viewAmount'],
+          image: doc['image'],
+          timestamp: (doc['timestamp'] as Timestamp).toDate(),
+          comments: null,
+          likes: null,
+          views: null,
+        );
+
+        posts.add(post);
+      }
+
+      return posts;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String?> getPostImageById(String postId) async {
+    try {
+      // Retrieve the post document by its ID
+      DocumentSnapshot postSnapshot = await _postRef.doc(postId).get();
+
+      if (!postSnapshot.exists) {
+        throw CustomFirestoreException(
+          code: 'post-not-found',
+          message: 'Post not found in Firestore',
+        );
+      }
+
+      // Extract the image URL from the post document
+      String? image = postSnapshot['image'];
+
+      return image; // Return the image URL or null if it doesn't exist
+    } catch (e) {
+      rethrow; // Rethrow the error for further handling
+    }
+  }
+
+
 
   @override
   Future<List<CommentModel>?> getCommentPost(PostModel post) async {

@@ -2,19 +2,28 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:social_app/data/repository/post/post_repository_impl.dart';
 
+import '../../../../domain/entities/post.dart';
+import '../../../../domain/repository/post/post_repository.dart';
 import '../../../../utils/constants/image_path.dart';
 
-class ShotTab extends StatelessWidget {
+class ShotTab extends StatefulWidget {
   final List<String> imageUrls;
 
   const ShotTab({super.key, required this.imageUrls});
 
   @override
+  State<ShotTab> createState() => _ShotTabState();
+}
+
+class _ShotTabState extends State<ShotTab> {
+  @override
   Widget build(BuildContext context) {
-    if (imageUrls.isEmpty) {
+    if (widget.imageUrls.isEmpty) {
       return Center(child: SvgPicture.asset(AppImages.empty));
     } else {
+
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child:
@@ -75,11 +84,11 @@ class ShotTab extends StatelessWidget {
           mainAxisSpacing: 16.0, // Space between items vertically
           crossAxisSpacing: 16.0, // Space between items horizontally
           itemBuilder: (context, index) {
-            if (index < imageUrls.length) {
+            if (index < widget.imageUrls.length) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
-                  imageUrl: imageUrls[index],
+                  imageUrl: widget.imageUrls[index],
                   fit: BoxFit.cover,
                   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => const Icon(Icons.error),

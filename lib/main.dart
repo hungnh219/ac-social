@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -42,9 +43,14 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -62,17 +68,17 @@ class MyApp extends StatelessWidget {
 
       ],
       child: SafeArea(
-        child: BlocBuilder<ThemeCubit, ThemeMode>(
-          builder: (context, mode) => MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            // darkTheme:
-            // themeMode: mode,
-            // home: const SplashPage()
-            routerConfig: MyRouter.router,
-            // home: const SplashScreen(),
+        child:  BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, mode) => MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              theme: AppTheme.lightTheme,
+              // darkTheme:
+              // themeMode: mode,
+              // home: const SplashPage()
+              routerConfig: MyRouter.router,
+              // home: const SplashScreen(),
+            ),
           ),
-        ),
       ),
     );
   }

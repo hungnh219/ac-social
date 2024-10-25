@@ -45,7 +45,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.of(buildContext).pop();
                             context.read<ProfileCubit>().signOut();
                             Future.delayed(Duration(milliseconds: 100), () {
-                              context.read<SignInCubit>().reset();
                               context.go('/signin');
 
 
