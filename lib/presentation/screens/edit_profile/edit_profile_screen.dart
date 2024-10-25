@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import 'package:social_app/utils/extensions/updated_field_extension.dart';
 
 import '../../../domain/entities/user.dart';
 import '../../../domain/repository/storage/storage_repository.dart';
+import '../../../mixin/validators/validators.dart';
 import '../../../utils/constants/icon_path.dart';
 import '../../../utils/styles/themes.dart';
 import '../../widgets/custom_alert_dialog.dart';
@@ -35,7 +37,7 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfileState();
 }
 
-class _EditProfileState extends State<EditProfile> {
+class _EditProfileState extends State<EditProfile> with Validator {
   late TextEditingController nameController ;
   late TextEditingController lastNameController ;
   late TextEditingController emailController;
@@ -83,52 +85,55 @@ class _EditProfileState extends State<EditProfile> {
         builder: (BuildContext dialogContext) {
           return AlertDialog(
             title: const Text('Re-authentication Required'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('You need to re-authenticate to change your email.'),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    hintText: 'Enter your email',
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('You need to re-authenticate to change your email.'),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      hintText: 'Enter your email',
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    hintText: 'Enter your password',
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      hintText: 'Enter your password',
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop(false);
+                },
+                child: const Text('Cancel'),
+              ),
               TextButton(
                 onPressed: () async {
                   String email = emailController.text;
                   String password = passwordController.text;
 
                   await context.read<EditPageCubit>()
-                        .reAuthenticateAndChangeEmail(context, updatedUser,newEmail, email, password);
+                      .reAuthenticateAndChangeEmail(context, updatedUser, newEmail, email, password);
 
-                    Navigator.of(dialogContext).pop(true);
+                  Navigator.of(dialogContext).pop(true);
                 },
                 child: const Text('Submit'),
-              ),
-              TextButton(
-                onPressed: () {
-                    Navigator.of(dialogContext).pop(false); // Close the dialog after successful re-authentication
-                },
-                child: const Text('Cancel'),
               ),
             ],
           );
         },
       ) ?? false;
+
 
 
       return isAuthenticated;
@@ -182,7 +187,6 @@ Widget build(BuildContext context) {
                         .bottom),
                 child: Column(
                   children: [
-                    // HeaderAndAvatar(avatarURL: user.avatar),
                     HeaderAndAvatar(avatarNotifier: avatarNotifier),
 
                     //TODO : Text fields
@@ -224,6 +228,7 @@ Widget build(BuildContext context) {
                           width: deviceWidth * 0.8,
                           focusNode: emailFocus,
                           onFieldSubmitted: (value) {},
+                          validator: (value) => validateEmail(value),
                         ),
                         const SizedBox(height: 22),
                         AppTextFormField(
@@ -270,30 +275,30 @@ Widget build(BuildContext context) {
 
         bool noChanges = true;
 
-        // if(rawAvatar.isNotEmpty && rawAvatar != updatedUser.avatar){
-        //   try{
-        //     StorageRepository storageRepository = StorageRepositoryImpl();
+        if(rawAvatar.isNotEmpty && rawAvatar != updatedUser.avatar){
+          try{
+            StorageRepository storageRepository = StorageRepositoryImpl();
 
-        //     File newAvatarFile = File(rawAvatar);
+            File newAvatarFile = File(rawAvatar);
 
-        //
-        //     if (!newAvatarFile.existsSync()) {
-        //       throw Exception('"File does not exist at path: $rawAvatar"');
-        //     }
-        //
-        //     String? newAvatarUrl =  await storageRepository.uploadAvatar(newAvatarFile,currentUser!.uid);
-        //     if (newAvatarUrl!.isNotEmpty && newAvatarUrl != updatedUser.avatar) {
-        //       await authRepository.updateCurrentUserAvatarUrl(newAvatarUrl);
-        //       updatedUser = updatedUser.copyWith(newAvatar: newAvatarUrl);
-        //       noChanges = false;
-        //     }
-        //   } catch(e){
-        //     if (kDebugMode) {
-        //       print(e);
-        //     }
-        //   }
-        //
-        // }
+
+            if (!newAvatarFile.existsSync()) {
+              throw Exception('"File does not exist at path: $rawAvatar"');
+            }
+
+            String? newAvatarUrl =  await storageRepository.uploadAvatar(newAvatarFile,currentUser!.uid);
+            if (newAvatarUrl!.isNotEmpty && newAvatarUrl != updatedUser.avatar) {
+              await authRepository.updateCurrentUserAvatarUrl(newAvatarUrl);
+              updatedUser = updatedUser.copyWith(newAvatar: newAvatarUrl);
+              noChanges = false;
+            }
+          } catch(e){
+            if (kDebugMode) {
+              print(e);
+            }
+          }
+
+        }
 
 
         if (newName.isNotEmpty && newName != updatedUser.name) {

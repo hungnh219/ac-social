@@ -22,6 +22,12 @@ abstract class AuthFirebaseService {
   User? getCurrentUser();
 
   Future<void> signOut();
+
+  Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password);
+
+  Future<void> updateCurrentUserAvatarUrl(String avatarUrl);
+
+  Future<void> updateAvatarUrl(String avatarUrl);
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
@@ -95,33 +101,178 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       rethrow;
     }
 
-  // @override
-  // Future<UserModel?> getUserModel() async {
-  //   try {
-  //     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  //
-  //     User? user = _auth.currentUser;
-  //     CollectionReference usersCollection =
-  //         firebaseFirestore.collection('User');
-  //
-  //     DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
-  //
-  //     if (userDoc.exists) {
-  //       // Nếu user đã tồn tại, trả về UserModel từ Firestore
-  //       return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
-  //     } else {
-  //       if (kDebugMode) {
-  //         print("User document does not exist.");
-  //       }
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print("Error fetching user data: $e");
-  //     }
-  //     return null;
-  //   }
-  // }
+    // @override
+    // Future<UserModel?> getUserModel() async {
+    //   try {
+    //     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    //
+    //     User? user = _auth.currentUser;
+    //     CollectionReference usersCollection =
+    //         firebaseFirestore.collection('User');
+    //
+    //     DocumentSnapshot userDoc = await usersCollection.doc(user?.uid).get();
+    //
+    //     if (userDoc.exists) {
+    //       // Nếu user đã tồn tại, trả về UserModel từ Firestore
+    //       return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+    //     } else {
+    //       if (kDebugMode) {
+    //         print("User document does not exist.");
+    //       }
+    //       return null;
+    //     }
+    //   } catch (e) {
+    //     if (kDebugMode) {
+    //       print("Error fetching user data: $e");
+    //     }
+    //     return null;
+    //   }
+    // }
+
+    @override
+    Future<void> signInWithGoogle() async {
+      // await signOut();
+      try {
+        if (kIsWeb) {
+          _auth.signInWithPopup(_googleProvider);
+        } else {
+          final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+          final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
+
+          // Create a GoogleAuthProvider credential
+          final AuthCredential googleCredential = GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken,
+          );
+
+          // Sign in to Firebase with Google credentials
+          UserCredential googleUserCredential =
+          await _auth.signInWithCredential(googleCredential);
+
+          // User? currentUser = _auth.currentUser;
+          // final userModel = await getUserModel();
+          //
+          // if (userModel == null) {
+          //   throw "new-user";
+          // }
+        }
+      } catch (error) {
+        if (kDebugMode) {
+          print(error.toString());
+        }
+        rethrow;
+      }
+    }
+
+    @override
+    Future<void> sendPasswordResetEmail(String email) async {
+      try {
+        final signInMethod = await _auth.fetchSignInMethodsForEmail(email);
+
+        if (signInMethod.isNotEmpty) {
+          await _auth.sendPasswordResetEmail(email: email);
+        } else {
+          throw FirebaseAuthException(
+            code: 'email-not-found',
+            message: 'Email does not exists',
+          );
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print("Error send email reset password: $e");
+        }
+
+        rethrow;
+      }
+    }
+
+    @override
+    Future<void> signOut() async {
+      await _auth.signOut();
+    }
+
+    @override
+    User? getCurrentUser() {
+      return _auth.currentUser;
+    }
+
+    Future<void> reAuthenticationAndChangeEmail(String email, String newEmail,
+        String password) async {
+      try {
+        User? user = _auth.currentUser;
+        if (user != null) {
+          AuthCredential credential = EmailAuthProvider.credential(
+            email: email,
+            password: password,
+          );
+
+          await user.reauthenticateWithCredential(credential).then((
+              userCredential) async {
+            await userCredential.user?.updateEmail(newEmail);
+            await userCredential.user?.reload();
+            await userCredential.user?.sendEmailVerification();
+          });
+        }
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          throw ("The account already exists for that email.");
+        } else {
+          rethrow;
+        }
+      } catch (error) {
+        if (kDebugMode) {
+          print(error.toString());
+        }
+        rethrow;
+      }
+    }
+
+    Future<void> updateAvatarUrl(String avatarUrl) async {
+      try {
+        User? user = _auth.currentUser;
+
+        if (user != null) {
+          await user.updatePhotoURL(avatarUrl);
+
+          await user.reload();
+        } else {
+          throw FirebaseAuthException(code: 'no-user-is-currently-signed-in');
+        }
+      } catch (e) {
+        print("Failed to update avatar: $e");
+      }
+    }
+  }
+
+  @override
+  User? getCurrentUser() {
+    return _auth.currentUser;
+  }
+
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      final signInMethod = await _auth.fetchSignInMethodsForEmail(email);
+
+      if (signInMethod.isNotEmpty) {
+        await _auth.sendPasswordResetEmail(email: email);
+      } else {
+        throw FirebaseAuthException(
+          code: 'email-not-found',
+          message: 'Email does not exists',
+        );
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error send email reset password: $e");
+      }
+
+      rethrow;
+    }
+  }
+
 
   @override
   Future<void> signInWithGoogle() async {
@@ -159,27 +310,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
     }
   }
 
-  @override
-  Future<void> sendPasswordResetEmail(String email) async {
-    try {
-      final signInMethod = await _auth.fetchSignInMethodsForEmail(email);
-
-      if (signInMethod.isNotEmpty) {
-        await _auth.sendPasswordResetEmail(email: email);
-      } else {
-        throw FirebaseAuthException(
-          code: 'email-not-found',
-          message: 'Email does not exists',
-        );
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error send email reset password: $e");
-      }
-
-      rethrow;
-    }
-  }
 
   @override
   Future<void> signOut() async {
@@ -187,10 +317,6 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  User? getCurrentUser() {
-    return _auth.currentUser;
-  }
-
   Future<void> reAuthenticationAndChangeEmail(String email, String newEmail, String password) async{
     try {
       User? user = _auth.currentUser;
@@ -201,9 +327,9 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
         );
 
         await user.reauthenticateWithCredential(credential).then((userCredential) async {
-        await userCredential.user?.updateEmail(newEmail);
-        await userCredential.user?.reload();
-        await userCredential.user?.sendEmailVerification();
+          await userCredential.user?.updateEmail(newEmail);
+          await userCredential.user?.reload();
+          await userCredential.user?.sendEmailVerification();
         });
       }
     } on FirebaseAuthException catch (e) {
@@ -235,5 +361,12 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       print("Failed to update avatar: $e");
     }
   }
+
+  @override
+  Future<void> updateCurrentUserAvatarUrl(String avatarUrl) {
+    // TODO: implement updateCurrentUserAvatarUrl
+    throw UnimplementedError();
+  }
+
 
 }
