@@ -308,8 +308,6 @@ class FirestoreServiceImpl extends FirestoreService {
     Future<DocumentSnapshot<Object?>> userData;
     String username = '';
     String userAvatar = '';
-    // PostModel post = PostModel();
-      print('posts: $posts');
 
     try {
       QuerySnapshot postsSnapshot = await _postCollection.orderBy('timestamp', descending: true).get();
@@ -320,8 +318,6 @@ class FirestoreServiceImpl extends FirestoreService {
         );
       }
       for (var doc in postsSnapshot.docs) {
-        print('docId: ${doc.id}');
-
         userRef = doc['userRef'];
         userData = userRef.get();
 
@@ -360,6 +356,7 @@ class FirestoreServiceImpl extends FirestoreService {
 
   @override
   Future<List<CommentModel>?> getCommentPost(PostModel post) async {
+    print('check');
     List<CommentModel> comments = [];
     DocumentReference commentRef;
     Future<DocumentSnapshot<Object?>> commentData;
@@ -370,7 +367,9 @@ class FirestoreServiceImpl extends FirestoreService {
     String userAvatar = '';
 
     try {
-      QuerySnapshot commentListSnapshot = await _firestoreDB.collection('NewPost').doc(post.postId).collection('lists').get();
+      QuerySnapshot commentListSnapshot = await _firestoreDB.collection('Post').doc(post.postId).collection('comments').get();
+      print('check2');
+      print(commentListSnapshot.docs);
       // Future<Map<String, dynamic>> userData = userRef.get().then((value) => value.data() as Map<String, dynamic>);
       if (commentListSnapshot.docs.isEmpty) {
         throw CustomFirestoreException(
@@ -380,25 +379,54 @@ class FirestoreServiceImpl extends FirestoreService {
       }
       for (var doc in commentListSnapshot.docs) {
         // print(doc.id); 
-        print(doc['comments']);
-        for (var comment in doc['comments']) {
-          print('1');
-          commentRef = comment;
-          commentData = commentRef.get();
-          await commentData.then((comment) {
-            print(comment['content']);
-            print(comment['timestamp']);
-            print(comment['user_id']);
-            userRef = comment['user_id'];
-            userData = userRef.get();
-            userData.then((userSnapshot) {
-              username = userSnapshot['name'];
-              userAvatar = userSnapshot['avatar'];
-            });
+        // print(doc.data());
+        // print(doc['commentRef']);
+        commentRef = doc['commentRef'];
+        commentData = commentRef.get();
+        await commentData.then((comment) {
+          print(comment['content']);
+
+          userRef = comment['userRef'];
+          userData = userRef.get();
+
+          userData.then((user) {
+            username = user['name'];
+            userAvatar = user['avatar'];
+
+            CommentModel singleComment = CommentModel(
+              commentId: doc.id,
+              username: username,
+              userAvatar: userAvatar,
+              content: comment['content'],
+              timestamp: (comment['timestamp'] as Timestamp).toDate(),
+              likes: null,
+            );
+
+            comments.add(singleComment);
           });
+        });
+        // commentRef = doc.reference; 
+        // commentRef = commentListSnapshot
+        // print(doc['comments']);
+        // for (var comment in doc['comments']) {
+        //   print('1');
+        //   print(comment);
+        //   // commentRef = comment;
+        //   // commentData = commentRef.get();
+        //   // await commentData.then((comment) {
+        //   //   print(comment['content']);
+        //   //   print(comment['timestamp']);
+        //   //   print(comment['user_id']);
+        //   //   userRef = comment['user_id'];
+        //   //   userData = userRef.get();
+        //   //   userData.then((userSnapshot) {
+        //   //     username = userSnapshot['name'];
+        //   //     userAvatar = userSnapshot['avatar'];
+        //   //   });
+        //   // });
 
         
-        }
+        // }
         // userRef = doc['user_id'];
         // userData = userRef.get();
         // await userData.then((value) {
@@ -427,7 +455,7 @@ class FirestoreServiceImpl extends FirestoreService {
       }
 
       // print('posts: $posts');
-      return null;
+      return comments;
       // return postsSnapshot.docs.map((doc) => PostModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
     } catch (e) {
       rethrow;

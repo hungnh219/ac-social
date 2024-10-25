@@ -7,6 +7,7 @@ import 'package:social_app/presentation/screens/home/home_screen.dart';
 import 'package:social_app/presentation/screens/new_post/new_post_screen.dart';
 import 'package:social_app/presentation/screens/notification/notification_screen.dart';
 import 'package:social_app/presentation/screens/profile_and_setting/main_profile_screen.dart';
+import 'package:social_app/utils/styles/colors.dart';
 
 class NavigatorBarCustom extends StatefulWidget {
   const NavigatorBarCustom({super.key});
@@ -38,7 +39,7 @@ class _NavigatorBarCustomState extends State<NavigatorBarCustom> {
         children: _screens,
       ),
       floatingActionButton: FloatingActionButton(
-        // backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.lavenderBlueShadow,
           onPressed: () {
             // Navigator.push(
             //   context,
@@ -46,7 +47,8 @@ class _NavigatorBarCustomState extends State<NavigatorBarCustom> {
             // );
             context.go('/signin/newpost');
           },
-          child: const Icon(Icons.add,
+          child: const Icon(Icons.add_box,
+            color: AppColors.white,
           ),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30.0)),
@@ -56,7 +58,7 @@ class _NavigatorBarCustomState extends State<NavigatorBarCustom> {
       bottomNavigationBar: BottomAppBar(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         height: 76,
-        color: Colors.yellow,
+        color: AppColors.white,
         shape: const CircularNotchedRectangle(),
         // elevation: 0,
         notchMargin: 4,
@@ -65,17 +67,28 @@ class _NavigatorBarCustomState extends State<NavigatorBarCustom> {
           children: <Widget>[
             Expanded(
               child: IconButton(
-              icon: Icon(Icons.home, size: 20, color: _screenIndex == 0 ? Colors.red : Colors.grey),
-              onPressed: () {
-                setState(() {
-                _screenIndex = 0;
-                });
-              },
+              icon: Icon(
+                Icons.home,
+                size: 20,
+                color: _screenIndex == 0 ?
+                  AppColors.lavenderBlueShadow :
+                  AppColors.carbon.withOpacity(0.4)),
+                onPressed: () {
+                  setState(() {
+                  _screenIndex = 0;
+                  });
+                },
               ),
             ),
             Expanded(
               child: IconButton(
-              icon: Icon(Icons.category_sharp, size: 20, color: _screenIndex == 1 ? Colors.red : Colors.grey),
+              icon: Icon(
+                Icons.category_sharp,
+                size: 20,
+                color: _screenIndex == 1 ?
+                  AppColors.lavenderBlueShadow :
+                  AppColors.carbon.withOpacity(0.4)
+              ),
               onPressed: () {
                 setState(() {
                 _screenIndex = 1;
@@ -83,9 +96,17 @@ class _NavigatorBarCustomState extends State<NavigatorBarCustom> {
               },
               ),
             ),
+            Spacer(),
             Expanded(
               child: IconButton(
-              icon: Icon(Icons.notifications, size: 20, color: _screenIndex == 2 ? Colors.red : Colors.grey),
+              icon: Icon(
+                Icons.notifications,
+                size: 20,
+                color: _screenIndex == 2 ?
+                  AppColors.lavenderBlueShadow :
+                  AppColors.carbon.withOpacity(0.4) 
+                
+              ),
               onPressed: () {
                 setState(() {
                 _screenIndex = 2;
@@ -95,7 +116,13 @@ class _NavigatorBarCustomState extends State<NavigatorBarCustom> {
             ),
             Expanded(
               child: IconButton(
-              icon: Icon(Icons.person, size: 20, color: _screenIndex == 3 ? Colors.red : Colors.grey),
+              icon: Icon(
+                Icons.person,
+                size: 20,
+                color: _screenIndex == 3 ?
+                  AppColors.lavenderBlueShadow :
+                  AppColors.carbon.withOpacity(0.4)
+              ),
               onPressed: () {
                 setState(() {
                 _screenIndex = 3;

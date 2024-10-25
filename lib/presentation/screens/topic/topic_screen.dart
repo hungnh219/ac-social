@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:social_app/domain/entities/topic.dart';
 import 'package:social_app/presentation/screens/topic/widgets/single_topic.dart';
 import 'package:social_app/presentation/screens/topic/widgets/topic_horizontal_image.dart';
+import 'package:social_app/utils/styles/colors.dart';
 import 'package:social_app/utils/styles/text_style.dart';
 
 class TopicScreen extends StatelessWidget {
@@ -20,7 +21,7 @@ class TopicScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BackButton(
-              color: Colors.black,  
+              color: AppColors.carbon,  
             ),
 
             topics == null ?
@@ -38,7 +39,7 @@ class TopicScreen extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width * 0.9,
                                 height: 140,
                                 decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.5),
+                                  color: AppColors.carbon.withOpacity(0.5),
                                   borderRadius: BorderRadius.circular(8),
                                   image: DecorationImage(image: 
                                     NetworkImage(topics![index].thumbnail), fit: BoxFit.cover

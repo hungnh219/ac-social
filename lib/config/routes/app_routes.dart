@@ -57,6 +57,14 @@ class MyRouter {
                 builder: (BuildContext context, GoRouterState state) {
                   return const HomeScreen();
                 },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'newpost',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const NewPostScreen();
+                    },
+                  ),
+                ]
               ),
               GoRoute(
                 path: 'navigator',
@@ -64,12 +72,7 @@ class MyRouter {
                   return const NavigatorBarCustom();
                 },
               ),
-              GoRoute(
-                path: 'comment',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const CommentScreen();
-                },
-              ),
+              
               GoRoute(
                 path: 'newpost',
                 builder: (BuildContext context, GoRouterState state) {

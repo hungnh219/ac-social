@@ -165,25 +165,29 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               child: Container(
                 height: 40,
-                margin: const EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: Colors.green.shade100,
+                  color: AppColors.white,
+                  // color: Colors.green.shade100,
                 ),
-                child: const TabBar(
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  dividerColor: Colors.transparent,
-                  indicator: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: TabBar(
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    dividerColor: Colors.transparent,
+                    indicator: BoxDecoration(
+                      color: AppColors.iric.withOpacity(0.1),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    labelColor: AppColors.iric,
+                    unselectedLabelColor: AppColors.erieBlack.withOpacity(0.5),
+                    tabs: [
+                      TabItem(title: 'Popular',),
+                      TabItem(title: 'Trending'),
+                      TabItem(title: 'Following'),
+                    ],
                   ),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.black54,
-                  tabs: [
-                    TabItem(title: 'Popular'),
-                    TabItem(title: 'Trending'),
-                    TabItem(title: 'Following'),
-                  ],
                 ),
               ),
             ),
@@ -192,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: TabBarView(
           children: [
             PostListView(),
-            Center(child: Text('Trending Fake')),
+            PostListView(),
             PostListView(),
           ],
         ),
@@ -226,13 +230,16 @@ class _PostListViewState extends State<PostListView> with AutomaticKeepAliveClie
           return Center(child: Text('No data found.'));
         }
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 60),
-          child: ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              return PostCustom(post: snapshot.data![index]);
-            },
+        return Container(
+          color: AppColors.orochimaru,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 60),
+            child: ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return PostCustom(post: snapshot.data![index]);
+              },
+            ),
           ),
         );
       },

@@ -36,7 +36,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   @override
   Widget build(BuildContext context) {
     // print('topics: $topics');
-    return SafeArea(child: 
+    return SafeArea(
+      bottom: false,
+      child: 
       Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(24.0),

@@ -7,6 +7,7 @@ import 'package:social_app/data/sources/firestore/firestore_service.dart';
 import 'package:social_app/presentation/screens/new_post/cubit/post_cubit.dart';
 import 'package:social_app/presentation/screens/new_post/cubit/post_state.dart';
 import 'package:social_app/service_locator.dart';
+import 'package:social_app/utils/styles/colors.dart';
 import 'package:social_app/utils/styles/text_style.dart';
 
 class ActionPost extends StatefulWidget {
@@ -52,9 +53,9 @@ class _ActionPostState extends State<ActionPost> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Spacer(),
-          Icon(Icons.image, color: Colors.blueAccent,),
+          Icon(Icons.image, color: AppColors.white,),
           SizedBox(width: 8),
-          Text('Photo', style: TextStyle(color: Colors.red),),
+          Text('Photo', style: TextStyle(color: AppColors.white),),
           Spacer(),
         ],
       ),

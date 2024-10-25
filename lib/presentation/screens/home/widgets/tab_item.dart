@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/utils/styles/text_style.dart';
 
 class TabItem extends StatelessWidget {
   final String title;
@@ -16,6 +17,7 @@ class TabItem extends StatelessWidget {
       child: Text(
         title,
         overflow: TextOverflow.ellipsis,
+        style: AppTextStyle.tabItemStyle
       ),
     );
   }
