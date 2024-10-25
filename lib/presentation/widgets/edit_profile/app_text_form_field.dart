@@ -50,6 +50,7 @@ class AppTextFormField extends StatelessWidget {
             textInputAction: textInputAction,
             style: AppTheme.profileCasualStyle.copyWith(color: AppColors.blackOak),
             textAlign: textAlign ?? TextAlign.start,
+            autovalidateMode: AutovalidateMode.onUnfocus,
           ),
         ],
       ),

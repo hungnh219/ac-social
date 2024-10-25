@@ -161,7 +161,6 @@ Widget build(BuildContext context) {
     resizeToAvoidBottomInset: false,
     body: BlocBuilder<EditPageCubit, EditPageState>(
         builder: (context, state) {
-          context.read<EditPageCubit>().emit(EditPageLoading());
 
           if (state is EditPageLoading) {
             return const Center(child: CircularProgressIndicator());
