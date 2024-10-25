@@ -316,18 +316,18 @@ Widget build(BuildContext context) {
           noChanges = false;
         }
 
-        if ((newEmail.isNotEmpty && newEmail != updatedUser.email)) {
-
-          noChanges = false;
-          await reAuthenticateAndChangeEmail(context, newEmail, updatedUser);
-          // if (!isFinished) {
-          //   return;
-          // }
-          currentUser = await authRepository.getCurrentUser();
-          if(currentUser?.email != updatedUser.email){
-            updatedUser = updatedUser.copyWith(newEmail: newEmail);
-          }
-        }
+        // if ((newEmail.isNotEmpty && newEmail != updatedUser.email)) {
+        //
+        //   noChanges = false;
+        //   await reAuthenticateAndChangeEmail(context, newEmail, updatedUser);
+        //   // if (!isFinished) {
+        //   //   return;
+        //   // }
+        //   currentUser = await authRepository.getCurrentUser();
+        //   if(currentUser?.email != updatedUser.email){
+        //     updatedUser = updatedUser.copyWith(newEmail: newEmail);
+        //   }
+        // }
 
         if (noChanges) {
           CustomAlertDialog(

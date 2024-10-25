@@ -34,7 +34,7 @@ class MyRouter {
           GoRoute(
             path: 'auth',
             builder: (BuildContext context, GoRouterState state) {
-              return _wrapWithWillPopScope(context, const AuthScreen());
+              return  const AuthScreen();
             },
           ),
           GoRoute(
@@ -52,19 +52,19 @@ class MyRouter {
               GoRoute(
                 path: 'signup',
                 builder: (BuildContext context, GoRouterState state) {
-                  return _wrapWithWillPopScope(context, const SignUpScreen());
+                  return  const SignUpScreen();
                 },
               ),
               GoRoute(
                 path: 'forgotpassword',
                 builder: (BuildContext context, GoRouterState state) {
-                  return _wrapWithWillPopScope(context, const ForgotPasswordScreen());
+                  return  const ForgotPasswordScreen();
                 },
                 routes: <RouteBase>[
                   GoRoute(
                     path: 'verification',
                     builder: (BuildContext context, GoRouterState state) {
-                      return _wrapWithWillPopScope(context, const VerificationScreen());
+                      return  const VerificationScreen();
                     },
                   ),
                 ],
