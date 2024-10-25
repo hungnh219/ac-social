@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/data/sources/firestore/firestore_service.dart';
+import 'package:social_app/domain/entities/post.dart';
 import 'package:social_app/domain/repository/post/post_repository.dart';
 import 'package:social_app/presentation/screens/discover/discover_screen.dart';
 import 'package:social_app/presentation/screens/home/widgets/home_header_custom.dart';

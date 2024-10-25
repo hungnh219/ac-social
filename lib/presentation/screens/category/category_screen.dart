@@ -26,7 +26,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         children: [
           Container(
             padding: const EdgeInsets.only(
-                top: 150, left: 20, right: 20, bottom: 20),
+                top: 160, left: 20, right: 20, bottom: 20),
             width: double.infinity,
             height: double.infinity,
             color: AppColors.white,
@@ -37,10 +37,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   "Who are you?",
                   style: AppTheme.categoryLabelStyle,
                 ),
-                const CategoryImageGroup(),
                 const SizedBox(
                   height: 15,
                 ),
+                const CategoryImageGroup(),
                 LinearGradientTitle(
                     text: "SHARE - INSPIRE - CONNECT",
                     textStyle: AppTheme.categoryBottomTitle),

@@ -24,6 +24,12 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    return await serviceLocator<AuthFirebaseService>()
+        .sendPasswordResetEmail(email);
+  }
+
+  @override
   Future<UserModel?> getUserModel() async {
     // return await serviceLocator<AuthFirebaseService>().getUserModel();
   }

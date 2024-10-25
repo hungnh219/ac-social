@@ -5,19 +5,20 @@ import '../../../utils/styles/themes.dart';
 class AuthBody extends StatelessWidget {
   const AuthBody(
       {super.key,
-      required this.padding,
+      required this.column,
       required this.marginTop,
       required this.height});
 
   final double marginTop;
   final double height;
-  final Padding padding;
+  final Column column;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: marginTop),
       height: height,
+      padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
       decoration: BoxDecoration(
         color: AppTheme.white,
         borderRadius: const BorderRadius.only(
@@ -25,7 +26,7 @@ class AuthBody extends StatelessWidget {
           topRight: Radius.circular(30),
         ),
       ),
-      child: padding,
+      child: column,
     );
   }
 }

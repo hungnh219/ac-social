@@ -9,9 +9,8 @@ import '../../../../service_locator.dart';
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit() : super(SignUpInitial());
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  void signup(BuildContext context, SignUpUserReq signUpUserReq) async {
+  void signup(BuildContext context, GlobalKey<FormState> formKey,
+      SignUpUserReq signUpUserReq) async {
     try {
       if (formKey.currentState!.validate()) {
         emit(SignUpLoading());

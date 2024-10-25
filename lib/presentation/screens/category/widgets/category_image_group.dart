@@ -43,7 +43,7 @@ class _CategoryImageGroupState extends State<CategoryImageGroup> {
             categories = snapshot.data!;
             return Container(
                 width: double.infinity,
-                height: 340,
+                height: MediaQuery.of(context).size.height * 0.5,
                 child: BlocBuilder<CategoryCubit, CategoryState>(
                   builder: (context, state) {
                     return GridView.count(
